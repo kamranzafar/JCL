@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!-- ====================================================================== 
+     4 Jul 2007 11:21:27                                                        
+
+     JCL    
+     Jar Class Loader
+                   
+     kzafar                                                                
+     ====================================================================== -->
+<project name="JCL" default="jar">
+	<description>
+            Jar Class Loader
+    </description>
+
+	<property name="src-dir" value="./src" />
+	<property name="classes-dir" value="./classes" />
+	<property name="lib-dir" value="./lib" />
+	<property name="docs-dir" value="./docs" />
+	<property name="api-dir" value="${docs-dir}/api" />
+	<property name="jar-file" value="jcl.jar" />
+	<property name="test-jar-file" value="test-jcl.jar" />
+
+	<path id="master-classpath">
+		<fileset dir="${lib-dir}" includes="*.jar" />
+	</path>
+
+	<target name="clean">
+		<delete dir="${classes-dir}" />
+		<delete dir="${api-dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${classes-dir}" />
+		<mkdir dir="${api-dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<copy file="${src-dir}/log4j.properties" todir="${classes-dir}">
+		</copy>
+
+		<javac classpathref="master-classpath" srcdir="${src-dir}" destdir="${classes-dir}">
+			<compilerarg value="-nowarn" />
+		</javac>
+	</target>
+
+	<target name="javadoc" depends="compile">
+		<javadoc packagenames="xeus.jcl.*" sourcepath="${src-dir}" 
+			destdir="${api-dir}" author="true" version="true" classpathref="master-classpath"/>
+	</target>
+
+	<target name="jar" depends="compile" description="Jar Builder">
+		<jar destfile="${jar-file}" basedir="${classes-dir}" includes="xeus/jcl/*.class,*.properties">
+		</jar>
+	</target>
+
+	<target name="test-jar" depends="compile" description="Jar Builder">
+		<jar destfile="${test-jar-file}" basedir="${classes-dir}" includes="xeus/test/jcl/*.class,*.properties">
+		</jar>
+	</target>
+</project>
