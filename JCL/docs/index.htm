@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<title>JCL</title>
+</head>
+
+<body>
+
+<div align="left"><b><font color="#000080" size="7">JCL</font><font
+	color="#000080" size="5"> ( Jar Class Loader ) v-1.0</font></b></div>
+<div align="right"><a href="http://xeustech.blogspot.com"
+	style="color: #000000"><b> <font size="5">Xeus
+Technologies</font></b></a></div>
+<hr>
+<div>
+<p><br>
+<b><u><font color="#000080" size="5">Overview</font></u></b></p>
+
+<p>JCL is a simple Java API that allows developers to load classes
+from Java Archives (JARs). It uses a custom class loader to load classes
+from JARs that helps in loading multiple versions of the same class file
+hence eliminating class loading conflicts when each version is used by the
+application.</p>
+
+<p><u><font color="#000080" size="5"><b>Installation</b></font></u></p>
+
+<p>To use JCL download and build the <a
+	href="http://www.sourceforge.net/projects/jcloader">JCL</a>
+project and put <i>jcl.jar</i> and <i>log4j.jar</i> files in the application's
+CLASSPATH.</p>
+
+<p><u><b><font size="5" color="#000080">Usage</font></b></u></p>
+
+<p>Below is a simple example of using JCL in Java applications</p>
+
+<ol>
+	<li>Create an object of <i>JarClassLoader</i> and pass the jar
+	file path/name or an InputStream object to its constructor</li>
+	<li>Call the <i>loadClass</i> method of <i>JarClassLoader</i> to
+	load the class from the jar file.</li>
+</ol>
+
+<table border="1" cellpadding="10" cellspacing="0"
+	style="border-collapse: collapse" bordercolor="#111111" width="61%"
+	id="AutoNumber1">
+	<tr>
+		<td width="100%"><u><b>Access using interface<br>
+		</b></u><br>
+		JarClassLoader jcl=<b><font color="#800000">new</font></b>
+		JarClassLoader(<font color="#0000FF">&quot;test-jcl-version-1.jar&quot;</font>);<br>
+		<br>
+		TestInterface ti= (TestInterface)jcl.loadClass(<font color="#0000FF">&quot;xeus.test.jcl.Test&quot;</font>).newInstance();<br>
+		System.<i><font color="#0000FF">out</font></i>.println(ti.sayHello());<br>
+		<br>
+		JarClassLoader jc2=<b><font color="#800000">new</font></b>
+		JarClassLoader(<font color="#0000FF">&quot;test-jcl-version-2.jar&quot;</font>);<br>
+		<br>
+		TestInterface ti1= (TestInterface)jc2.loadClass(<font color="#0000FF">&quot;xeus.test.jcl.Test&quot;</font>).newInstance();<br>
+		System.out.println(ti1.sayHello());<br>
+		&nbsp;</td>
+	</tr>
+</table>
+&nbsp;
+<p>The example shows how two versions of the same class <i>Test</i>
+is loaded using JCL. Interfaces are used to point to different versions
+of it's implementation.</p>
+
+<table border="1" cellpadding="10" cellspacing="0"
+	style="border-collapse: collapse" bordercolor="#111111" width="61%"
+	id="AutoNumber1">
+	<tr>
+		<td width="100%"><u><b>Access using reflection<br>
+		</b></u><br>
+		JarClassLoader jcl=<b><font color="#800000">new</font></b>
+		JarClassLoader(<font color="#0000FF">&quot;test-jcl-version-1.jar&quot;</font>);<br>
+		<br>
+		Object t1=jcl.loadClass(<font color="#0000FF">&quot;xeus.test.jcl.Test&quot;</font>).newInstance();<br>
+		System.<i><font color="#0000FF">out</font></i>.println(t1.getClass().getDeclaredMethod(<font
+			color="#0000FF">&quot;sayHello&quot;</font>,<b><font
+			color="#800000">null</font></b>).invoke(t1,<b><font color="#800000">null</font></b>));<br>
+		<br>
+		JarClassLoader jc2=<b><font color="#800000">new</font></b>
+		JarClassLoader(<font color="#0000FF">&quot;test-jcl-version-2.jar&quot;</font>);<br>
+		<br>
+		Object t2=jcl.loadClass(<font color="#0000FF">&quot;xeus.test.jcl.Test&quot;</font>).newInstance();<br>
+		System.<i><font color="#0000FF">out</font></i>.println(t2.getClass().getDeclaredMethod(<font
+			color="#0000FF">&quot;sayHello&quot;</font>,<b><font
+			color="#800000">null</font></b>).invoke(t2,<b><font color="#800000">null</font></b>));<br>
+		&nbsp;</td>
+	</tr>
+</table>
+<p>This example shows how to access loaded class methods using
+reflection.</p>
+<p><b>Note: </b>JarClassLoader also has a constructor that takes an InputStream object pointing to the jar file. This is available in version 1.0.3 and later, see API for more details.<br>
+&nbsp;</p>
+<p><u><font color="#000080" size="5"><b>Downloads</b></font></u></p>
+<p>JCL is open source and is distributed under <a
+	href="http://www.gnu.org/copyleft/gpl.html">GPL</a>.</p>
+<p>- <a href="http://sourceforge.net/project/downloading.php?group_id=177055&use_mirror=heanet&filename=jcl-src-1.0.2.zip&35576285">JCL latest realease</a><br><br>
+For older releases goto the <a href="http://www.sourceforge.net/projects/jcloader">project page</a><br>
+<br>
+JCL source can be <i>anonymously</i> checked-out from subversion using
+the following command:</p>
+<p align="left"><b><tt>svn co
+https://jcloader.svn.sourceforge.net/svnroot/jcloader JCL</tt></b></p>
+<p><b><font color="#000080"><br>
+Author: </font>Kamran Zafar<br>
+</b> <a href="mailto:xeus.man@gmail.com">xeus.man@gmail.com</a><b> <br>
+&nbsp;</b>
+</div>
+<hr>
+<p align="center"><font size="2">Copyright Xeus Technologies 2007<br>
+<a href="http://xeustech.blogspot.com">http://xeustech.blogspot.com</a></font></p>
+
+</body>
+
+</html>
