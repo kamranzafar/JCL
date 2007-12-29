@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- Singleton object factory -->
+	<bean id="jclFactory" class="xeus.jcl.JclObjectFactory" />
+
+	<!-- Test jar class loader -->
+	<bean id="jclTest" class="xeus.jcl.JarClassLoader">
+		<constructor-arg>
+			<value>test-jcl.jar</value>
+		</constructor-arg>
+	</bean>
+
+	<!-- 
+		The Bean
+		Arguments:
+		0- The jar class loader
+		1- Name of the class to be loaded
+		
+		The rest are optional arguments used in constructor/setter injection for the bean to be loaded 
+	-->
+	<bean id="test" factory-bean="jclFactory" factory-method="create">
+		<constructor-arg>
+			<ref bean="jclTest" />
+		</constructor-arg>
+		<constructor-arg>
+			<value>xeus.test.jcl.Test</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>Kamran</value>
+		</constructor-arg>
+		<property name="lastName">
+			<value>Zafar</value>
+		</property>
+	</bean>
+</beans>
