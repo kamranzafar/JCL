@@ -28,6 +28,7 @@ package xeus.jcl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * Reads the class bytes from jar files using JarResources
@@ -56,6 +57,15 @@ public class JarClassLoader extends AbstractClassLoader {
         jarResources.loadJar(jarStream);	    
 	}
 
+	/**
+     * @param url
+     * @throws IOException
+     */
+    public JarClassLoader(URL url) throws IOException{
+        jarResources = new JarResources();
+        jarResources.loadJar(url);        
+    }
+	
 	/**
 	 * Reads the class bytes from jar files using JarResources
 	 * 

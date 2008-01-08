@@ -7,6 +7,7 @@ public class Test implements TestInterface {
 
 	public Test() {
 		firstName = "World";
+		lastName="";
 	}
 
 	public Test(String firstName) {

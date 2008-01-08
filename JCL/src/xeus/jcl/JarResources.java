@@ -30,6 +30,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -75,6 +76,18 @@ public class JarResources {
 		fis.close();
 	}
 
+   /**
+     * Reads the jar file from a specified URL
+     * 
+     * @param jarFile
+     * @throws IOException
+     */
+    public void loadJar(URL url) throws IOException {
+        InputStream in=url.openStream();
+        loadJar(in);
+        in.close();
+    }
+	
 	/**
 	 * Load the jar contents from InputStream
 	 * 
