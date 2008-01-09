@@ -76,18 +76,18 @@ public class JarResources {
 		fis.close();
 	}
 
-   /**
-     * Reads the jar file from a specified URL
-     * 
-     * @param jarFile
-     * @throws IOException
-     */
-    public void loadJar(URL url) throws IOException {
-        InputStream in=url.openStream();
-        loadJar(in);
-        in.close();
-    }
-	
+	/**
+	 * Reads the jar file from a specified URL
+	 * 
+	 * @param url
+	 * @throws IOException
+	 */
+	public void loadJar(URL url) throws IOException {
+		InputStream in = url.openStream();
+		loadJar(in);
+		in.close();
+	}
+
 	/**
 	 * Load the jar contents from InputStream
 	 * 
