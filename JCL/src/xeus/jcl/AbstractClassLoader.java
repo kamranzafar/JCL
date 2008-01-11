@@ -49,6 +49,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	public AbstractClassLoader() {
 		classes = Collections.synchronizedMap(new HashMap());
 	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -102,7 +103,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		logger.debug("Return newly loaded class");
 		return result;
 	}
-
+	
 	/**
 	 * @param replacement
 	 */
@@ -111,6 +112,13 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	}
 
 	/**
+	 * @return char
+	 */
+	public char getClassNameReplacementChar() {
+        return classNameReplacementChar;
+    }
+	
+    /**
 	 * Abstarct method that allows class content to be loaded from other
 	 * sources
 	 * 
@@ -121,7 +129,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
 	/**
 	 * @param className
-	 * @return Strinv
+	 * @return String
 	 */
 	protected String formatClassName(String className) {
 		if (classNameReplacementChar == '\u0000') {
