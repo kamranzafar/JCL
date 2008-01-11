@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -47,7 +48,7 @@ import xeus.jcl.exception.JclException;
  */
 public class JarResources {
 
-	private HashMap jarEntryContents;
+	private Map<String, byte[]> jarEntryContents;
 
 	static Logger logger = Logger.getLogger(JarResources.class);
 
@@ -55,7 +56,7 @@ public class JarResources {
 	 * @throws IOException
 	 */
 	public JarResources() {
-		jarEntryContents = new HashMap();
+		jarEntryContents = new HashMap<String, byte[]>();
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class JarResources {
 	 * @return byte[]
 	 */
 	public byte[] getResource(String name) {
-		return (byte[]) jarEntryContents.get(name);
+		return jarEntryContents.get(name);
 	}
 
 	/**
@@ -109,6 +110,8 @@ public class JarResources {
 
 			JarEntry jarEntry = null;
 			while ((jarEntry = jis.getNextJarEntry()) != null) {
+			    logger.debug(dump(jarEntry));
+			    
 				if (jarEntry.isDirectory()) {
 					continue;
 				}

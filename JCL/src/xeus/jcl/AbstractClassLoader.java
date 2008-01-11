@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class AbstractClassLoader extends ClassLoader {
 
-	private Map classes;
+	private Map<String, Class> classes;
 	private char classNameReplacementChar;
 	static Logger logger = Logger.getLogger(AbstractClassLoader.class);
 
@@ -47,7 +47,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * No arguments constructor
 	 */
 	public AbstractClassLoader() {
-		classes = Collections.synchronizedMap(new HashMap());
+		classes = Collections.synchronizedMap(new HashMap<String, Class>());
 	}
 	
 	/*
@@ -72,7 +72,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		byte[] classBytes;
 		logger.debug("Loading class: " + className + ", " + resolveIt + "");
 
-		result = (Class) classes.get(className);
+		result = classes.get(className);
 		if (result != null) {
 			logger.debug("Returning local loaded class");
 			return result;
