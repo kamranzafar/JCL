@@ -13,13 +13,14 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
 import xeus.jcl.JarClassLoader;
+import xeus.jcl.exception.JclException;
 
 public class LoadTest extends TestCase {
 
     private static Logger logger = Logger.getLogger(LoadTest.class);
 
     public void testWithInterface() throws IOException, InstantiationException,
-            IllegalAccessException, ClassNotFoundException {
+            IllegalAccessException, ClassNotFoundException, JclException {
         JarClassLoader jcl = new JarClassLoader("test-jcl.jar");
 
         TestInterface ti = (TestInterface) jcl.loadClass("xeus.test.jcl.Test")
@@ -33,7 +34,8 @@ public class LoadTest extends TestCase {
     public void testWithReflection() throws IOException,
             InstantiationException, IllegalAccessException,
             ClassNotFoundException, IllegalArgumentException,
-            SecurityException, InvocationTargetException, NoSuchMethodException {
+            SecurityException, InvocationTargetException,
+            NoSuchMethodException, JclException {
         JarClassLoader jc2 = new JarClassLoader("test-jcl.jar");
 
         Object testObj = jc2.loadClass("xeus.test.jcl.Test").newInstance();
@@ -46,9 +48,10 @@ public class LoadTest extends TestCase {
     public void testWithUrl() throws IOException, InstantiationException,
             IllegalAccessException, ClassNotFoundException,
             IllegalArgumentException, SecurityException,
-            InvocationTargetException, NoSuchMethodException {
-        //URL url=new URL("http://localhost:8080/blank/test-jcl.jar");
-        URL url=new URL("file:/C:/Kamran/Kamran/work/eclipse/JCL/test-jcl.jar");
+            InvocationTargetException, NoSuchMethodException, JclException {
+        // URL url=new URL("http://localhost:8080/blank/test-jcl.jar");
+        URL url = new URL(
+                "file:/C:/Kamran/Kamran/work/eclipse/JCL/test-jcl.jar");
         JarClassLoader jc = new JarClassLoader(url);
         Object testObj = jc.loadClass("xeus.test.jcl.Test").newInstance();
         assertNotNull(testObj);
@@ -60,7 +63,8 @@ public class LoadTest extends TestCase {
     public void testWithInputStream() throws IOException,
             InstantiationException, IllegalAccessException,
             ClassNotFoundException, IllegalArgumentException,
-            SecurityException, InvocationTargetException, NoSuchMethodException {
+            SecurityException, InvocationTargetException,
+            NoSuchMethodException, JclException {
         FileInputStream fis = new FileInputStream("test-jcl.jar");
         JarClassLoader jc = new JarClassLoader(fis);
         Object testObj = jc.loadClass("xeus.test.jcl.Test").newInstance();

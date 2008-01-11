@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import xeus.jcl.exception.JclException;
+
 /**
  * Reads the class bytes from jar files using JarResources
  * 
@@ -37,43 +39,46 @@ import java.net.URL;
  * 
  */
 public class JarClassLoader extends AbstractClassLoader {
-	private JarResources jarResources;
+    private JarResources jarResources;
 
-	/**
-	 * @param jarName
-	 * @throws IOException
-	 */
-	public JarClassLoader(String jarName) throws IOException {
-		jarResources = new JarResources();
-		jarResources.loadJar(jarName);
-	}
-	
-	/**
-	 * @param jarStream
-	 * @throws IOException
-	 */
-	public JarClassLoader(InputStream jarStream) throws IOException{
+    /**
+     * @param jarName
+     * @throws IOException
+     * @throws JclException 
+     */
+    public JarClassLoader(String jarName) throws IOException, JclException {
         jarResources = new JarResources();
-        jarResources.loadJar(jarStream);	    
-	}
+        jarResources.loadJar(jarName);
+    }
+    
+    /**
+     * @param jarStream
+     * @throws IOException
+     * @throws JclException 
+     */
+    public JarClassLoader(InputStream jarStream) throws IOException, JclException{
+        jarResources = new JarResources();
+        jarResources.loadJar(jarStream);        
+    }
 
-	/**
+    /**
      * @param url
      * @throws IOException
+     * @throws JclException 
      */
-    public JarClassLoader(URL url) throws IOException{
+    public JarClassLoader(URL url) throws IOException, JclException{
         jarResources = new JarResources();
         jarResources.loadJar(url);        
     }
-	
-	/**
-	 * Reads the class bytes from jar files using JarResources
-	 * 
-	 * @see xeus.jcl.AbstractClassLoader#loadClassBytes(java.lang.String)
-	 */
-	protected byte[] loadClassBytes(String className) {
-		className = formatClassName(className);
+    
+    /**
+     * Reads the class bytes from jar files using JarResources
+     * 
+     * @see xeus.jcl.AbstractClassLoader#loadClassBytes(java.lang.String)
+     */
+    protected byte[] loadClassBytes(String className) {
+        className = formatClassName(className);
 
-		return (jarResources.getResource(className));
-	}
+        return (jarResources.getResource(className));
+    }
 }
