@@ -37,6 +37,8 @@ import java.util.jar.JarInputStream;
 
 import org.apache.log4j.Logger;
 
+import xeus.jcl.exception.JclException;
+
 /**
  * JarResources reads jar files and loads the class content/bytes in a HashMap
  * 
@@ -65,12 +67,13 @@ public class JarResources {
 	}
 
 	/**
-	 * Reads the specified jar file
-	 * 
-	 * @param jarFile
-	 * @throws IOException
-	 */
-	public void loadJar(String jarFile) throws IOException {
+     * Reads the specified jar file
+     * 
+     * @param jarFile
+     * @throws IOException
+     * @throws JclException
+     */
+	public void loadJar(String jarFile) throws IOException, JclException {
 		FileInputStream fis = new FileInputStream(jarFile);
 		loadJar(fis);
 		fis.close();
@@ -81,8 +84,9 @@ public class JarResources {
 	 * 
 	 * @param url
 	 * @throws IOException
+	 * @throws JclException 
 	 */
-	public void loadJar(URL url) throws IOException {
+	public void loadJar(URL url) throws IOException, JclException {
 		InputStream in = url.openStream();
 		loadJar(in);
 		in.close();
@@ -92,8 +96,9 @@ public class JarResources {
 	 * Load the jar contents from InputStream
 	 * 
 	 * @throws IOException
+	 * @throws JclException 
 	 */
-	public void loadJar(InputStream jarStream) throws IOException {
+	public void loadJar(InputStream jarStream) throws IOException, JclException {
 
 		BufferedInputStream bis = null;
 		JarInputStream jis = null;
@@ -107,6 +112,17 @@ public class JarResources {
 				if (jarEntry.isDirectory()) {
 					continue;
 				}
+				
+                if (jarEntryContents.containsKey(jarEntry.getName())) {
+                    if (!Configuration.supressCollisionException())
+                        throw new JclException("Class " + jarEntry.getName()
+                                + " Already loaded");
+                    else {
+                        logger.debug("Class " + jarEntry.getName()
+                                + " already loaded; ignoring entry...");
+                        continue;
+                    }
+                }
 
 				logger.debug("Entry Name: " + jarEntry.getName() + ","
 						+ "Entry Size: " + jarEntry.getSize());
