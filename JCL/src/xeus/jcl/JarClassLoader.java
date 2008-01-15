@@ -54,7 +54,7 @@ public class JarClassLoader extends AbstractClassLoader {
     @Deprecated
     public JarClassLoader(String resourceName) throws IOException, JclException {
         this();
-        classpathResources.addResource(resourceName);
+        classpathResources.loadResource(resourceName);
     }
 
     /**
@@ -67,7 +67,7 @@ public class JarClassLoader extends AbstractClassLoader {
         this();
 
         for (String resource : resourceNames)
-            classpathResources.addResource(resource);
+            classpathResources.loadResource(resource);
     }
 
     /**
@@ -105,7 +105,7 @@ public class JarClassLoader extends AbstractClassLoader {
     public JarClassLoader(URL url) throws IOException, JclException,
             URISyntaxException {
         classpathResources = new ClasspathResources();
-        classpathResources.addResource(url);
+        classpathResources.loadResource(url);
     }
 
     /**
@@ -119,11 +119,11 @@ public class JarClassLoader extends AbstractClassLoader {
         classpathResources = new ClasspathResources();
 
         for (URL url : urls)
-            classpathResources.addResource(url);
+            classpathResources.loadResource(url);
     }
 
     /**
-     * Reads the class bytes from different local and remote files/paths using ClasspathResources
+     * Reads the class bytes from different local and remote resources using ClasspathResources
      * 
      * @see xeus.jcl.AbstractClassLoader#loadClassBytes(java.lang.String)
      */

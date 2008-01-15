@@ -51,7 +51,7 @@ public class ClasspathResources extends JarResources {
      * @throws IOException
      * @throws JclException
      */
-    private void addResourceContent(String resource) throws IOException,
+    private void loadResourceContent(String resource) throws IOException,
             JclException {
         File resourceFile = new File(resource);
 
@@ -83,7 +83,7 @@ public class ClasspathResources extends JarResources {
      * @throws IOException
      * @throws JclException
      */
-    private void addRemoteResource(URL url) throws IOException, JclException {
+    private void loadRemoteResource(URL url) throws IOException, JclException {
         logger.debug("Attempting to load a remote resource.");
 
         if (url.toString().toLowerCase().endsWith(".jar")) {
@@ -126,7 +126,7 @@ public class ClasspathResources extends JarResources {
      * @throws JclException
      * @throws IOException
      */
-    private void addClassContent(String clazz, String pack)
+    private void loadClassContent(String clazz, String pack)
             throws JclException, IOException {
         File cf = new File(clazz);
         FileInputStream fis = new FileInputStream(cf);
@@ -159,14 +159,14 @@ public class ClasspathResources extends JarResources {
      * @throws JclException
      * @throws URISyntaxException
      */
-    public void addResource(URL url) throws IOException, JclException,
+    public void loadResource(URL url) throws IOException, JclException,
             URISyntaxException {
         try {
             // Is Local
-            addResource(new File(url.toURI()), "");
+            loadResource(new File(url.toURI()), "");
         } catch (IllegalArgumentException iae) {
             // Is Remote
-            addRemoteResource(url);
+            loadRemoteResource(url);
         }
     }
 
@@ -180,8 +180,8 @@ public class ClasspathResources extends JarResources {
      * @throws IOException
      * @throws JclException
      */
-    public void addResource(String path) throws IOException, JclException {
-        addResource(new File(path), "");
+    public void loadResource(String path) throws IOException, JclException {
+        loadResource(new File(path), "");
     }
 
     /**
@@ -195,17 +195,17 @@ public class ClasspathResources extends JarResources {
      * @throws IOException
      * @throws JclException
      */
-    private void addResource(File fol, String packName) throws IOException,
+    private void loadResource(File fol, String packName) throws IOException,
             JclException {
         if (fol.isFile()) {
             if (fol.getName().toLowerCase().endsWith(".class")) {
-                addClassContent(fol.getAbsolutePath(), packName);
+                loadClassContent(fol.getAbsolutePath(), packName);
             } else {
                 if (fol.getName().toLowerCase().endsWith(".jar")) {
                     loadJar(fol.getAbsolutePath());
                 } else {
                     logger.debug("Adding resource: " + fol.getName());
-                    addResourceContent(fol.getAbsolutePath());
+                    loadResourceContent(fol.getAbsolutePath());
                 }
             }
 
@@ -226,7 +226,7 @@ public class ClasspathResources extends JarResources {
                     pn = pn + fl.getName();
                 }
 
-                addResource(fl, pn);
+                loadResource(fl, pn);
             }
         }
     }
