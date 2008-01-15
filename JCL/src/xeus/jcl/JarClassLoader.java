@@ -34,7 +34,7 @@ import java.net.URL;
 import xeus.jcl.exception.JclException;
 
 /**
- * Reads the class bytes from jar files using JarResources
+ * Reads the class bytes from jar files and other resources using ClasspathResources
  * 
  * @author Kamran Zafar
  * 
