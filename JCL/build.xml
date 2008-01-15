@@ -37,7 +37,9 @@
 	<target name="compile" depends="init">
 		<copy file="${src-dir}/log4j.properties" todir="${classes-dir}">
 		</copy>
-
+		<copy file="${src-dir}/jcl.properties" todir="${classes-dir}">
+		</copy>
+		
 		<javac classpathref="master-classpath" srcdir="${src-dir}" destdir="${classes-dir}">
 			<compilerarg value="-nowarn" />
 		</javac>

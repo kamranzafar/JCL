@@ -3,11 +3,7 @@ package xeus.jcl;
 import java.util.ResourceBundle;
 
 public class Configuration {
-    private static ResourceBundle bundle;
-
-    static{
-        bundle = ResourceBundle.getBundle("jcl.properties");
-    }
+    private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
 
     public static boolean supressCollisionException() {
         return bundle.getString("jcl.suppressCollisionException")

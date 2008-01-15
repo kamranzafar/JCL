@@ -65,7 +65,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * 
 	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
 	 */
-	public synchronized Class loadClass(String className, boolean resolveIt)
+	public Class loadClass(String className, boolean resolveIt)
 			throws ClassNotFoundException {
 
 		Class result;

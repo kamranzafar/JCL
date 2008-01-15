@@ -8,7 +8,9 @@
 	<!-- Test jar class loader -->
 	<bean id="jclTest" class="xeus.jcl.JarClassLoader">
 		<constructor-arg>
-			<value>test-jcl.jar</value>
+			<list>
+				<value>test-jcl.jar</value>
+			</list>
 		</constructor-arg>
 	</bean>
 
@@ -27,6 +29,7 @@
 		<constructor-arg>
 			<value>xeus.test.jcl.Test</value>
 		</constructor-arg>
+		
 		<constructor-arg>
 			<value>Kamran</value>
 		</constructor-arg>

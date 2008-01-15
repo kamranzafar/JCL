@@ -48,7 +48,7 @@ import xeus.jcl.exception.JclException;
  */
 public class JarResources {
 
-	private Map<String, byte[]> jarEntryContents;
+	protected Map<String, byte[]> jarEntryContents;
 
 	static Logger logger = Logger.getLogger(JarResources.class);
 
@@ -65,6 +65,13 @@ public class JarResources {
 	 */
 	public byte[] getResource(String name) {
 		return jarEntryContents.get(name);
+	}
+	
+	/**
+	 * @return Map
+	 */
+	public Map<String, byte[]> getResources(){
+	    return jarEntryContents;
 	}
 
 	/**
@@ -118,10 +125,10 @@ public class JarResources {
 				
                 if (jarEntryContents.containsKey(jarEntry.getName())) {
                     if (!Configuration.supressCollisionException())
-                        throw new JclException("Class " + jarEntry.getName()
-                                + " Already loaded");
+                        throw new JclException("Class/Resource " + jarEntry.getName()
+                                + " already loaded");
                     else {
-                        logger.debug("Class " + jarEntry.getName()
+                        logger.debug("Class/Resource " + jarEntry.getName()
                                 + " already loaded; ignoring entry...");
                         continue;
                     }

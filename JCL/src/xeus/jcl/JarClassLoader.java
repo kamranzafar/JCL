@@ -28,6 +28,7 @@ package xeus.jcl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import xeus.jcl.exception.JclException;
@@ -39,46 +40,96 @@ import xeus.jcl.exception.JclException;
  * 
  */
 public class JarClassLoader extends AbstractClassLoader {
-    private JarResources jarResources;
+    private ClasspathResources classpathResources;
+
+    private JarClassLoader() {
+        classpathResources = new ClasspathResources();
+    }
 
     /**
      * @param jarName
      * @throws IOException
-     * @throws JclException 
+     * @throws JclException
      */
-    public JarClassLoader(String jarName) throws IOException, JclException {
-        jarResources = new JarResources();
-        jarResources.loadJar(jarName);
+    @Deprecated
+    public JarClassLoader(String resourceName) throws IOException, JclException {
+        this();
+        classpathResources.addResource(resourceName);
     }
-    
+
+    /**
+     * @param jarNames
+     * @throws IOException
+     * @throws JclException
+     */
+    public JarClassLoader(String[] resourceNames) throws IOException,
+            JclException {
+        this();
+
+        for (String resource : resourceNames)
+            classpathResources.addResource(resource);
+    }
+
     /**
      * @param jarStream
      * @throws IOException
-     * @throws JclException 
+     * @throws JclException
      */
-    public JarClassLoader(InputStream jarStream) throws IOException, JclException{
-        jarResources = new JarResources();
-        jarResources.loadJar(jarStream);        
+    @Deprecated
+    public JarClassLoader(InputStream jarStream) throws IOException,
+            JclException {
+        this();
+        classpathResources.loadJar(jarStream);
+    }
+
+    /**
+     * @param jarStreams
+     * @throws IOException
+     * @throws JclException
+     */
+    public JarClassLoader(InputStream[] jarStreams) throws IOException,
+            JclException {
+        this();
+
+        for (InputStream stream : jarStreams)
+            classpathResources.loadJar(stream);
     }
 
     /**
      * @param url
      * @throws IOException
-     * @throws JclException 
+     * @throws JclException
+     * @throws URISyntaxException
      */
-    public JarClassLoader(URL url) throws IOException, JclException{
-        jarResources = new JarResources();
-        jarResources.loadJar(url);        
+    @Deprecated
+    public JarClassLoader(URL url) throws IOException, JclException,
+            URISyntaxException {
+        classpathResources = new ClasspathResources();
+        classpathResources.addResource(url);
     }
-    
+
     /**
-     * Reads the class bytes from jar files using JarResources
+     * @param urls
+     * @throws IOException
+     * @throws JclException
+     * @throws URISyntaxException
+     */
+    public JarClassLoader(URL[] urls) throws IOException, JclException,
+            URISyntaxException {
+        classpathResources = new ClasspathResources();
+
+        for (URL url : urls)
+            classpathResources.addResource(url);
+    }
+
+    /**
+     * Reads the class bytes from different local and remote files/paths using ClasspathResources
      * 
      * @see xeus.jcl.AbstractClassLoader#loadClassBytes(java.lang.String)
      */
     protected byte[] loadClassBytes(String className) {
         className = formatClassName(className);
 
-        return (jarResources.getResource(className));
+        return (classpathResources.getResource(className));
     }
 }
