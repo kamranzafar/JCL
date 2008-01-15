@@ -1,6 +1,6 @@
-package xeus.test.jcl;
+package xeus.jcl.test;
 
-public class Test implements TestInterface {
+public class Test{
 
 	private String firstName;
 	private String lastName;

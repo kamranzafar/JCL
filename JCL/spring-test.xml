@@ -27,7 +27,7 @@
 			<ref bean="jclTest" />
 		</constructor-arg>
 		<constructor-arg>
-			<value>xeus.test.jcl.Test</value>
+			<value>xeus.jcl.test.Test</value>
 		</constructor-arg>
 		
 		<constructor-arg>

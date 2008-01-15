@@ -27,6 +27,7 @@
 package xeus.jcl;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,21 +67,21 @@ public class JarResources {
 	public byte[] getResource(String name) {
 		return jarEntryContents.get(name);
 	}
-	
+
 	/**
 	 * @return Map
 	 */
-	public Map<String, byte[]> getResources(){
-	    return jarEntryContents;
+	public Map<String, byte[]> getResources() {
+		return jarEntryContents;
 	}
 
 	/**
-     * Reads the specified jar file
-     * 
-     * @param jarFile
-     * @throws IOException
-     * @throws JclException
-     */
+	 * Reads the specified jar file
+	 * 
+	 * @param jarFile
+	 * @throws IOException
+	 * @throws JclException
+	 */
 	public void loadJar(String jarFile) throws IOException, JclException {
 		FileInputStream fis = new FileInputStream(jarFile);
 		loadJar(fis);
@@ -92,7 +93,7 @@ public class JarResources {
 	 * 
 	 * @param url
 	 * @throws IOException
-	 * @throws JclException 
+	 * @throws JclException
 	 */
 	public void loadJar(URL url) throws IOException, JclException {
 		InputStream in = url.openStream();
@@ -104,7 +105,7 @@ public class JarResources {
 	 * Load the jar contents from InputStream
 	 * 
 	 * @throws IOException
-	 * @throws JclException 
+	 * @throws JclException
 	 */
 	public void loadJar(InputStream jarStream) throws IOException, JclException {
 
@@ -117,44 +118,41 @@ public class JarResources {
 
 			JarEntry jarEntry = null;
 			while ((jarEntry = jis.getNextJarEntry()) != null) {
-			    logger.debug(dump(jarEntry));
-			    
+				logger.debug(dump(jarEntry));
+
 				if (jarEntry.isDirectory()) {
 					continue;
 				}
-				
-                if (jarEntryContents.containsKey(jarEntry.getName())) {
-                    if (!Configuration.supressCollisionException())
-                        throw new JclException("Class/Resource " + jarEntry.getName()
-                                + " already loaded");
-                    else {
-                        logger.debug("Class/Resource " + jarEntry.getName()
-                                + " already loaded; ignoring entry...");
-                        continue;
-                    }
-                }
+
+				if (jarEntryContents.containsKey(jarEntry.getName())) {
+					if (!Configuration.supressCollisionException())
+						throw new JclException("Class/Resource "
+								+ jarEntry.getName() + " already loaded");
+					else {
+						logger.debug("Class/Resource " + jarEntry.getName()
+								+ " already loaded; ignoring entry...");
+						continue;
+					}
+				}
 
 				logger.debug("Entry Name: " + jarEntry.getName() + ","
 						+ "Entry Size: " + jarEntry.getSize());
 
-				int size = (int) jarEntry.getSize();
+				byte[] b = new byte[2048];
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-				byte[] b = new byte[(int) size];
-				int rb = 0;
-				int chunk = 0;
-				while (((int) size - rb) > 0) {
-					chunk = jis.read(b, rb, (int) size - rb);
-					if (chunk == -1) {
-						break;
-					}
-					rb += chunk;
+				int len = 0;
+				while ((len = jis.read(b)) > 0) {
+					out.write(b, 0, len);
 				}
 
 				// add to internal resource HashMap
-				jarEntryContents.put(jarEntry.getName(), b);
+				jarEntryContents.put(jarEntry.getName(), out.toByteArray());
 
-				logger.debug(jarEntry.getName() + "  rb=" + rb + ",size="
-						+ size + ",csize=" + jarEntry.getCompressedSize());
+				logger.debug(jarEntry.getName() + ", size=" + out.size() + ",csize="
+						+ jarEntry.getCompressedSize());
+				
+				out.close();
 			}
 		} catch (NullPointerException e) {
 			logger.debug("Done loading.");

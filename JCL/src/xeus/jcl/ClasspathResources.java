@@ -181,6 +181,7 @@ public class ClasspathResources extends JarResources {
      * @throws JclException
      */
     public void loadResource(String path) throws IOException, JclException {
+    	logger.debug("Resource: "+path);
         loadResource(new File(path), "");
     }
 
@@ -198,10 +199,12 @@ public class ClasspathResources extends JarResources {
     private void loadResource(File fol, String packName) throws IOException,
             JclException {
         if (fol.isFile()) {
+        	logger.debug("Is File");
             if (fol.getName().toLowerCase().endsWith(".class")) {
                 loadClassContent(fol.getAbsolutePath(), packName);
             } else {
                 if (fol.getName().toLowerCase().endsWith(".jar")) {
+                	logger.debug("Loading jar: " + fol.getName());
                     loadJar(fol.getAbsolutePath());
                 } else {
                     logger.debug("Adding resource: " + fol.getName());
@@ -211,7 +214,7 @@ public class ClasspathResources extends JarResources {
 
             return;
         }
-
+        logger.debug("Is not a File");
         if (fol.list() != null) {
             for (String f : fol.list()) {
                 File fl = new File(fol.getAbsolutePath() + "/" + f);

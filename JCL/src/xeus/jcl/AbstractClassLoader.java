@@ -25,6 +25,7 @@
  */
 
 package xeus.jcl;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * Abstract class loader that can load classes from different resources 
+ * Abstract class loader that can load classes from different resources
  * 
  * @author Kamran Zafar
  * 
@@ -49,7 +50,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	public AbstractClassLoader() {
 		classes = Collections.synchronizedMap(new HashMap<String, Class>());
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -60,8 +61,9 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	}
 
 	/**
-	 * Overrid the loadClass method to load classes from other resources, 
-	 * JarClassLoader is the only subclass in this project that loads classes from jar files
+	 * Overrid the loadClass method to load classes from other resources,
+	 * JarClassLoader is the only subclass in this project that loads classes
+	 * from jar files
 	 * 
 	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
 	 */
@@ -79,10 +81,12 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		}
 
 		try {
+			//Return System class
 			result = findSystemClass(className);
-			logger.debug("Returning system class");
 			return result;
+
 		} catch (ClassNotFoundException e) {
+			// System class not found
 			logger.debug(e);
 		}
 
@@ -103,7 +107,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		logger.debug("Return newly loaded class");
 		return result;
 	}
-	
+
 	/**
 	 * @param replacement
 	 */
@@ -115,12 +119,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * @return char
 	 */
 	public char getClassNameReplacementChar() {
-        return classNameReplacementChar;
-    }
-	
-    /**
-	 * Abstarct method that allows class content to be loaded from other
-	 * sources
+		return classNameReplacementChar;
+	}
+
+	/**
+	 * Abstarct method that allows class content to be loaded from other sources
 	 * 
 	 * @param className
 	 * @return byte[]
