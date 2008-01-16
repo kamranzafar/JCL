@@ -60,7 +60,7 @@ public class ClasspathResources extends JarResources {
         byte[] content = new byte[(int) resourceFile.length()];
         fis.read(content);
 
-        if (jarEntryContents.containsValue(content)) {
+        if (jarEntryContents.containsKey(resourceFile.getName())) {
             if (!Configuration.supressCollisionException())
                 throw new JclException("Resource " + resourceFile.getName()
                         + " already loaded");
@@ -72,7 +72,8 @@ public class ClasspathResources extends JarResources {
         }
 
         fis.close();
-
+        
+        logger.debug("Loading resource: " + resourceFile.getName());
         jarEntryContents.put(resourceFile.getName(), content);
     }
 
@@ -101,7 +102,7 @@ public class ClasspathResources extends JarResources {
         
         byte[] content=out.toByteArray();
         
-        if (jarEntryContents.containsValue(content)) {
+        if (jarEntryContents.containsKey(url.toString())) {
             if (!Configuration.supressCollisionException())
                 throw new JclException("Resource " + url.toString()
                         + " already loaded");
@@ -112,6 +113,7 @@ public class ClasspathResources extends JarResources {
             }
         }
 
+        logger.debug("Loading remote resource.");
         jarEntryContents.put(url.toString(), content);
 
         out.close();
@@ -134,7 +136,7 @@ public class ClasspathResources extends JarResources {
         byte[] content = new byte[(int) cf.length()];
         fis.read(content);
 
-        String entryName = pack + cf.getName();
+        String entryName = pack + "/" +cf.getName();
 
         if (jarEntryContents.containsKey(entryName)) {
             if (!Configuration.supressCollisionException())
@@ -142,12 +144,13 @@ public class ClasspathResources extends JarResources {
             else {
                 logger.debug("Class " + entryName
                         + " already loaded; ignoring entry...");
+                return;
             }
         }
 
         fis.close();
 
-        logger.debug("Adding class: " + entryName);
+        logger.debug("Loading class: " + entryName);
         jarEntryContents.put(entryName, content);
     }
 
@@ -199,7 +202,6 @@ public class ClasspathResources extends JarResources {
     private void loadResource(File fol, String packName) throws IOException,
             JclException {
         if (fol.isFile()) {
-        	logger.debug("Is File");
             if (fol.getName().toLowerCase().endsWith(".class")) {
                 loadClassContent(fol.getAbsolutePath(), packName);
             } else {
@@ -207,14 +209,13 @@ public class ClasspathResources extends JarResources {
                 	logger.debug("Loading jar: " + fol.getName());
                     loadJar(fol.getAbsolutePath());
                 } else {
-                    logger.debug("Adding resource: " + fol.getName());
                     loadResourceContent(fol.getAbsolutePath());
                 }
             }
 
             return;
         }
-        logger.debug("Is not a File");
+
         if (fol.list() != null) {
             for (String f : fol.list()) {
                 File fl = new File(fol.getAbsolutePath() + "/" + f);

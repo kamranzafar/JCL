@@ -20,12 +20,12 @@ public class LoadTest extends TestCase {
 
 	private static Logger logger = Logger.getLogger(LoadTest.class);
 
-	public void testWithReflection() throws IOException,
+	public void testWithResourceName() throws IOException,
 			InstantiationException, IllegalAccessException,
 			ClassNotFoundException, IllegalArgumentException,
 			SecurityException, InvocationTargetException,
 			NoSuchMethodException, JclException {
-		JarClassLoader jc2 = new JarClassLoader(new String[] { "test-jcl.jar" });
+		JarClassLoader jc2 = new JarClassLoader(new String[] { "test-jcl.jar", "./test-classes" });
 
 		Object testObj = jc2.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
@@ -39,10 +39,10 @@ public class LoadTest extends TestCase {
 			IllegalArgumentException, SecurityException,
 			InvocationTargetException, NoSuchMethodException, JclException,
 			URISyntaxException {
-		// URL url=new URL("http://localhost:8080/blank/test-jcl.jar");
-		URL url = new URL("file:/c:\\Kamran\\work\\new\\test.jar");
+		 URL url=new URL("http://localhost:8080/blank/test-jcl.jar");
+//		URL url = new URL("file:/c:\\Kamran\\work\\new\\test.jar");
 		JarClassLoader jc = new JarClassLoader(new URL[] { url });
-		Object testObj = jc.loadClass("Test").newInstance();
+		Object testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
 
 		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
