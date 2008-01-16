@@ -8,7 +8,7 @@
 <body>
 
 <div align="left"><b><font color="#000080" size="7">JCL</font><font
-	color="#000080" size="5"> ( Jar Class Loader ) v-1.0</font></b></div>
+	color="#000080" size="5"> ( Jar Class Loader )</font></b></div>
 <div align="right"><a href="http://xeustech.blogspot.com"
 	style="color: #000000"><b> <font size="5">Xeus
 Technologies</font></b></a></div>
@@ -21,7 +21,7 @@ Technologies</font></b></a></div>
 from Java Archives (JARs). It uses a custom class loader to load classes
 from JARs that helps in loading multiple versions of the same class file
 hence eliminating class loading conflicts when each version is used by the
-application.</p>
+application. JCL now also integrates with Spring; the integration is tested with Spring 2.5.</p>
 
 <p><u><font color="#000080" size="5"><b>Installation</b></font></u></p>
 
@@ -92,8 +92,8 @@ of it's implementation.</p>
 </table>
 <p>This example shows how to access loaded class methods using
 reflection.</p>
-<p><b>Note: </b>JarClassLoader also has a constructor that takes an InputStream object pointing to the jar file. This is available in version 1.0.3 and later, see API for more details.<br>
-&nbsp;</p>
+<p><b>Note: </b>JCL now also loads classes and resources from multiple JARs and other sources using different methods. See API for more details.</p>
+<p><i>For the latest version of this document please keep on visiting the project <a href="http://jcloader.sourceforge.net">home page</a>. The document will be updated with new examples and code snippets.</i></p>
 <p><u><font color="#000080" size="5"><b>Downloads</b></font></u></p>
 <p>JCL is open source and is distributed under <a
 	href="http://www.gnu.org/copyleft/gpl.html">GPL</a>.</p>
