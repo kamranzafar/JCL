@@ -206,7 +206,6 @@ public class ClasspathResources extends JarResources {
                 loadClassContent(fol.getAbsolutePath(), packName);
             } else {
                 if (fol.getName().toLowerCase().endsWith(".jar")) {
-                	logger.debug("Loading jar: " + fol.getName());
                     loadJar(fol.getAbsolutePath());
                 } else {
                     loadResourceContent(fol.getAbsolutePath());

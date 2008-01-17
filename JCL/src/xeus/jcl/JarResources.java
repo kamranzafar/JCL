@@ -83,6 +83,7 @@ public class JarResources {
 	 * @throws JclException
 	 */
 	public void loadJar(String jarFile) throws IOException, JclException {
+	    logger.debug("Loading jar: " + jarFile);
 		FileInputStream fis = new FileInputStream(jarFile);
 		loadJar(fis);
 		fis.close();
@@ -96,6 +97,7 @@ public class JarResources {
 	 * @throws JclException
 	 */
 	public void loadJar(URL url) throws IOException, JclException {
+	    logger.debug("Loading jar: " + url.toString());
 		InputStream in = url.openStream();
 		loadJar(in);
 		in.close();
@@ -109,7 +111,7 @@ public class JarResources {
 	 */
 	public void loadJar(InputStream jarStream) throws IOException, JclException {
 
-		BufferedInputStream bis = null;
+	    BufferedInputStream bis = null;
 		JarInputStream jis = null;
 
 		try {
@@ -135,7 +137,7 @@ public class JarResources {
 					}
 				}
 
-				logger.debug("Entry Name: " + jarEntry.getName() + ","
+				logger.debug("Entry Name: " + jarEntry.getName() + ", "
 						+ "Entry Size: " + jarEntry.getSize());
 
 				byte[] b = new byte[2048];
@@ -149,7 +151,7 @@ public class JarResources {
 				// add to internal resource HashMap
 				jarEntryContents.put(jarEntry.getName(), out.toByteArray());
 
-				logger.debug(jarEntry.getName() + ", size=" + out.size() + ",csize="
+				logger.debug(jarEntry.getName() + ": size=" + out.size() + " ,csize="
 						+ jarEntry.getCompressedSize());
 				
 				out.close();

@@ -47,6 +47,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads a single resource
+     * 
      * @param jarName
      * @throws IOException
      * @throws JclException
@@ -58,6 +60,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads multiple resources
+     * 
      * @param jarNames
      * @throws IOException
      * @throws JclException
@@ -71,6 +75,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads a single resource
+     * 
      * @param jarStream
      * @throws IOException
      * @throws JclException
@@ -83,6 +89,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads multiple resources
+     * 
      * @param jarStreams
      * @throws IOException
      * @throws JclException
@@ -96,6 +104,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads a single resource
+     * 
      * @param url
      * @throws IOException
      * @throws JclException
@@ -109,6 +119,8 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Loads multiple resources
+     * 
      * @param urls
      * @throws IOException
      * @throws JclException

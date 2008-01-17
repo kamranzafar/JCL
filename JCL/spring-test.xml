@@ -23,6 +23,7 @@
 		The rest are optional arguments used in constructor/setter injection for the bean to be loaded 
 	-->
 	<bean id="test" factory-bean="jclFactory" factory-method="create">
+		<!-- Factory-method arguments -->
 		<constructor-arg>
 			<ref bean="jclTest" />
 		</constructor-arg>
@@ -30,6 +31,7 @@
 			<value>xeus.jcl.test.Test</value>
 		</constructor-arg>
 		
+		<!-- Bean arguments -->
 		<constructor-arg>
 			<value>Kamran</value>
 		</constructor-arg>

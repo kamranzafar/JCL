@@ -29,6 +29,8 @@ package xeus.jcl;
 import java.util.ResourceBundle;
 
 /**
+ * General configuration
+ * 
  * @author Kamran Zafar
  *
  */
@@ -36,6 +38,8 @@ public class Configuration {
     private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
 
     /**
+     * Flag to ignore redundant resources
+     * 
      * @return boolean
      */
     public static boolean supressCollisionException() {
