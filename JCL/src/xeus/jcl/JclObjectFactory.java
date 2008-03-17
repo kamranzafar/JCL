@@ -35,6 +35,7 @@ import java.lang.reflect.InvocationTargetException;
  * @author Kamran Zafar
  *
  */
+@SuppressWarnings("unchecked")
 public class JclObjectFactory {
 	private static JclObjectFactory jclObjectFactory=new JclObjectFactory();
 	

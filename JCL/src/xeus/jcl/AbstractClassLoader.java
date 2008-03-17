@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
  * @author Kamran Zafar
  * 
  */
+@SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
 	private Map<String, Class> classes;
