@@ -38,7 +38,7 @@ public class Configuration {
     private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
 
     /**
-     * Flag to ignore redundant resources
+     * Flag to ignore duplicate resources
      * 
      * @return boolean
      */

@@ -51,7 +51,7 @@ public class JarResources {
 
 	protected Map<String, byte[]> jarEntryContents;
 
-	static Logger logger = Logger.getLogger(JarResources.class);
+	private static Logger logger = Logger.getLogger(JarResources.class);
 
 	/**
 	 * @throws IOException

@@ -1,21 +1,25 @@
 package xeus.jcl.test;
 
-public class Test{
+import org.apache.log4j.Logger;
+
+public class Test {
 
 	private String firstName;
 	private String lastName;
 
+	private static Logger logger = Logger.getLogger(Test.class);
+
 	public Test() {
 		firstName = "World";
-		lastName="";
+		lastName = "";
 	}
 
 	public Test(String firstName) {
 		this.firstName = firstName;
 	}
 
-	public String sayHello() {
-		return "Hello " + firstName + " " + lastName;
+	public void sayHello() {
+		logger.debug("Hello " + firstName + " " + lastName);
 	}
 
 	public String getFirstName() {
@@ -33,6 +37,4 @@ public class Test{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
-
 }

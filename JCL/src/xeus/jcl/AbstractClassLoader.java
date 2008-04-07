@@ -40,10 +40,10 @@ import org.apache.log4j.Logger;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
-
-	private Map<String, Class> classes;
+	
+	protected Map<String, Class> classes;
 	private char classNameReplacementChar;
-	static Logger logger = Logger.getLogger(AbstractClassLoader.class);
+	private static Logger logger = Logger.getLogger(AbstractClassLoader.class);
 
 	/**
 	 * No arguments constructor
@@ -57,6 +57,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * 
 	 * @see java.lang.ClassLoader#loadClass(java.lang.String)
 	 */
+	@Override
 	public Class loadClass(String className) throws ClassNotFoundException {
 		return (loadClass(className, true));
 	}
@@ -68,6 +69,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * 
 	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
 	 */
+	@Override
 	public Class loadClass(String className, boolean resolveIt)
 			throws ClassNotFoundException {
 
@@ -84,11 +86,12 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		try {
 			//Return System class
 			result = findSystemClass(className);
+			logger.debug("Returning system class");
 			return result;
 
 		} catch (ClassNotFoundException e) {
 			// System class not found
-			logger.debug(e);
+			//logger.debug(e);
 		}
 
 		classBytes = loadClassBytes(className);

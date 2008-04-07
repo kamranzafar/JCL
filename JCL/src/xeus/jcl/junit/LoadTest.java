@@ -27,14 +27,14 @@ public class LoadTest extends TestCase {
 			ClassNotFoundException, IllegalArgumentException,
 			SecurityException, InvocationTargetException,
 			NoSuchMethodException, JclException {
-		JarClassLoader jc2 = new JarClassLoader(new String[] { "test-jcl.jar",
+		JarClassLoader jc = new JarClassLoader(new String[] { "test-jcl.jar",
 				"./test-classes" });
 
-		Object testObj = jc2.loadClass("xeus.jcl.test.Test").newInstance();
+		Object testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
 
-		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
-				.invoke(testObj, null));
+		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj,
+				null);
 	}
 
 	public void testWithClassFolder() throws IOException,
@@ -42,14 +42,14 @@ public class LoadTest extends TestCase {
 			ClassNotFoundException, IllegalArgumentException,
 			SecurityException, InvocationTargetException,
 			NoSuchMethodException, JclException {
-		JarClassLoader jc2 = new JarClassLoader(
+		JarClassLoader jc = new JarClassLoader(
 				new String[] { "./test-classes" });
 
-		Object testObj = jc2.loadClass("xeus.jcl.test.Test").newInstance();
+		Object testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
 
-		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
-				.invoke(testObj, null));
+		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj,
+				null);
 	}
 
 	public void testWithUrl() throws IOException, InstantiationException,
@@ -58,14 +58,14 @@ public class LoadTest extends TestCase {
 			InvocationTargetException, NoSuchMethodException, JclException,
 			URISyntaxException {
 		// URL url = new URL("http://localhost:8080/blank/test-jcl.jar");
-		File f=new File("test-jcl.jar");
+		File f = new File("test-jcl.jar");
 
 		JarClassLoader jc = new JarClassLoader(new URL[] { f.toURI().toURL() });
 		Object testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
 
-		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
-				.invoke(testObj, null));
+		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj,
+				null);
 	}
 
 	public void testWithInputStream() throws IOException,
@@ -78,8 +78,8 @@ public class LoadTest extends TestCase {
 		Object testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
 		assertNotNull(testObj);
 
-		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
-				.invoke(testObj, null));
+		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj,
+				null);
 		fis.close();
 	}
 
@@ -92,7 +92,27 @@ public class LoadTest extends TestCase {
 		Object testObj = bf.getBean("test");
 		assertNotNull(testObj);
 
-		logger.debug(testObj.getClass().getDeclaredMethod("sayHello", null)
-				.invoke(testObj, null));
+		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj,
+				null);
+	}
+
+	public void testUnloading() throws IOException, InstantiationException,
+			IllegalAccessException, ClassNotFoundException,
+			IllegalArgumentException, SecurityException,
+			InvocationTargetException, NoSuchMethodException, JclException {
+		JarClassLoader jc = new JarClassLoader(new String[] { "./test-classes" });
+
+		Object testObj = null;
+		jc.loadClass("xeus.jcl.test.Test");
+		jc.unloadClass("xeus.jcl.test.Test");
+
+		try {
+			testObj = jc.loadClass("xeus.jcl.test.Test").newInstance();
+		} catch (ClassNotFoundException cnfe) {
+			logger.debug(cnfe);
+			testObj = null;
+		}
+
+		assertNull(testObj);
 	}
 }

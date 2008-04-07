@@ -51,4 +51,19 @@ public class JclException extends Exception{
     public JclException(String message){
         super(message);
     }
+
+	/**
+	 * @param cause
+	 */
+	public JclException(Throwable cause) {
+		super(cause);
+	}
+
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public JclException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
