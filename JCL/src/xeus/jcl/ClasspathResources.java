@@ -40,7 +40,7 @@ import xeus.jcl.exception.JclException;
 import xeus.jcl.exception.ResourceNotFoundException;
 
 /**
- * Class that builds a virtual classpath by loading resources from different
+ * Class that builds a local classpath by loading resources from different
  * files/paths
  * 
  * @author Kamran Zafar
