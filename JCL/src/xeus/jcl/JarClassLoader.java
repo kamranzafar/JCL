@@ -175,7 +175,7 @@ public class JarClassLoader extends AbstractClassLoader {
 			try {
 				classpathResources.unload(formatClassName(className));
 			} catch (ResourceNotFoundException e) {
-				new JclException(
+				throw new JclException(
 						"Class could not be unloaded " +
 						"[Possible reason: Class belongs to the system]", e);
 			}
