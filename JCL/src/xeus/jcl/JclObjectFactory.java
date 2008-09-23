@@ -108,4 +108,37 @@ public class JclObjectFactory {
 
 		return jcl.loadClass(className).getConstructor(types).newInstance(args);
 	}
+
+	/**
+	 * Creates the object of the specified class from the specified class loader by invoking the right static factory method
+	 * 
+	 * @param jcl
+	 * @param className
+	 * @param methodName
+	 * @param args
+	 * @return Object
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws IllegalArgumentException
+	 * @throws SecurityException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	public Object create(JarClassLoader jcl, String className, String methodName,
+			Object[] args) throws IOException, ClassNotFoundException,
+			InstantiationException, IllegalAccessException,
+			IllegalArgumentException, SecurityException,
+			InvocationTargetException, NoSuchMethodException {
+		if (args == null || args.length == 0)
+			return jcl.loadClass(className).getMethod(methodName).invoke(null);
+
+		Class[] types = new Class[args.length];
+
+		for (int i = 0; i < args.length; i++)
+			types[i] = args[i].getClass();
+
+		return jcl.loadClass(className).getMethod(methodName, types).invoke(null, args);
+	}
 }
