@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2006  Xeus Technologies
+ *  Copyright (C) 2008  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -136,6 +136,10 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		}
 	}
 
+	/**
+	 * Local class loader
+	 * 
+	 */
 	class LocalLoader extends Loader {
 
 		private Logger logger = Logger.getLogger(LocalLoader.class);
@@ -178,6 +182,10 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		}
 	}
 
+	/**
+	 * System class loader
+	 * 
+	 */
 	class SystemLoader extends Loader {
 
 		private Logger logger = Logger.getLogger(SystemLoader.class);
@@ -202,6 +210,10 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
 	}
 
+	/**
+	 * Parent class loader
+	 * 
+	 */
 	class ParentLoader extends Loader {
 		private Logger logger = Logger.getLogger(ParentLoader.class);
 

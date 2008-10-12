@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2006  Xeus Technologies
+ *  Copyright (C) 2008  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
