@@ -83,7 +83,8 @@ public class JarResources {
 	 * @throws JclException
 	 */
 	public void loadJar(String jarFile) throws IOException, JclException {
-	    logger.debug("Loading jar: " + jarFile);
+		if (logger.isTraceEnabled())
+			logger.trace("Loading jar: " + jarFile);
 		FileInputStream fis = new FileInputStream(jarFile);
 		loadJar(fis);
 		fis.close();
@@ -97,7 +98,8 @@ public class JarResources {
 	 * @throws JclException
 	 */
 	public void loadJar(URL url) throws IOException, JclException {
-	    logger.debug("Loading jar: " + url.toString());
+		if (logger.isTraceEnabled())
+			logger.trace("Loading jar: " + url.toString());
 		InputStream in = url.openStream();
 		loadJar(in);
 		in.close();
@@ -111,7 +113,7 @@ public class JarResources {
 	 */
 	public void loadJar(InputStream jarStream) throws IOException, JclException {
 
-	    BufferedInputStream bis = null;
+		BufferedInputStream bis = null;
 		JarInputStream jis = null;
 
 		try {
@@ -120,7 +122,8 @@ public class JarResources {
 
 			JarEntry jarEntry = null;
 			while ((jarEntry = jis.getNextJarEntry()) != null) {
-				logger.debug(dump(jarEntry));
+				if (logger.isTraceEnabled())
+					logger.trace(dump(jarEntry));
 
 				if (jarEntry.isDirectory()) {
 					continue;
@@ -128,17 +131,16 @@ public class JarResources {
 
 				if (jarEntryContents.containsKey(jarEntry.getName())) {
 					if (!Configuration.supressCollisionException())
-						throw new JclException("Class/Resource "
-								+ jarEntry.getName() + " already loaded");
+						throw new JclException("Class/Resource " + jarEntry.getName() + " already loaded");
 					else {
-						logger.debug("Class/Resource " + jarEntry.getName()
-								+ " already loaded; ignoring entry...");
+						if (logger.isTraceEnabled())
+							logger.trace("Class/Resource " + jarEntry.getName() + " already loaded; ignoring entry...");
 						continue;
 					}
 				}
 
-				logger.debug("Entry Name: " + jarEntry.getName() + ", "
-						+ "Entry Size: " + jarEntry.getSize());
+				if (logger.isTraceEnabled())
+					logger.trace("Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize());
 
 				byte[] b = new byte[2048];
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -151,13 +153,15 @@ public class JarResources {
 				// add to internal resource HashMap
 				jarEntryContents.put(jarEntry.getName(), out.toByteArray());
 
-				logger.debug(jarEntry.getName() + ": size=" + out.size() + " ,csize="
-						+ jarEntry.getCompressedSize());
-				
+				if (logger.isTraceEnabled())
+					logger.trace(jarEntry.getName() + ": size=" + out.size() + " ,csize="
+							+ jarEntry.getCompressedSize());
+
 				out.close();
 			}
 		} catch (NullPointerException e) {
-			logger.debug("Done loading.");
+			if (logger.isTraceEnabled())
+				logger.trace("Done loading.");
 		} finally {
 			jis.close();
 			bis.close();

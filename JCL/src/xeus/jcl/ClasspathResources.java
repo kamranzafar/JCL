@@ -49,7 +49,7 @@ import xeus.jcl.exception.ResourceNotFoundException;
 public class ClasspathResources extends JarResources {
 
 	private static Logger logger = Logger.getLogger(ClasspathResources.class);
-	
+
 	/**
 	 * Reads the resource content
 	 * 
@@ -57,8 +57,7 @@ public class ClasspathResources extends JarResources {
 	 * @throws IOException
 	 * @throws JclException
 	 */
-	private void loadResourceContent(String resource) throws IOException,
-			JclException {
+	private void loadResourceContent(String resource) throws IOException, JclException {
 		File resourceFile = new File(resource);
 
 		FileInputStream fis = new FileInputStream(resourceFile);
@@ -68,18 +67,18 @@ public class ClasspathResources extends JarResources {
 
 		if (jarEntryContents.containsKey(resourceFile.getName())) {
 			if (!Configuration.supressCollisionException())
-				throw new JclException("Resource " + resourceFile.getName()
-						+ " already loaded");
+				throw new JclException("Resource " + resourceFile.getName() + " already loaded");
 			else {
-				logger.debug("Resource " + resourceFile.getName()
-						+ " already loaded; ignoring entry...");
+				if (logger.isTraceEnabled())
+					logger.trace("Resource " + resourceFile.getName() + " already loaded; ignoring entry...");
 				return;
 			}
 		}
 
 		fis.close();
 
-		logger.debug("Loading resource: " + resourceFile.getName());
+		if (logger.isTraceEnabled())
+			logger.trace("Loading resource: " + resourceFile.getName());
 		jarEntryContents.put(resourceFile.getName(), content);
 	}
 
@@ -91,7 +90,8 @@ public class ClasspathResources extends JarResources {
 	 * @throws JclException
 	 */
 	private void loadRemoteResource(URL url) throws IOException, JclException {
-		logger.debug("Attempting to load a remote resource.");
+		if (logger.isTraceEnabled())
+			logger.trace("Attempting to load a remote resource.");
 
 		if (url.toString().toLowerCase().endsWith(".jar")) {
 			loadJar(url);
@@ -110,16 +110,16 @@ public class ClasspathResources extends JarResources {
 
 		if (jarEntryContents.containsKey(url.toString())) {
 			if (!Configuration.supressCollisionException())
-				throw new JclException("Resource " + url.toString()
-						+ " already loaded");
+				throw new JclException("Resource " + url.toString() + " already loaded");
 			else {
-				logger.debug("Resource " + url.toString()
-						+ " already loaded; ignoring entry...");
+				if (logger.isTraceEnabled())
+					logger.trace("Resource " + url.toString() + " already loaded; ignoring entry...");
 				return;
 			}
 		}
 
-		logger.debug("Loading remote resource.");
+		if (logger.isTraceEnabled())
+			logger.trace("Loading remote resource.");
 		jarEntryContents.put(url.toString(), content);
 
 		out.close();
@@ -134,8 +134,7 @@ public class ClasspathResources extends JarResources {
 	 * @throws JclException
 	 * @throws IOException
 	 */
-	private void loadClassContent(String clazz, String pack)
-			throws JclException, IOException {
+	private void loadClassContent(String clazz, String pack) throws JclException, IOException {
 		File cf = new File(clazz);
 		FileInputStream fis = new FileInputStream(cf);
 
@@ -148,15 +147,16 @@ public class ClasspathResources extends JarResources {
 			if (!Configuration.supressCollisionException())
 				throw new JclException("Class " + entryName + " already loaded");
 			else {
-				logger.debug("Class " + entryName
-						+ " already loaded; ignoring entry...");
+				if (logger.isTraceEnabled())
+					logger.trace("Class " + entryName + " already loaded; ignoring entry...");
 				return;
 			}
 		}
 
 		fis.close();
 
-		logger.debug("Loading class: " + entryName);
+		if (logger.isTraceEnabled())
+			logger.trace("Loading class: " + entryName);
 		jarEntryContents.put(entryName, content);
 	}
 
@@ -168,14 +168,15 @@ public class ClasspathResources extends JarResources {
 	 * @throws JclException
 	 * @throws URISyntaxException
 	 */
-	public void loadResource(URL url) throws IOException, JclException,
-			URISyntaxException {
+	public void loadResource(URL url) throws IOException, JclException {
 		try {
 			// Is Local
 			loadResource(new File(url.toURI()), "");
 		} catch (IllegalArgumentException iae) {
 			// Is Remote
 			loadRemoteResource(url);
+		} catch (URISyntaxException e) {
+			throw new JclException("URISyntaxException", e);
 		}
 	}
 
@@ -188,7 +189,8 @@ public class ClasspathResources extends JarResources {
 	 * @throws JclException
 	 */
 	public void loadResource(String path) throws IOException, JclException {
-		logger.debug("Resource: " + path);
+		if (logger.isTraceEnabled())
+			logger.trace("Resource: " + path);
 		loadResource(new File(path), "");
 	}
 
@@ -201,8 +203,7 @@ public class ClasspathResources extends JarResources {
 	 * @throws IOException
 	 * @throws JclException
 	 */
-	private void loadResource(File fol, String packName) throws IOException,
-			JclException {
+	private void loadResource(File fol, String packName) throws IOException, JclException {
 		if (fol.isFile()) {
 			if (fol.getName().toLowerCase().endsWith(".class")) {
 				loadClassContent(fol.getAbsolutePath(), packName);
@@ -244,11 +245,11 @@ public class ClasspathResources extends JarResources {
 	 */
 	public void unload(String resource) throws ResourceNotFoundException {
 		if (jarEntryContents.containsKey(resource)) {
-			logger.debug("Removing resource " + resource);
+			if (logger.isTraceEnabled())
+				logger.trace("Removing resource " + resource);
 			jarEntryContents.remove(resource);
 		} else {
-			throw new ResourceNotFoundException(resource,
-					"Resource not found in local ClasspathResources");
+			throw new ResourceNotFoundException(resource, "Resource not found in local ClasspathResources");
 		}
 	}
 }

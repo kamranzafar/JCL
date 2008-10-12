@@ -26,11 +26,15 @@
 
 package xeus.jcl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import xeus.jcl.loader.Loader;
 
 /**
  * Abstract class loader that can load classes from different resources
@@ -40,16 +44,27 @@ import org.apache.log4j.Logger;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
-	
+
 	protected Map<String, Class> classes;
 	private char classNameReplacementChar;
-	private static Logger logger = Logger.getLogger(AbstractClassLoader.class);
+	private final List<Loader> loaders = new ArrayList<Loader>();
+
+	private Loader systemLoader = new SystemLoader();
+	private Loader parentLoader = new ParentLoader();
+	private Loader localLoader = new LocalLoader();
 
 	/**
 	 * No arguments constructor
 	 */
 	public AbstractClassLoader() {
 		classes = Collections.synchronizedMap(new HashMap<String, Class>());
+		loaders.add(systemLoader);
+		loaders.add(parentLoader);
+		loaders.add(localLoader);
+	}
+
+	public void addLoader(Loader loader) {
+		loaders.add(loader);
 	}
 
 	/*
@@ -70,46 +85,19 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
 	 */
 	@Override
-	public Class loadClass(String className, boolean resolveIt)
-			throws ClassNotFoundException {
-
-		Class result;
-		byte[] classBytes;
-		logger.debug("Loading class: " + className + ", " + resolveIt + "");
-
-		result = classes.get(className);
-		if (result != null) {
-			logger.debug("Returning local loaded class");
-			return result;
+	public Class loadClass(String className, boolean resolveIt) throws ClassNotFoundException {
+		Collections.sort(loaders);
+		Class clazz = null;
+		for (Loader l : loaders) {
+			clazz = l.load(className, resolveIt);
+			if (clazz != null)
+				break;
 		}
 
-		try {
-			//Return System class
-			result = findSystemClass(className);
-			logger.debug("Returning system class");
-			return result;
+		if (clazz == null)
+			throw new ClassNotFoundException(className);
 
-		} catch (ClassNotFoundException e) {
-			// System class not found
-			//logger.debug(e);
-		}
-
-		classBytes = loadClassBytes(className);
-		if (classBytes == null) {
-			throw new ClassNotFoundException();
-		}
-
-		result = defineClass(className, classBytes, 0, classBytes.length);
-		if (result == null) {
-			throw new ClassFormatError();
-		}
-
-		if (resolveIt)
-			resolveClass(result);
-
-		classes.put(className, result);
-		logger.debug("Return newly loaded class");
-		return result;
+		return clazz;
 	}
 
 	/**
@@ -146,5 +134,106 @@ public abstract class AbstractClassLoader extends ClassLoader {
 			// Replace '.' with custom char, such as '_'
 			return className.replace('.', classNameReplacementChar) + ".class";
 		}
+	}
+
+	class LocalLoader extends Loader {
+
+		private Logger logger = Logger.getLogger(LocalLoader.class);
+
+		public LocalLoader() {
+			order = 1;
+		}
+
+		public Class load(String className, boolean resolveIt) {
+			Class result = null;
+			byte[] classBytes;
+			if (logger.isTraceEnabled())
+				logger.trace("Loading class: " + className + ", " + resolveIt + "");
+
+			result = classes.get(className);
+			if (result != null) {
+				if (logger.isTraceEnabled())
+					logger.trace("Returning local loaded class " + className);
+				return result;
+			}
+
+			classBytes = loadClassBytes(className);
+			if (classBytes == null) {
+				return null;
+			}
+
+			result = defineClass(className, classBytes, 0, classBytes.length);
+
+			if (result == null) {
+				return null;
+			}
+
+			if (resolveIt)
+				resolveClass(result);
+
+			classes.put(className, result);
+			if (logger.isTraceEnabled())
+				logger.trace("Return newly loaded class " + className);
+			return result;
+		}
+	}
+
+	class SystemLoader extends Loader {
+
+		private Logger logger = Logger.getLogger(SystemLoader.class);
+
+		public SystemLoader() {
+			order = 3;
+		}
+
+		public Class load(String className, boolean resolveIt) {
+			Class result;
+			try {
+				result = findSystemClass(className);
+			} catch (ClassNotFoundException e) {
+				return null;
+			}
+
+			if (logger.isTraceEnabled())
+				logger.trace("Returning system class " + className);
+
+			return result;
+		}
+
+	}
+
+	class ParentLoader extends Loader {
+		private Logger logger = Logger.getLogger(ParentLoader.class);
+
+		public ParentLoader() {
+			order = 2;
+		}
+
+		public Class load(String className, boolean resolveIt) {
+			Class result;
+			try {
+				result = this.getClass().getClassLoader().getParent().loadClass(className);
+			} catch (ClassNotFoundException e) {
+				return null;
+			}
+
+			if (logger.isTraceEnabled())
+				logger.trace("Returning class " + className + " loaded with parent classloader");
+
+			return result;
+		}
+
+	}
+
+	public Loader getSystemLoader() {
+		return systemLoader;
+	}
+
+	public Loader getParentLoader() {
+		return parentLoader;
+	}
+
+	public Loader getLocalLoader() {
+		return localLoader;
 	}
 }

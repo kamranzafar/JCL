@@ -28,7 +28,6 @@ package xeus.jcl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
@@ -47,96 +46,63 @@ public class JarClassLoader extends AbstractClassLoader {
 	private ClasspathResources classpathResources;
 	private static Logger logger = Logger.getLogger(JarClassLoader.class);
 
-	private JarClassLoader() {
+	public JarClassLoader() {
 		classpathResources = new ClasspathResources();
 	}
 
 	/**
-	 * Loads a single resource
+	 * Loads classes from different sources
+	 * 
+	 * @param resources
+	 * @throws IOException
+	 * @throws JclException
+	 */
+	public JarClassLoader(Object[] resources) throws IOException, JclException {
+		this();
+
+		for (Object resource : resources) {
+			if (resource instanceof InputStream)
+				add((InputStream) resource);
+			else if (resource instanceof URL)
+				add((URL) resource);
+			else if (resource instanceof String)
+				add((String) resource);
+			else
+				throw new JclException("Unknow Resource type");
+		}
+	}
+
+	/**
+	 * Loads local/remote resource
 	 * 
 	 * @param resourceName
 	 * @throws IOException
 	 * @throws JclException
 	 */
-	@Deprecated
-	public JarClassLoader(String resourceName) throws IOException, JclException {
-		this();
+	public void add(String resourceName) throws IOException, JclException {
 		classpathResources.loadResource(resourceName);
 	}
 
 	/**
-	 * Loads multiple resources
-	 * 
-	 * @param resourceNames
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	public JarClassLoader(String[] resourceNames) throws IOException,
-			JclException {
-		this();
-
-		for (String resource : resourceNames)
-			classpathResources.loadResource(resource);
-	}
-
-	/**
-	 * Loads a single resource
+	 * Loads resource from InputStream
 	 * 
 	 * @param jarStream
 	 * @throws IOException
 	 * @throws JclException
 	 */
-	@Deprecated
-	public JarClassLoader(InputStream jarStream) throws IOException,
-			JclException {
-		this();
+	public void add(InputStream jarStream) throws IOException, JclException {
 		classpathResources.loadJar(jarStream);
 	}
 
 	/**
-	 * Loads multiple resources
-	 * 
-	 * @param jarStreams
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	public JarClassLoader(InputStream[] jarStreams) throws IOException,
-			JclException {
-		this();
-
-		for (InputStream stream : jarStreams)
-			classpathResources.loadJar(stream);
-	}
-
-	/**
-	 * Loads a single resource
+	 * Loads local/remote resource
 	 * 
 	 * @param url
 	 * @throws IOException
 	 * @throws JclException
-	 * @throws URISyntaxException
 	 */
-	@Deprecated
-	public JarClassLoader(URL url) throws IOException, JclException,
-			URISyntaxException {
-		classpathResources = new ClasspathResources();
+	public void add(URL url) throws IOException, JclException {
 		classpathResources.loadResource(url);
-	}
-
-	/**
-	 * Loads multiple resources
-	 * 
-	 * @param urls
-	 * @throws IOException
-	 * @throws JclException
-	 * @throws URISyntaxException
-	 */
-	public JarClassLoader(URL[] urls) throws IOException, JclException,
-			URISyntaxException {
-		classpathResources = new ClasspathResources();
-
-		for (URL url : urls)
-			classpathResources.loadResource(url);
 	}
 
 	/**
@@ -149,7 +115,7 @@ public class JarClassLoader extends AbstractClassLoader {
 	protected byte[] loadClassBytes(String className) {
 		className = formatClassName(className);
 
-		return (classpathResources.getResource(className));
+		return classpathResources.getResource(className);
 	}
 
 	/**
@@ -157,27 +123,28 @@ public class JarClassLoader extends AbstractClassLoader {
 	 * JCL
 	 * 
 	 * @param className
-	 * @throws JclException 
+	 * @throws JclException
 	 */
 	public void unloadClass(String className) throws JclException {
-		logger.debug("Unloading class " + className);
+		if (logger.isTraceEnabled())
+			logger.trace("Unloading class " + className);
 
 		if (classes.containsKey(className)) {
-			logger.debug("Removing loaded class " + className);
+			if (logger.isTraceEnabled())
+				logger.trace("Removing loaded class " + className);
 			classes.remove(className);
 			try {
 				classpathResources.unload(formatClassName(className));
 			} catch (ResourceNotFoundException e) {
-				throw new JclException("Something is very wrong!!!" +
-								"The locally loaded classes must be in synch with ClasspathResources", e);
+				throw new JclException("Something is very wrong!!!"
+						+ "The locally loaded classes must be in synch with ClasspathResources", e);
 			}
 		} else {
 			try {
 				classpathResources.unload(formatClassName(className));
 			} catch (ResourceNotFoundException e) {
-				throw new JclException(
-						"Class could not be unloaded " +
-						"[Possible reason: Class belongs to the system]", e);
+				throw new JclException("Class could not be unloaded "
+						+ "[Possible reason: Class belongs to the system]", e);
 			}
 		}
 	}
