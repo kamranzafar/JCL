@@ -92,7 +92,56 @@ of it's implementation.</p>
 </table>
 <p>This example shows how to access loaded class methods using
 reflection.</p>
-<p><b>Note: </b>JCL now also loads classes and resources from multiple JARs and other sources using different methods. See API for more details.</p>
+<p>In version 1.2 and later parent class loader has been added. Currently JCL 
+looks for class in three places in order.</p>
+
+<ul>
+  <li>locally in JCL classloader (order=1)</li>
+  <li>parent class loader (order=2)</li>
+  <li>system classloader (order=3)</li>
+</ul>
+<p>&nbsp;This class loading order can be changed and more custom loaders can 
+also be added by extending <font color="#0000FF"><i>xeus.jcl.loader.Loader</i></font>, 
+below is an example that illustrates this.</p>
+
+<table border="1" cellpadding="10" cellspacing="0"
+	style="border-collapse: collapse" bordercolor="#111111" width="61%"
+	id="AutoNumber2">
+	<tr>
+		<td width="100%"><u><b>Changing class loading order</b></u><p>
+        <font color="#008000">// A custom loader</font><u><b><br>
+        </b></u>class MyLoader extends Loader{<br>
+&nbsp;&nbsp; public Class load(String className, boolean resoveIt){<br>
+        <font color="#008000">&nbsp;&nbsp;&nbsp;&nbsp; //Load and return class 
+        from somewhere</font><br>
+&nbsp;&nbsp; }<br>
+        }</p>
+        <p>...<br>
+        <br>
+		JarClassLoader jcl=<b><font color="#800000">new</font></b>
+		JarClassLoader();<br>
+        jcl.add(<font color="#0000FF">&quot;testjar.jar&quot;</font>);
+        <font color="#008000">// Add some class source</font><br>
+        <br>
+		jcl.getSystemLoader().setOrder(1); <font color="#008000">// Look for 
+        classes in system class loader first</font><br>
+        jcl.getLocalLoader().setOrder(2); <font color="#008000">// if not found 
+        look for classes in local class loader</font><br>
+        jcl.getParentLoader().setOrder(3); <font color="#008000">// if not found 
+        look for classes in parent class loader<br>
+        <br>
+        </font>MyLoader loader=new MyLoader();<br>
+        loader.setOrder(4);<br>
+        <br>
+        jcl.addLoader(loader); <font color="#008000">//Add custom loader</font></p>
+        <p>Object t1=jcl.loadClass(<font color="#0000FF">&quot;xeus.test.jcl.Test&quot;</font>).newInstance();<br>
+		System.<i><font color="#0000FF">out</font></i>.println(t1.getClass().getDeclaredMethod(<font
+			color="#0000FF">&quot;sayHello&quot;</font>,<b><font
+			color="#800000">null</font></b>).invoke(t1,<b><font color="#800000">null</font></b>));<br>
+		&nbsp;</td>
+	</tr>
+</table>
+<p><b>Note: </b>See API for more details.</p>
 <p><i>For the latest version of this document please keep on visiting the project <a href="http://jcloader.sourceforge.net">home page</a>. The document will be updated with new examples and code snippets.</i></p>
 <p><u><font color="#000080" size="5"><b>Downloads</b></font></u></p>
 <p> - <a href="http://www.sourceforge.net/projects/jcloader">Download</a><br>
