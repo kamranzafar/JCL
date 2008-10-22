@@ -12,12 +12,14 @@
 	<title>Jar Class Loader</title>	
 	<link rel="shortcut icon" href="image/favicon.ico" />
 	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="expires" content="0">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta http-equiv="content-language" content="en-gb" />
 	<meta http-equiv="imagetoolbar" content="false" />
 	<meta name="author" content="Xeus Technologies" />
 	<meta name="description" content="" />
-	<meta name="keywords" content="jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies, jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies," />	
+	<meta name="keywords" content="jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies, spring, spring framework, spring classloader, spring class loader, jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies, spring, spring framework, spring classloader, spring class loader" />	
 	<meta name="mssmarttagspreventparsing" content="true" />	
 	<meta name="robots" content="index, follow, noarchive" />
 	<meta name="revisit-after" content="7 days" />
@@ -53,7 +55,7 @@
 		<h1>Overview</h1>
 			
 			<p>JCL is a simple Java API that allows loading classes from Jar 
-            files. It uses a custom class loaders to load classes from JARs, 
+            files. It uses a custom class loader to load classes from JARs, 
             which helps in isolating class loaders and it even makes it possible 
             to load multiple versions of the same class file from different 
             jars. JCL also integrates with Spring; the integration is tested 
@@ -68,57 +70,63 @@
 			<h1>Usage</h1>
 			
 			<p>JCL is a light weight API and has only a few but useful classes. 
-            Here is a simple example on how to use programmatically use JCL.</p>
+            Here is a simple example on how to programmatically use JCL.</p>
 			
-			<p><pre name="code" class="java">			JarClassLoader jcl = new JarClassLoader();
-			jcl.add("myjar.jar");
-			jcl.add("myclassfolder/");
-			jcl.add(new FileInputStream("anotherjar.jar"));
+			<p><pre name="code" class="java">
+			JarClassLoader jcl = new JarClassLoader();
+			jcl.add("myjar.jar"); //Load jar file
+			jcl.add("myclassfolder/"); //Load class folder
+
+			//Recursively load all jar files in the folder/sub-folder(s)
+			jcl.add(new FileInputStream("myjarlib/"));
 			
 			JclObjectFactory factory = JclObjectFactory.getInstance();
 			
 			//Create object of loaded class
 			Object obj = factory.create(jcl,&quot;mypackage.MyClass");
-</pre>
+			</pre>
 			<p>JarClassLoader has an arguments-constructor and <b><i>add</i></b> 
-            methods that take jar file/class folder paths, URLs and InputStreams.<p>Similarly JCL can be used with spring 
-        framework.<pre name="code" class="xml">	<!-- Singleton object factory -->
-	<bean id="jclFactory" class="xeus.jcl.JclObjectFactory"></bean>
-	<!-- Test jar class loader -->
-	<bean id="jcl" class="xeus.jcl.JarClassLoader">
-		<constructor-arg>
+            methods that take jar-file/class-folder paths, URLs and InputStreams.<p>Similarly JCL can be used with spring 
+	framework.
+			<pre name="code" class="xml">
+			<!-- Singleton object factory -->
+			<bean id="jclFactory" class="xeus.jcl.JclObjectFactory"></bean>
+			<!-- Test jar class loader -->
+			<bean id="jcl" class="xeus.jcl.JarClassLoader">
+			<constructor-arg>
 			<list>
 				<value>myjar.jar</value>
-				<ref  bean="someJarInputStream"/>
-				<ref  bean="someJarURL"/>
+				<ref  bean="someJarInputStream"></ref>
+				<ref  bean="someJarURL"/></ref>
 			</list>
-		</constructor-arg>
-	</bean>
+			</constructor-arg>
+			</bean>
 
-	<!-- 
-		The Bean arguments: 
-		1- The jar class loader
-		2- Name of the class to be loaded
-		The rest are optional arguments used in constructor/setter injection for the bean to be loaded 
-	-->
-	<bean id="test" factory-bean="jclFactory" factory-method="create">
-		<!-- Factory-method arguments -->
-		<constructor-arg>
-			<ref bean="jcl" />
-		</constructor-arg>
-		<constructor-arg>
-			<value>mypackage.MyClass</value>
-		</constructor-arg>
+			<!-- 
+				The Bean arguments: 
+				1- The jar class loader
+				2- Name of the class to be loaded
+				The rest are optional arguments used in constructor/setter injection for the bean to be loaded 
+			-->
+			<bean id="test" factory-bean="jclFactory" factory-method="create">
+			<!-- Factory-method arguments -->
+			<constructor-arg>
+				<ref bean="jcl"></ref>
+			</constructor-arg>
+			<constructor-arg>
+				<value>mypackage.MyClass</value>
+			</constructor-arg>
 
-		<!-- Bean arguments -->
-		<constructor-arg>
-			<value>Hello</value>
-		</constructor-arg>
-		<property name="name">
-			<value>Kamran Zafar</value>
-		</property>
-	</bean></pre>
-</p>
+			<!-- Bean arguments -->
+			<constructor-arg>
+				<value>Hello</value>
+			</constructor-arg>
+			<property name="name">
+				<value>Kamran Zafar</value>
+			</property>
+			</bean>
+			</pre>
+			</p>
 			<p>JCL looks for classes in three places in order, local JCL class 
             loader (order=1), parent class loader (order=2) and then in system class loader 
             (order=3). More 
@@ -143,17 +151,17 @@ jcl.addLoader(loader); //Add custom loader</pre>
 			
 			<p>JCL is open source under <a href="http://www.gnu.org/copyleft/gpl.html">GPL</a> and is available for
             <a href="http://www.sourceforge.net/projects/jcloader">download</a> 
-            on sourceforge. The can be anonymously checked-out from subversion 
+            on sourceforge. The source can be anonymously checked-out from subversion 
             using the following command:<br>
             <br>
             svn co https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL 
             JCL</p>
-	
 	</div>
-	
+
 	<div id="footer">
 		<p>Copyright &copy; <a href="http://xeustech.blogspot.com/">Xeus Technologies</a> 2008 | Valid <a href="http://jigsaw.w3.org/css-validator/">CSS</a> &amp; <a href="http://validator.w3.org/">XHTML</a></p>
 	</div>
 </body>
 
 </html>
+
