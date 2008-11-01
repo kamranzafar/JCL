@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.FileSystemResource;
 
 import xeus.jcl.JarClassLoader;
+import xeus.jcl.JclObjectFactory;
+import xeus.jcl.JclUtils;
 import xeus.jcl.exception.JclException;
 
 @SuppressWarnings("all")
@@ -110,6 +113,28 @@ public class LoadTest extends TestCase {
 		assertNotNull(testObj);
 
 		testObj.getClass().getDeclaredMethod("sayHello", null).invoke(testObj, null);
+	}
+
+	public void testInterfaceCast() throws IOException, InstantiationException, IllegalAccessException,
+			ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
+			NoSuchMethodException, JclException {
+		JarClassLoader jc = new JarClassLoader();
+		jc.add("test-jcl.jar");
+
+		JclObjectFactory factory = JclObjectFactory.getInstance();
+		Object serializable = factory.create(jc, "xeus.jcl.test.Test");
+
+		Serializable s = JclUtils.cast(serializable, Serializable.class);
+
+		assertNotNull(s);
+
+		s = (Serializable) JclUtils.toCastable(serializable, Serializable.class);
+
+		assertNotNull(s);
+
+		s = (Serializable) JclUtils.clone(serializable);
+
+		assertNotNull(s);
 	}
 
 	public void testUnloading() throws IOException, InstantiationException, IllegalAccessException,

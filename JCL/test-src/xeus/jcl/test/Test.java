@@ -1,8 +1,10 @@
 package xeus.jcl.test;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
-public class Test {
+public class Test implements Serializable {
 
 	private String firstName;
 	private String lastName;
