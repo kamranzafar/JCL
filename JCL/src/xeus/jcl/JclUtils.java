@@ -44,8 +44,8 @@ public class JclUtils {
 	 * Casts the object ref to the passed interface class ref
 	 * 
 	 * @param object
-	 * @param clazz
-	 * @return
+	 * @param classes
+	 * @return castable
 	 * @return casted
 	 */
 	public static Object toCastable(Object object, Class[] classes) {
@@ -58,7 +58,7 @@ public class JclUtils {
 	 * 
 	 * @param object
 	 * @param clazz
-	 * @return
+	 * @return castable
 	 * @return casted
 	 */
 	public static Object toCastable(Object object, Class clazz) {
@@ -70,7 +70,7 @@ public class JclUtils {
 	 * 
 	 * @param object
 	 * @param clazz
-	 * @return
+	 * @return T reference
 	 * @return casted
 	 */
 	public static <T> T cast(Object object, Class<T> clazz) {

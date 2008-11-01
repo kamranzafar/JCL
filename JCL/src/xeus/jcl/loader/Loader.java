@@ -52,7 +52,7 @@ public abstract class Loader implements Comparable<Loader> {
 	 * 
 	 * @param className
 	 * @param resolveIt
-	 * @return
+	 * @return class
 	 */
 	public abstract Class load(String className, boolean resolveIt);
 
