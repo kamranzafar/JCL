@@ -37,6 +37,7 @@ import java.lang.reflect.Proxy;
 
 import xeus.jcl.exception.JclException;
 
+@SuppressWarnings("unchecked")
 public class JclUtils {
 
 	/**
