@@ -11,16 +11,12 @@
 <meta http-equiv="content-language" content="en-gb" />
 <meta http-equiv="imagetoolbar" content="false" />
 <meta name="author" content="Xeus Technologies" />
-<meta name="description" content />
+<meta name="description" content="Jar Class Loader" />
 <meta name="keywords" content="jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies, spring, spring framework, spring classloader, spring class loader, jar class loader, jarclassloader, classloader, java, jar, Kamran, Kamran Zafar, Xeus, Xeus Technologies, spring, spring framework, spring classloader, spring class loader" />
 <meta name="mssmarttagspreventparsing" content="true" />
 <meta name="robots" content="index, follow, noarchive" />
 <meta name="revisit-after" content="7 days" />
 <link type="text/css" rel="stylesheet" href="css/SyntaxHighlighter.css" />
-<link />
-<link />
-<link>
-</link>
 <script language="javascript" src="js/shCore.js"></script>
 <script language="javascript" src="js/shBrushJava.js"></script>
 <script language="javascript" src="js/shBrushXml.js"></script>
@@ -61,11 +57,12 @@
   classpath.</p>
   <h1>Usage</h1>
   <p>JCL is a light weight API and has only a few but useful classes. Here is a 
-  simple example on how to programmatically use JCL.</p>
+  simple example on how to programmatically use JCL. JarClassLoader has an arguments-constructor and <b><i>add</i></b> methods that 
+  take jar-file/class-folder paths, URLs and InputStreams.</p>
   <p></p>
   <pre name="code" class="java">			JarClassLoader jcl = new JarClassLoader();
 			jcl.add(&quot;myjar.jar&quot;); //Load jar file
-			jcl.add(new URL(&quot;http:⁄⁄myserver.com/myjar.jar&quot;)); //Load jar from a URL
+			jcl.add(new URL(&quot;http://myserver.com/myjar.jar&quot;)); //Load jar from a URL
 			jcl.add(new FileInputStream(&quot;myotherjar.jar&quot;)); //Load jar file from stream
 			jcl.add(&quot;myclassfolder/&quot;); //Load class folder
 			jcl.add(&quot;myjarlib/&quot;); //Recursively load all jar files in the folder/sub-folder(s)
@@ -75,11 +72,10 @@
 			//Create object of loaded class
 			Object obj = factory.create(jcl,&quot;mypackage.MyClass&quot;);
 			</pre>
-  <p>JarClassLoader has an arguments-constructor and <b><i>add</i></b> methods that 
-  take jar-file/class-folder paths, URLs and InputStreams.</p>
+
+  <p>Now in order to invoke the methods of the object one has to use reflection.</p>
   <p>Similarly JCL can be used with spring framework. </p>
   <pre name="code" class="xml">			
-
 &lt;!-- Singleton object factory --&gt;
 &lt;bean id=&quot;jclFactory&quot; class=&quot;xeus.jcl.JclObjectFactory&quot;&gt;&lt;/bean&gt;
 &lt;!-- Test jar class loader --&gt;
@@ -116,10 +112,31 @@
 		&lt;value&gt;Kamran Zafar&lt;/value&gt;
 	&lt;/property&gt;
 &lt;/bean&gt;
-
-
 			</pre>
-  <p></p>
+<br/>
+  <h3>Casting objects loaded in JCL</h3>
+<p> Java disallows casting objects loaded in a different classloader; such casting attempt results in a ClassCastException. But sometimes it is necessary to cast objects to obtain a interface references
+loaded in the current classloader. E.g. suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface references and coverting the JCL-loaded objects into castable objects.</p>
+  <pre name="code" class="java">			JarClassLoader jcl = new JarClassLoader();
+			jcl.add(&quot;myapi-impl.jar&quot;); //Load jar file
+			
+			JclObjectFactory factory = JclObjectFactory.getInstance();
+			
+			//Create object of loaded class
+			Object obj = factory.create(jcl,&quot;myapi.impl.MyInterfaceImpl&quot;);
+
+			//Obtain interface reference in the current classloader
+			MyInterface mi = JclUtils.cast(obj, MyInterface.class);
+
+			//Convert the object into a castable object in the current classloader
+			MyInterface mi1 = (MyInterface) JclUtils.toCastable(obj, MyInterface.class);
+
+			//Clone "Serializable" object into a castable object in the current classloader
+			//The JCL-loaded object must implement Serializable
+			MyInterface mi2 = (MyInterface) JclUtils.clone(obj);
+			</pre>
+<br />
+<h3>Manipulating class loading order & adding custom classloaders</h3>
   <p>JCL looks for classes in three places in order, local JCL class loader (order=1), 
   parent class loader (order=2) and then in system class loader (order=3). More 
   class loaders can be added by extending the <i>xeus.jcl.loader.Loader</i> class. 
@@ -137,7 +154,6 @@ MyLoader loader=new MyLoader();
 loader.setOrder(4);
 
 jcl.addLoader(loader); //Add custom loader</pre>
-  <p></p>
   <p>See <a href="http://jcloader.sourceforge.net/api/">API</a> for more details.</p>
   <h1>Downloads</h1>
   <p>JCL is open source under <a href="http://www.gnu.org/copyleft/gpl.html">GPL</a> 
@@ -148,7 +164,7 @@ jcl.addLoader(loader); //Add custom loader</pre>
   svn co https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL JCL</p>
   </div>
   <div id="footer">
-    <p>Copyright © <a href="http://xeustech.blogspot.com/">Xeus Technologies</a> 
+    <p>Copyright &copy; <a href="http://xeustech.blogspot.com/">Xeus Technologies</a> 
     2008 | Valid <a href="http://jigsaw.w3.org/css-validator/">CSS</a> &amp;
     <a href="http://validator.w3.org/">XHTML</a></p>
   </div>
@@ -156,3 +172,5 @@ jcl.addLoader(loader); //Add custom loader</pre>
 </body>
 
 </html>
+
+
