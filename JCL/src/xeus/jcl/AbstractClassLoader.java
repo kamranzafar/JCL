@@ -224,7 +224,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		public Class load(String className, boolean resolveIt) {
 			Class result;
 			try {
-				result = this.getClass().getClassLoader().getParent().loadClass(className);
+				result = this.getClass().getClassLoader().loadClass(className);
 			} catch (ClassNotFoundException e) {
 				return null;
 			}
