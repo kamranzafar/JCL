@@ -30,6 +30,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -44,13 +47,16 @@ import xeus.jcl.loader.Loader;
  * @author Kamran Zafar
  * 
  */
+@SuppressWarnings("unchecked")
 public class JarClassLoader extends AbstractClassLoader {
+    protected Map<String, Class> classes;
     private final ClasspathResources classpathResources;
     private static Logger logger = Logger.getLogger( JarClassLoader.class );
     private final Loader localLoader = new LocalLoader();
 
     public JarClassLoader() {
         classpathResources = new ClasspathResources();
+        classes = Collections.synchronizedMap( new HashMap<String, Class>() );
         loaders.add( localLoader );
     }
 
@@ -170,7 +176,8 @@ public class JarClassLoader extends AbstractClassLoader {
             Class result = null;
             byte[] classBytes;
             // if( logger.isTraceEnabled() )
-            // logger.trace( "Loading class: " + className + ", " + resolveIt + "" );
+            // logger.trace( "Loading class: " + className + ", " + resolveIt +
+            // "" );
 
             result = classes.get( className );
             if( result != null ) {

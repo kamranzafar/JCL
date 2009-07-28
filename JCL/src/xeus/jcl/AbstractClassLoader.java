@@ -29,9 +29,7 @@ package xeus.jcl;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +45,6 @@ import xeus.jcl.loader.Loader;
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
-    protected Map<String, Class> classes;
     private char classNameReplacementChar;
     protected final List<Loader> loaders = new ArrayList<Loader>();
 
@@ -59,7 +56,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
      * No arguments constructor
      */
     public AbstractClassLoader() {
-        classes = Collections.synchronizedMap( new HashMap<String, Class>() );
         loaders.add( systemLoader );
         loaders.add( parentLoader );
         loaders.add( currentLoader );
