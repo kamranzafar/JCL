@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2008  Xeus Technologies
+ *  Copyright (C) 2009  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- *  @author Kamran Zafar    
+ *  @author Kamran Zafar
  *
  *  Contact Info:
  *  Email:  xeus.man@gmail.com
@@ -26,37 +26,51 @@
 
 package xeus.jcl.loader;
 
+import java.io.InputStream;
+
+/**
+ * @author Kamran Zafar
+ * 
+ */
 /**
  * @author Kamran Zafar
  * 
  */
 public abstract class Loader implements Comparable<Loader> {
-	// Default order
-	protected int order = 4;
+    // Default order
+    protected int order = 4;
 
-	public int getOrder() {
-		return order;
-	}
+    public int getOrder() {
+        return order;
+    }
 
-	/**
-	 * Set loading order
-	 * 
-	 * @param order
-	 */
-	public void setOrder(int order) {
-		this.order = order;
-	}
+    /**
+     * Set loading order
+     * 
+     * @param order
+     */
+    public void setOrder(int order) {
+        this.order = order;
+    }
 
-	/**
-	 * Loads the class
-	 * 
-	 * @param className
-	 * @param resolveIt
-	 * @return class
-	 */
-	public abstract Class load(String className, boolean resolveIt);
+    /**
+     * Loads the class
+     * 
+     * @param className
+     * @param resolveIt
+     * @return class
+     */
+    public abstract Class load(String className, boolean resolveIt);
 
-	public int compareTo(Loader o) {
-		return order - o.getOrder();
-	}
+    /**
+     * Loads the resource
+     * 
+     * @param name
+     * @return
+     */
+    public abstract InputStream loadResource(String name);
+
+    public int compareTo(Loader o) {
+        return order - o.getOrder();
+    }
 }

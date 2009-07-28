@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- *  @author Kamran Zafar    
+ *  @author Kamran Zafar
  *
  *  Contact Info:
  *  Email:  xeus.man@gmail.com
@@ -30,9 +30,9 @@ package xeus.jcl.exception;
  * General custom exception
  * 
  * @author Kamran Zafar
- *
+ * 
  */
-public class JclException extends Exception{
+public class JclException extends RuntimeException {
     /**
      * Default serial id
      */
@@ -41,29 +41,29 @@ public class JclException extends Exception{
     /**
      * Default constructor
      */
-    public JclException(){
+    public JclException() {
         super();
     }
-    
+
     /**
      * @param message
      */
-    public JclException(String message){
-        super(message);
+    public JclException(String message) {
+        super( message );
     }
 
-	/**
-	 * @param cause
-	 */
-	public JclException(Throwable cause) {
-		super(cause);
-	}
+    /**
+     * @param cause
+     */
+    public JclException(Throwable cause) {
+        super( cause );
+    }
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
-	public JclException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * @param message
+     * @param cause
+     */
+    public JclException(String message, Throwable cause) {
+        super( message, cause );
+    }
 }
