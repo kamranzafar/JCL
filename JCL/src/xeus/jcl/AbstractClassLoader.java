@@ -295,4 +295,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
         return parentLoader;
     }
 
+    public Loader getCurrentLoader() {
+        return currentLoader;
+    }
 }

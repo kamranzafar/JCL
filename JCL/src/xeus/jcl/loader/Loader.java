@@ -32,10 +32,6 @@ import java.io.InputStream;
  * @author Kamran Zafar
  * 
  */
-/**
- * @author Kamran Zafar
- * 
- */
 public abstract class Loader implements Comparable<Loader> {
     // Default order
     protected int order = 4;

@@ -169,8 +169,8 @@ public class JarClassLoader extends AbstractClassLoader {
         public Class load(String className, boolean resolveIt) {
             Class result = null;
             byte[] classBytes;
-            if( logger.isTraceEnabled() )
-                logger.trace( "Loading class: " + className + ", " + resolveIt + "" );
+            // if( logger.isTraceEnabled() )
+            // logger.trace( "Loading class: " + className + ", " + resolveIt + "" );
 
             result = classes.get( className );
             if( result != null ) {
