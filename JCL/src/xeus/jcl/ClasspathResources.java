@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- *  @author Kamran Zafar    
+ *  @author Kamran Zafar
  *
  *  Contact Info:
  *  Email:  xeus.man@gmail.com
@@ -48,208 +48,208 @@ import xeus.jcl.exception.ResourceNotFoundException;
  */
 public class ClasspathResources extends JarResources {
 
-	private static Logger logger = Logger.getLogger(ClasspathResources.class);
+    private static Logger logger = Logger.getLogger( ClasspathResources.class );
 
-	/**
-	 * Reads the resource content
-	 * 
-	 * @param resource
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	private void loadResourceContent(String resource) throws IOException, JclException {
-		File resourceFile = new File(resource);
+    /**
+     * Reads the resource content
+     * 
+     * @param resource
+     * @throws IOException
+     * @throws JclException
+     */
+    private void loadResourceContent(String resource) throws IOException {
+        File resourceFile = new File( resource );
 
-		FileInputStream fis = new FileInputStream(resourceFile);
+        FileInputStream fis = new FileInputStream( resourceFile );
 
-		byte[] content = new byte[(int) resourceFile.length()];
-		fis.read(content);
+        byte[] content = new byte[(int) resourceFile.length()];
+        fis.read( content );
 
-		if (jarEntryContents.containsKey(resourceFile.getName())) {
-			if (!Configuration.supressCollisionException())
-				throw new JclException("Resource " + resourceFile.getName() + " already loaded");
-			else {
-				if (logger.isTraceEnabled())
-					logger.trace("Resource " + resourceFile.getName() + " already loaded; ignoring entry...");
-				return;
-			}
-		}
+        if( jarEntryContents.containsKey( resourceFile.getName() ) ) {
+            if( !Configuration.supressCollisionException() )
+                throw new JclException( "Resource " + resourceFile.getName() + " already loaded" );
+            else {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Resource " + resourceFile.getName() + " already loaded; ignoring entry..." );
+                return;
+            }
+        }
 
-		fis.close();
+        fis.close();
 
-		if (logger.isTraceEnabled())
-			logger.trace("Loading resource: " + resourceFile.getName());
-		jarEntryContents.put(resourceFile.getName(), content);
-	}
+        if( logger.isTraceEnabled() )
+            logger.trace( "Loading resource: " + resourceFile.getName() );
+        jarEntryContents.put( resourceFile.getName(), content );
+    }
 
-	/**
-	 * Attempts to load a remote resource (jars, properties files, etc)
-	 * 
-	 * @param url
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	private void loadRemoteResource(URL url) throws IOException, JclException {
-		if (logger.isTraceEnabled())
-			logger.trace("Attempting to load a remote resource.");
+    /**
+     * Attempts to load a remote resource (jars, properties files, etc)
+     * 
+     * @param url
+     * @throws IOException
+     * @throws JclException
+     */
+    private void loadRemoteResource(URL url) throws IOException {
+        if( logger.isTraceEnabled() )
+            logger.trace( "Attempting to load a remote resource." );
 
-		if (url.toString().toLowerCase().endsWith(".jar")) {
-			loadJar(url);
-			return;
-		}
+        if( url.toString().toLowerCase().endsWith( ".jar" ) ) {
+            loadJar( url );
+            return;
+        }
 
-		InputStream stream = url.openStream();
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
+        InputStream stream = url.openStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-		int byt;
-		while (((byt = stream.read()) != -1)) {
-			out.write(byt);
-		}
+        int byt;
+        while(( ( byt = stream.read() ) != -1 )) {
+            out.write( byt );
+        }
 
-		byte[] content = out.toByteArray();
+        byte[] content = out.toByteArray();
 
-		if (jarEntryContents.containsKey(url.toString())) {
-			if (!Configuration.supressCollisionException())
-				throw new JclException("Resource " + url.toString() + " already loaded");
-			else {
-				if (logger.isTraceEnabled())
-					logger.trace("Resource " + url.toString() + " already loaded; ignoring entry...");
-				return;
-			}
-		}
+        if( jarEntryContents.containsKey( url.toString() ) ) {
+            if( !Configuration.supressCollisionException() )
+                throw new JclException( "Resource " + url.toString() + " already loaded" );
+            else {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Resource " + url.toString() + " already loaded; ignoring entry..." );
+                return;
+            }
+        }
 
-		if (logger.isTraceEnabled())
-			logger.trace("Loading remote resource.");
-		jarEntryContents.put(url.toString(), content);
+        if( logger.isTraceEnabled() )
+            logger.trace( "Loading remote resource." );
+        jarEntryContents.put( url.toString(), content );
 
-		out.close();
-		stream.close();
-	}
+        out.close();
+        stream.close();
+    }
 
-	/**
-	 * Reads the class content
-	 * 
-	 * @param clazz
-	 * @param pack
-	 * @throws JclException
-	 * @throws IOException
-	 */
-	private void loadClassContent(String clazz, String pack) throws JclException, IOException {
-		File cf = new File(clazz);
-		FileInputStream fis = new FileInputStream(cf);
+    /**
+     * Reads the class content
+     * 
+     * @param clazz
+     * @param pack
+     * @throws JclException
+     * @throws IOException
+     */
+    private void loadClassContent(String clazz, String pack) throws IOException {
+        File cf = new File( clazz );
+        FileInputStream fis = new FileInputStream( cf );
 
-		byte[] content = new byte[(int) cf.length()];
-		fis.read(content);
+        byte[] content = new byte[(int) cf.length()];
+        fis.read( content );
 
-		String entryName = pack + "/" + cf.getName();
+        String entryName = pack + "/" + cf.getName();
 
-		if (jarEntryContents.containsKey(entryName)) {
-			if (!Configuration.supressCollisionException())
-				throw new JclException("Class " + entryName + " already loaded");
-			else {
-				if (logger.isTraceEnabled())
-					logger.trace("Class " + entryName + " already loaded; ignoring entry...");
-				return;
-			}
-		}
+        if( jarEntryContents.containsKey( entryName ) ) {
+            if( !Configuration.supressCollisionException() )
+                throw new JclException( "Class " + entryName + " already loaded" );
+            else {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Class " + entryName + " already loaded; ignoring entry..." );
+                return;
+            }
+        }
 
-		fis.close();
+        fis.close();
 
-		if (logger.isTraceEnabled())
-			logger.trace("Loading class: " + entryName);
-		jarEntryContents.put(entryName, content);
-	}
+        if( logger.isTraceEnabled() )
+            logger.trace( "Loading class: " + entryName );
+        jarEntryContents.put( entryName, content );
+    }
 
-	/**
-	 * Reads local and remote resources
-	 * 
-	 * @param url
-	 * @throws IOException
-	 * @throws JclException
-	 * @throws URISyntaxException
-	 */
-	public void loadResource(URL url) throws IOException, JclException {
-		try {
-			// Is Local
-			loadResource(new File(url.toURI()), "");
-		} catch (IllegalArgumentException iae) {
-			// Is Remote
-			loadRemoteResource(url);
-		} catch (URISyntaxException e) {
-			throw new JclException("URISyntaxException", e);
-		}
-	}
+    /**
+     * Reads local and remote resources
+     * 
+     * @param url
+     * @throws IOException
+     * @throws JclException
+     * @throws URISyntaxException
+     */
+    public void loadResource(URL url) throws IOException {
+        try {
+            // Is Local
+            loadResource( new File( url.toURI() ), "" );
+        } catch (IllegalArgumentException iae) {
+            // Is Remote
+            loadRemoteResource( url );
+        } catch (URISyntaxException e) {
+            throw new JclException( "URISyntaxException", e );
+        }
+    }
 
-	/**
-	 * Reads local resources from - Jar files - Class folders - Jar Library
-	 * folders
-	 * 
-	 * @param path
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	public void loadResource(String path) throws IOException, JclException {
-		if (logger.isTraceEnabled())
-			logger.trace("Resource: " + path);
-		loadResource(new File(path), "");
-	}
+    /**
+     * Reads local resources from - Jar files - Class folders - Jar Library
+     * folders
+     * 
+     * @param path
+     * @throws IOException
+     * @throws JclException
+     */
+    public void loadResource(String path) throws IOException {
+        if( logger.isTraceEnabled() )
+            logger.trace( "Resource: " + path );
+        loadResource( new File( path ), "" );
+    }
 
-	/**
-	 * Reads local resources from - Jar files - Class folders - Jar Library
-	 * folders
-	 * 
-	 * @param fol
-	 * @param packName
-	 * @throws IOException
-	 * @throws JclException
-	 */
-	private void loadResource(File fol, String packName) throws IOException, JclException {
-		if (fol.isFile()) {
-			if (fol.getName().toLowerCase().endsWith(".class")) {
-				loadClassContent(fol.getAbsolutePath(), packName);
-			} else {
-				if (fol.getName().toLowerCase().endsWith(".jar")) {
-					loadJar(fol.getAbsolutePath());
-				} else {
-					loadResourceContent(fol.getAbsolutePath());
-				}
-			}
+    /**
+     * Reads local resources from - Jar files - Class folders - Jar Library
+     * folders
+     * 
+     * @param fol
+     * @param packName
+     * @throws IOException
+     * @throws JclException
+     */
+    private void loadResource(File fol, String packName) throws IOException {
+        if( fol.isFile() ) {
+            if( fol.getName().toLowerCase().endsWith( ".class" ) ) {
+                loadClassContent( fol.getAbsolutePath(), packName );
+            } else {
+                if( fol.getName().toLowerCase().endsWith( ".jar" ) ) {
+                    loadJar( fol.getAbsolutePath() );
+                } else {
+                    loadResourceContent( fol.getAbsolutePath() );
+                }
+            }
 
-			return;
-		}
+            return;
+        }
 
-		if (fol.list() != null) {
-			for (String f : fol.list()) {
-				File fl = new File(fol.getAbsolutePath() + "/" + f);
+        if( fol.list() != null ) {
+            for( String f : fol.list() ) {
+                File fl = new File( fol.getAbsolutePath() + "/" + f );
 
-				String pn = packName;
+                String pn = packName;
 
-				if (fl.isDirectory()) {
+                if( fl.isDirectory() ) {
 
-					if (!pn.equals(""))
-						pn = pn + "/";
+                    if( !pn.equals( "" ) )
+                        pn = pn + "/";
 
-					pn = pn + fl.getName();
-				}
+                    pn = pn + fl.getName();
+                }
 
-				loadResource(fl, pn);
-			}
-		}
-	}
+                loadResource( fl, pn );
+            }
+        }
+    }
 
-	/**
-	 * Removes the loaded resource
-	 * 
-	 * @param resource
-	 * @throws ResourceNotFoundException
-	 */
-	public void unload(String resource) throws ResourceNotFoundException {
-		if (jarEntryContents.containsKey(resource)) {
-			if (logger.isTraceEnabled())
-				logger.trace("Removing resource " + resource);
-			jarEntryContents.remove(resource);
-		} else {
-			throw new ResourceNotFoundException(resource, "Resource not found in local ClasspathResources");
-		}
-	}
+    /**
+     * Removes the loaded resource
+     * 
+     * @param resource
+     * @throws ResourceNotFoundException
+     */
+    public void unload(String resource) throws ResourceNotFoundException {
+        if( jarEntryContents.containsKey( resource ) ) {
+            if( logger.isTraceEnabled() )
+                logger.trace( "Removing resource " + resource );
+            jarEntryContents.remove( resource );
+        } else {
+            throw new ResourceNotFoundException( resource, "Resource not found in local ClasspathResources" );
+        }
+    }
 }

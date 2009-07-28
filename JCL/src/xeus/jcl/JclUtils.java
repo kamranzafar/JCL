@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- *  @author Kamran Zafar    
+ *  @author Kamran Zafar
  *
  *  Contact Info:
  *  Email:  xeus.man@gmail.com
@@ -85,7 +85,7 @@ public class JclUtils {
      * @return clone
      * @throws JclException
      */
-    public static Object clone(Object original) throws JclException {
+    public static Object clone(Object original) {
         Object clone = null;
         try {
             // Increased buffer size to speed up writing
