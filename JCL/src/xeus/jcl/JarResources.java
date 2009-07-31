@@ -80,7 +80,6 @@ public class JarResources {
      * 
      * @param jarFile
      * @throws IOException
-     * @throws JclException
      */
     public void loadJar(String jarFile) throws IOException {
         if( logger.isTraceEnabled() )
@@ -95,7 +94,6 @@ public class JarResources {
      * 
      * @param url
      * @throws IOException
-     * @throws JclException
      */
     public void loadJar(URL url) throws IOException {
         if( logger.isTraceEnabled() )
@@ -109,7 +107,6 @@ public class JarResources {
      * Load the jar contents from InputStream
      * 
      * @throws IOException
-     * @throws JclException
      */
     public void loadJar(InputStream jarStream) throws IOException {
 

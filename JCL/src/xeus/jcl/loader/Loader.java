@@ -34,7 +34,7 @@ import java.io.InputStream;
  */
 public abstract class Loader implements Comparable<Loader> {
     // Default order
-    protected int order = 4;
+    protected int order = 5;
 
     public int getOrder() {
         return order;

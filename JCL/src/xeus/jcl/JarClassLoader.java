@@ -49,8 +49,8 @@ import xeus.jcl.loader.Loader;
  */
 @SuppressWarnings("unchecked")
 public class JarClassLoader extends AbstractClassLoader {
-    protected Map<String, Class> classes;
-    private final ClasspathResources classpathResources;
+    protected final Map<String, Class> classes;
+    protected final ClasspathResources classpathResources;
     private static Logger logger = Logger.getLogger( JarClassLoader.class );
     private final Loader localLoader = new LocalLoader();
 
@@ -65,7 +65,6 @@ public class JarClassLoader extends AbstractClassLoader {
      * 
      * @param resources
      * @throws IOException
-     * @throws JclException
      */
     public JarClassLoader(Object[] resources) throws IOException {
         this();
@@ -78,7 +77,7 @@ public class JarClassLoader extends AbstractClassLoader {
             else if( resource instanceof String )
                 add( (String) resource );
             else
-                throw new JclException( "Unknow Resource type" );
+                throw new JclException( "Unknown Resource type" );
         }
     }
 
@@ -87,7 +86,6 @@ public class JarClassLoader extends AbstractClassLoader {
      * 
      * @param resourceName
      * @throws IOException
-     * @throws JclException
      */
     public void add(String resourceName) throws IOException {
         classpathResources.loadResource( resourceName );
@@ -98,7 +96,6 @@ public class JarClassLoader extends AbstractClassLoader {
      * 
      * @param jarStream
      * @throws IOException
-     * @throws JclException
      */
     public void add(InputStream jarStream) throws IOException {
         classpathResources.loadJar( jarStream );
@@ -109,7 +106,6 @@ public class JarClassLoader extends AbstractClassLoader {
      * 
      * @param url
      * @throws IOException
-     * @throws JclException
      */
     public void add(URL url) throws IOException {
         classpathResources.loadResource( url );
@@ -133,7 +129,6 @@ public class JarClassLoader extends AbstractClassLoader {
      * JCL
      * 
      * @param className
-     * @throws JclException
      */
     public void unloadClass(String className) {
         if( logger.isTraceEnabled() )
@@ -220,6 +215,9 @@ public class JarClassLoader extends AbstractClassLoader {
         }
     }
 
+    /**
+     * @return Local JCL Loader
+     */
     public Loader getLocalLoader() {
         return localLoader;
     }

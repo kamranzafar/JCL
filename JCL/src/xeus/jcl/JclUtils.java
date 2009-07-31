@@ -83,7 +83,6 @@ public class JclUtils {
      * 
      * @param original
      * @return clone
-     * @throws JclException
      */
     public static Object clone(Object original) {
         Object clone = null;

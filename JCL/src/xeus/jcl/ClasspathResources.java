@@ -55,7 +55,6 @@ public class ClasspathResources extends JarResources {
      * 
      * @param resource
      * @throws IOException
-     * @throws JclException
      */
     private void loadResourceContent(String resource) throws IOException {
         File resourceFile = new File( resource );
@@ -87,7 +86,6 @@ public class ClasspathResources extends JarResources {
      * 
      * @param url
      * @throws IOException
-     * @throws JclException
      */
     private void loadRemoteResource(URL url) throws IOException {
         if( logger.isTraceEnabled() )
@@ -131,7 +129,6 @@ public class ClasspathResources extends JarResources {
      * 
      * @param clazz
      * @param pack
-     * @throws JclException
      * @throws IOException
      */
     private void loadClassContent(String clazz, String pack) throws IOException {
@@ -165,8 +162,6 @@ public class ClasspathResources extends JarResources {
      * 
      * @param url
      * @throws IOException
-     * @throws JclException
-     * @throws URISyntaxException
      */
     public void loadResource(URL url) throws IOException {
         try {
@@ -186,7 +181,6 @@ public class ClasspathResources extends JarResources {
      * 
      * @param path
      * @throws IOException
-     * @throws JclException
      */
     public void loadResource(String path) throws IOException {
         if( logger.isTraceEnabled() )
@@ -201,7 +195,6 @@ public class ClasspathResources extends JarResources {
      * @param fol
      * @param packName
      * @throws IOException
-     * @throws JclException
      */
     private void loadResource(File fol, String packName) throws IOException {
         if( fol.isFile() ) {
