@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2008  Xeus Technologies
+ *  Copyright (C) 2009  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -33,37 +33,37 @@ package xeus.jcl.exception;
  * 
  */
 public class JclException extends RuntimeException {
-    /**
-     * Default serial id
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * Default serial id
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor
-     */
-    public JclException() {
-        super();
-    }
+	/**
+	 * Default constructor
+	 */
+	public JclException() {
+		super();
+	}
 
-    /**
-     * @param message
-     */
-    public JclException(String message) {
-        super( message );
-    }
+	/**
+	 * @param message
+	 */
+	public JclException(String message) {
+		super(message);
+	}
 
-    /**
-     * @param cause
-     */
-    public JclException(Throwable cause) {
-        super( cause );
-    }
+	/**
+	 * @param cause
+	 */
+	public JclException(Throwable cause) {
+		super(cause);
+	}
 
-    /**
-     * @param message
-     * @param cause
-     */
-    public JclException(String message, Throwable cause) {
-        super( message, cause );
-    }
+	/**
+	 * @param message
+	 * @param cause
+	 */
+	public JclException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

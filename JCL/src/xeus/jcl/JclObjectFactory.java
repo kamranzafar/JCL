@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2008  Xeus Technologies
+ *  Copyright (C) 2009  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -30,32 +30,34 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * A factory class that loads classes from specified JarClassLoader and tries to instantiate their objects
+ * A factory class that loads classes from specified JarClassLoader and tries to
+ * instantiate their objects
  * 
  * @author Kamran Zafar
- *
+ * 
  */
 @SuppressWarnings("unchecked")
 public class JclObjectFactory {
-	private static JclObjectFactory jclObjectFactory=new JclObjectFactory();
-	
+	private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
+
 	/**
 	 * private constructor
 	 */
 	private JclObjectFactory() {
 	}
-	
+
 	/**
 	 * Returns the instance of the singleton factory
 	 * 
 	 * @return JclObjectFactory
 	 */
-	public static JclObjectFactory getInstance(){
+	public static JclObjectFactory getInstance() {
 		return jclObjectFactory;
 	}
-	
+
 	/**
-	 * Creates the object of the specified class from the specified class loader by invoking the default constructor
+	 * Creates the object of the specified class from the specified class loader
+	 * by invoking the default constructor
 	 * 
 	 * @param jcl
 	 * @param className
@@ -69,16 +71,15 @@ public class JclObjectFactory {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	public Object create(JarClassLoader jcl, String className)
-			throws IllegalArgumentException, SecurityException, IOException,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException, InvocationTargetException,
-			NoSuchMethodException {
+	public Object create(JarClassLoader jcl, String className) throws IllegalArgumentException, SecurityException,
+			IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
+			InvocationTargetException, NoSuchMethodException {
 		return create(jcl, className, null);
 	}
 
 	/**
-	 * Creates the object of the specified class from the specified class loader by invoking the right arguments-constructor
+	 * Creates the object of the specified class from the specified class loader
+	 * by invoking the right arguments-constructor
 	 * 
 	 * @param jcl
 	 * @param className
@@ -93,11 +94,9 @@ public class JclObjectFactory {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	public Object create(JarClassLoader jcl, String className,
-			Object[] args) throws IOException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, SecurityException,
-			InvocationTargetException, NoSuchMethodException {
+	public Object create(JarClassLoader jcl, String className, Object[] args) throws IOException,
+			ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException,
+			SecurityException, InvocationTargetException, NoSuchMethodException {
 		if (args == null || args.length == 0)
 			return jcl.loadClass(className).newInstance();
 
@@ -110,7 +109,8 @@ public class JclObjectFactory {
 	}
 
 	/**
-	 * Creates the object of the specified class from the specified class loader by invoking the right static factory method
+	 * Creates the object of the specified class from the specified class loader
+	 * by invoking the right static factory method
 	 * 
 	 * @param jcl
 	 * @param className
@@ -126,11 +126,9 @@ public class JclObjectFactory {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	public Object create(JarClassLoader jcl, String className, String methodName,
-			Object[] args) throws IOException, ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, SecurityException,
-			InvocationTargetException, NoSuchMethodException {
+	public Object create(JarClassLoader jcl, String className, String methodName, Object[] args) throws IOException,
+			ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException,
+			SecurityException, InvocationTargetException, NoSuchMethodException {
 		if (args == null || args.length == 0)
 			return jcl.loadClass(className).getMethod(methodName).invoke(null);
 

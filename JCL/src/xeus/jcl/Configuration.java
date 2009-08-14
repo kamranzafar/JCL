@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2008  Xeus Technologies
+ *  Copyright (C) 2009  Xeus Technologies
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -32,18 +32,17 @@ import java.util.ResourceBundle;
  * General configuration
  * 
  * @author Kamran Zafar
- *
+ * 
  */
 public class Configuration {
-    private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
+	private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
 
-    /**
-     * Flag to ignore duplicate resources
-     * 
-     * @return boolean
-     */
-    public static boolean supressCollisionException() {
-        return bundle.getString("jcl.suppressCollisionException")
-                .equals("true") ? true : false;
-    }
+	/**
+	 * Flag to ignore duplicate resources
+	 * 
+	 * @return boolean
+	 */
+	public static boolean supressCollisionException() {
+		return bundle.getString("jcl.suppressCollisionException").equals("true") ? true : false;
+	}
 }
