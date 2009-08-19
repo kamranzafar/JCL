@@ -88,7 +88,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
         Class clazz = null;
         for( Loader l : loaders ) {
             if( l.isEnabled() ) {
-                System.out.println( l );
                 clazz = l.load( className, resolveIt );
                 if( clazz != null )
                     break;
