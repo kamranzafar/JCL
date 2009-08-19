@@ -172,6 +172,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         public SystemLoader() {
             order = 4;
+            enabled = Configuration.isSystemLoaderEnabled();
         }
 
         @Override
@@ -213,6 +214,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         public ParentLoader() {
             order = 3;
+            enabled = Configuration.isParentLoaderEnabled();
         }
 
         @Override
@@ -254,6 +256,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         public CurrentLoader() {
             order = 2;
+            enabled = Configuration.isCurrentLoaderEnabled();
         }
 
         @Override

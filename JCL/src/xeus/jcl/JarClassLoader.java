@@ -164,6 +164,7 @@ public class JarClassLoader extends AbstractClassLoader {
 
         public LocalLoader() {
             order = 1;
+            enabled = Configuration.isLocalLoaderEnabled();
         }
 
         @Override

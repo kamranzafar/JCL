@@ -36,7 +36,7 @@ public abstract class Loader implements Comparable<Loader> {
     // Default order
     protected int order = 5;
     // Enabled by default
-    private boolean enabled = true;
+    protected boolean enabled = true;
 
     public int getOrder() {
         return order;

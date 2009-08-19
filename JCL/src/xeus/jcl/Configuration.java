@@ -17,7 +17,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- *  @author Kamran Zafar    
+ *  @author Kamran Zafar
  *
  *  Contact Info:
  *  Email:  xeus.man@gmail.com
@@ -26,8 +26,6 @@
 
 package xeus.jcl;
 
-import java.util.ResourceBundle;
-
 /**
  * General configuration
  * 
@@ -35,14 +33,45 @@ import java.util.ResourceBundle;
  * 
  */
 public class Configuration {
-	private static ResourceBundle bundle = ResourceBundle.getBundle("jcl");
 
-	/**
-	 * Flag to ignore duplicate resources
-	 * 
-	 * @return boolean
-	 */
-	public static boolean supressCollisionException() {
-		return bundle.getString("jcl.suppressCollisionException").equals("true") ? true : false;
-	}
+    private static final String JCL_CLASSLOADER_SYSTEM = "jcl.classloader.system";
+    private static final String JCL_CLASSLOADER_PARENT = "jcl.classloader.parent";
+    private static final String JCL_CLASSLOADER_CURRENT = "jcl.classloader.current";
+    private static final String JCL_CLASSLOADER_LOCAL = "jcl.classloader.local";
+    private static final String JCL_SUPPRESS_COLLISION_EXCEPTION = "jcl.suppressCollisionException";
+
+    public static boolean supressCollisionException() {
+        if( System.getProperty( JCL_SUPPRESS_COLLISION_EXCEPTION ) == null )
+            return true;
+
+        return System.getProperty( JCL_SUPPRESS_COLLISION_EXCEPTION ).equals( "true" ) ? true : false;
+    }
+
+    public static boolean isLocalLoaderEnabled() {
+        if( System.getProperty( JCL_CLASSLOADER_LOCAL ) == null )
+            return true;
+
+        return System.getProperty( JCL_CLASSLOADER_LOCAL ).equals( "true" ) ? true : false;
+    }
+
+    public static boolean isCurrentLoaderEnabled() {
+        if( System.getProperty( JCL_CLASSLOADER_CURRENT ) == null )
+            return true;
+
+        return System.getProperty( JCL_CLASSLOADER_CURRENT ).equals( "true" ) ? true : false;
+    }
+
+    public static boolean isParentLoaderEnabled() {
+        if( System.getProperty( JCL_CLASSLOADER_PARENT ) == null )
+            return true;
+
+        return System.getProperty( JCL_CLASSLOADER_PARENT ).equals( "true" ) ? true : false;
+    }
+
+    public static boolean isSystemLoaderEnabled() {
+        if( System.getProperty( JCL_CLASSLOADER_SYSTEM ) == null )
+            return true;
+
+        return System.getProperty( JCL_CLASSLOADER_SYSTEM ).equals( "true" ) ? true : false;
+    }
 }
