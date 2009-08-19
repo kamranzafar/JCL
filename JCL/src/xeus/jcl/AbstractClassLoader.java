@@ -45,253 +45,258 @@ import xeus.jcl.loader.Loader;
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
-	private char classNameReplacementChar;
-	protected final List<Loader> loaders = new ArrayList<Loader>();
+    private char classNameReplacementChar;
+    protected final List<Loader> loaders = new ArrayList<Loader>();
 
-	private final Loader systemLoader = new SystemLoader();
-	private final Loader parentLoader = new ParentLoader();
-	private final Loader currentLoader = new CurrentLoader();
+    private final Loader systemLoader = new SystemLoader();
+    private final Loader parentLoader = new ParentLoader();
+    private final Loader currentLoader = new CurrentLoader();
 
-	/**
-	 * No arguments constructor
-	 */
-	public AbstractClassLoader() {
-		loaders.add(systemLoader);
-		loaders.add(parentLoader);
-		loaders.add(currentLoader);
-	}
+    /**
+     * No arguments constructor
+     */
+    public AbstractClassLoader() {
+        loaders.add( systemLoader );
+        loaders.add( parentLoader );
+        loaders.add( currentLoader );
+    }
 
-	public void addLoader(Loader loader) {
-		loaders.add(loader);
-	}
+    public void addLoader(Loader loader) {
+        loaders.add( loader );
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.ClassLoader#loadClass(java.lang.String)
-	 */
-	@Override
-	public Class loadClass(String className) throws ClassNotFoundException {
-		return (loadClass(className, true));
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.ClassLoader#loadClass(java.lang.String)
+     */
+    @Override
+    public Class loadClass(String className) throws ClassNotFoundException {
+        return ( loadClass( className, true ) );
+    }
 
-	/**
-	 * Overrides the loadClass method to load classes from other resources,
-	 * JarClassLoader is the only subclass in this project that loads classes
-	 * from jar files
-	 * 
-	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
-	 */
-	@Override
-	public Class loadClass(String className, boolean resolveIt) throws ClassNotFoundException {
-		Collections.sort(loaders);
-		Class clazz = null;
-		for (Loader l : loaders) {
-			clazz = l.load(className, resolveIt);
-			if (clazz != null)
-				break;
-		}
+    /**
+     * Overrides the loadClass method to load classes from other resources,
+     * JarClassLoader is the only subclass in this project that loads classes
+     * from jar files
+     * 
+     * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
+     */
+    @Override
+    public Class loadClass(String className, boolean resolveIt) throws ClassNotFoundException {
+        Collections.sort( loaders );
+        Class clazz = null;
+        for( Loader l : loaders ) {
+            if( l.isEnabled() ) {
+                System.out.println( l );
+                clazz = l.load( className, resolveIt );
+                if( clazz != null )
+                    break;
+            }
+        }
 
-		if (clazz == null)
-			throw new ClassNotFoundException(className);
+        if( clazz == null )
+            throw new ClassNotFoundException( className );
 
-		return clazz;
-	}
+        return clazz;
+    }
 
-	/**
-	 * Overrides the getResourceAsStream method to load non-class resources from
-	 * other sources, JarClassLoader is the only subclass in this project that
-	 * loads non-class resources from jar files
-	 * 
-	 * @see java.lang.ClassLoader#getResourceAsStream(java.lang.String)
-	 */
-	@Override
-	public InputStream getResourceAsStream(String name) {
-		Collections.sort(loaders);
-		InputStream is = null;
-		for (Loader l : loaders) {
-			is = l.loadResource(name);
-			if (is != null)
-				break;
-		}
+    /**
+     * Overrides the getResourceAsStream method to load non-class resources from
+     * other sources, JarClassLoader is the only subclass in this project that
+     * loads non-class resources from jar files
+     * 
+     * @see java.lang.ClassLoader#getResourceAsStream(java.lang.String)
+     */
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        Collections.sort( loaders );
+        InputStream is = null;
+        for( Loader l : loaders ) {
+            if( l.isEnabled() ) {
+                is = l.loadResource( name );
+                if( is != null )
+                    break;
+            }
+        }
 
-		if (is == null)
-			throw new ResourceNotFoundException("Resource " + name + " not found.");
+        if( is == null )
+            throw new ResourceNotFoundException( "Resource " + name + " not found." );
 
-		return is;
+        return is;
 
-	}
+    }
 
-	/**
-	 * @param replacement
-	 */
-	public void setClassNameReplacementChar(char replacement) {
-		classNameReplacementChar = replacement;
-	}
+    /**
+     * @param replacement
+     */
+    public void setClassNameReplacementChar(char replacement) {
+        classNameReplacementChar = replacement;
+    }
 
-	/**
-	 * @return char
-	 */
-	public char getClassNameReplacementChar() {
-		return classNameReplacementChar;
-	}
+    /**
+     * @return char
+     */
+    public char getClassNameReplacementChar() {
+        return classNameReplacementChar;
+    }
 
-	/**
-	 * Abstarct method that allows class content to be loaded from other sources
-	 * 
-	 * @param className
-	 * @return byte[]
-	 */
-	protected abstract byte[] loadClassBytes(String className);
+    /**
+     * Abstarct method that allows class content to be loaded from other sources
+     * 
+     * @param className
+     * @return byte[]
+     */
+    protected abstract byte[] loadClassBytes(String className);
 
-	/**
-	 * @param className
-	 * @return String
-	 */
-	protected String formatClassName(String className) {
-		if (classNameReplacementChar == '\u0000') {
-			// '/' is used to map the package to the path
-			return className.replace('.', '/') + ".class";
-		} else {
-			// Replace '.' with custom char, such as '_'
-			return className.replace('.', classNameReplacementChar) + ".class";
-		}
-	}
+    /**
+     * @param className
+     * @return String
+     */
+    protected String formatClassName(String className) {
+        if( classNameReplacementChar == '\u0000' ) {
+            // '/' is used to map the package to the path
+            return className.replace( '.', '/' ) + ".class";
+        } else {
+            // Replace '.' with custom char, such as '_'
+            return className.replace( '.', classNameReplacementChar ) + ".class";
+        }
+    }
 
-	/**
-	 * System class loader
-	 * 
-	 */
-	class SystemLoader extends Loader {
+    /**
+     * System class loader
+     * 
+     */
+    class SystemLoader extends Loader {
 
-		private final Logger logger = Logger.getLogger(SystemLoader.class);
+        private final Logger logger = Logger.getLogger( SystemLoader.class );
 
-		public SystemLoader() {
-			order = 4;
-		}
+        public SystemLoader() {
+            order = 4;
+        }
 
-		@Override
-		public Class load(String className, boolean resolveIt) {
-			Class result;
-			try {
-				result = findSystemClass(className);
-			} catch (ClassNotFoundException e) {
-				return null;
-			}
+        @Override
+        public Class load(String className, boolean resolveIt) {
+            Class result;
+            try {
+                result = findSystemClass( className );
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
 
-			if (logger.isTraceEnabled())
-				logger.trace("Returning system class " + className);
+            if( logger.isTraceEnabled() )
+                logger.trace( "Returning system class " + className );
 
-			return result;
-		}
+            return result;
+        }
 
-		@Override
-		public InputStream loadResource(String name) {
-			InputStream is = getSystemResourceAsStream(name);
+        @Override
+        public InputStream loadResource(String name) {
+            InputStream is = getSystemResourceAsStream( name );
 
-			if (is != null) {
-				if (logger.isTraceEnabled())
-					logger.trace("Returning system resource " + name);
+            if( is != null ) {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Returning system resource " + name );
 
-				return is;
-			}
+                return is;
+            }
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	/**
-	 * Parent class loader
-	 * 
-	 */
-	class ParentLoader extends Loader {
-		private final Logger logger = Logger.getLogger(ParentLoader.class);
+    /**
+     * Parent class loader
+     * 
+     */
+    class ParentLoader extends Loader {
+        private final Logger logger = Logger.getLogger( ParentLoader.class );
 
-		public ParentLoader() {
-			order = 3;
-		}
+        public ParentLoader() {
+            order = 3;
+        }
 
-		@Override
-		public Class load(String className, boolean resolveIt) {
-			Class result;
-			try {
-				result = getParent().loadClass(className);
-			} catch (ClassNotFoundException e) {
-				return null;
-			}
+        @Override
+        public Class load(String className, boolean resolveIt) {
+            Class result;
+            try {
+                result = getParent().loadClass( className );
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
 
-			if (logger.isTraceEnabled())
-				logger.trace("Returning class " + className + " loaded with parent classloader");
+            if( logger.isTraceEnabled() )
+                logger.trace( "Returning class " + className + " loaded with parent classloader" );
 
-			return result;
-		}
+            return result;
+        }
 
-		@Override
-		public InputStream loadResource(String name) {
-			InputStream is = getParent().getResourceAsStream(name);
+        @Override
+        public InputStream loadResource(String name) {
+            InputStream is = getParent().getResourceAsStream( name );
 
-			if (is != null) {
-				if (logger.isTraceEnabled())
-					logger.trace("Returning resource " + name + " loaded with parent classloader");
+            if( is != null ) {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Returning resource " + name + " loaded with parent classloader" );
 
-				return is;
-			}
-			return null;
-		}
+                return is;
+            }
+            return null;
+        }
 
-	}
+    }
 
-	/**
-	 * Current class loader
-	 * 
-	 */
-	class CurrentLoader extends Loader {
-		private final Logger logger = Logger.getLogger(CurrentLoader.class);
+    /**
+     * Current class loader
+     * 
+     */
+    class CurrentLoader extends Loader {
+        private final Logger logger = Logger.getLogger( CurrentLoader.class );
 
-		public CurrentLoader() {
-			order = 2;
-		}
+        public CurrentLoader() {
+            order = 2;
+        }
 
-		@Override
-		public Class load(String className, boolean resolveIt) {
-			Class result;
-			try {
-				result = getClass().getClassLoader().loadClass(className);
-			} catch (ClassNotFoundException e) {
-				return null;
-			}
+        @Override
+        public Class load(String className, boolean resolveIt) {
+            Class result;
+            try {
+                result = getClass().getClassLoader().loadClass( className );
+            } catch (ClassNotFoundException e) {
+                return null;
+            }
 
-			if (logger.isTraceEnabled())
-				logger.trace("Returning class " + className + " loaded with current classloader");
+            if( logger.isTraceEnabled() )
+                logger.trace( "Returning class " + className + " loaded with current classloader" );
 
-			return result;
-		}
+            return result;
+        }
 
-		@Override
-		public InputStream loadResource(String name) {
-			InputStream is = getClass().getClassLoader().getResourceAsStream(name);
+        @Override
+        public InputStream loadResource(String name) {
+            InputStream is = getClass().getClassLoader().getResourceAsStream( name );
 
-			if (is != null) {
-				if (logger.isTraceEnabled())
-					logger.trace("Returning resource " + name + " loaded with current classloader");
+            if( is != null ) {
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Returning resource " + name + " loaded with current classloader" );
 
-				return is;
-			}
+                return is;
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-	}
+    }
 
-	public Loader getSystemLoader() {
-		return systemLoader;
-	}
+    public Loader getSystemLoader() {
+        return systemLoader;
+    }
 
-	public Loader getParentLoader() {
-		return parentLoader;
-	}
+    public Loader getParentLoader() {
+        return parentLoader;
+    }
 
-	public Loader getCurrentLoader() {
-		return currentLoader;
-	}
+    public Loader getCurrentLoader() {
+        return currentLoader;
+    }
 }

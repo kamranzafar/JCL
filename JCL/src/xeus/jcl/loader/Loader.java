@@ -35,6 +35,8 @@ import java.io.InputStream;
 public abstract class Loader implements Comparable<Loader> {
     // Default order
     protected int order = 5;
+    // Enabled by default
+    private boolean enabled = true;
 
     public int getOrder() {
         return order;
@@ -65,6 +67,14 @@ public abstract class Loader implements Comparable<Loader> {
      * @return
      */
     public abstract InputStream loadResource(String name);
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public int compareTo(Loader o) {
         return order - o.getOrder();
