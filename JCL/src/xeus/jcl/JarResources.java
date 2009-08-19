@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -49,149 +50,153 @@ import xeus.jcl.exception.JclException;
  */
 public class JarResources {
 
-	protected Map<String, byte[]> jarEntryContents;
+    protected Map<String, byte[]> jarEntryContents;
 
-	private static Logger logger = Logger.getLogger(JarResources.class);
+    private static Logger logger = Logger.getLogger( JarResources.class );
 
-	/**
-	 * @throws IOException
-	 */
-	public JarResources() {
-		jarEntryContents = new HashMap<String, byte[]>();
-	}
+    /**
+     * @throws IOException
+     */
+    public JarResources() {
+        jarEntryContents = new HashMap<String, byte[]>();
+    }
 
-	/**
-	 * @param name
-	 * @return byte[]
-	 */
-	public byte[] getResource(String name) {
-		return jarEntryContents.get(name);
-	}
+    /**
+     * @param name
+     * @return byte[]
+     */
+    public byte[] getResource(String name) {
+        return jarEntryContents.get( name );
+    }
 
-	/**
-	 * @return Map
-	 */
-	public Map<String, byte[]> getResources() {
-		return jarEntryContents;
-	}
+    /**
+     * Returns an immutable Map of all jar resources
+     * 
+     * @return Map
+     */
+    public Map<String, byte[]> getResources() {
+        return Collections.unmodifiableMap( jarEntryContents );
+    }
 
-	/**
-	 * Reads the specified jar file
-	 * 
-	 * @param jarFile
-	 * @throws IOException
-	 */
-	public void loadJar(String jarFile) throws IOException {
-		if (logger.isTraceEnabled())
-			logger.trace("Loading jar: " + jarFile);
-		FileInputStream fis = new FileInputStream(jarFile);
-		loadJar(fis);
-		fis.close();
-	}
+    /**
+     * Reads the specified jar file
+     * 
+     * @param jarFile
+     * @throws IOException
+     */
+    public void loadJar(String jarFile) throws IOException {
+        if( logger.isTraceEnabled() )
+            logger.trace( "Loading jar: " + jarFile );
+        FileInputStream fis = new FileInputStream( jarFile );
+        loadJar( fis );
+        fis.close();
+    }
 
-	/**
-	 * Reads the jar file from a specified URL
-	 * 
-	 * @param url
-	 * @throws IOException
-	 */
-	public void loadJar(URL url) throws IOException {
-		if (logger.isTraceEnabled())
-			logger.trace("Loading jar: " + url.toString());
-		InputStream in = url.openStream();
-		loadJar(in);
-		in.close();
-	}
+    /**
+     * Reads the jar file from a specified URL
+     * 
+     * @param url
+     * @throws IOException
+     */
+    public void loadJar(URL url) throws IOException {
+        if( logger.isTraceEnabled() )
+            logger.trace( "Loading jar: " + url.toString() );
+        InputStream in = url.openStream();
+        loadJar( in );
+        in.close();
+    }
 
-	/**
-	 * Load the jar contents from InputStream
-	 * 
-	 * @throws IOException
-	 */
-	public void loadJar(InputStream jarStream) throws IOException {
+    /**
+     * Load the jar contents from InputStream
+     * 
+     * @throws IOException
+     */
+    public void loadJar(InputStream jarStream) throws IOException {
 
-		BufferedInputStream bis = null;
-		JarInputStream jis = null;
+        BufferedInputStream bis = null;
+        JarInputStream jis = null;
 
-		try {
-			bis = new BufferedInputStream(jarStream);
-			jis = new JarInputStream(bis);
+        try {
+            bis = new BufferedInputStream( jarStream );
+            jis = new JarInputStream( bis );
 
-			JarEntry jarEntry = null;
-			while ((jarEntry = jis.getNextJarEntry()) != null) {
-				if (logger.isTraceEnabled())
-					logger.trace(dump(jarEntry));
+            JarEntry jarEntry = null;
+            while(( jarEntry = jis.getNextJarEntry() ) != null) {
+                if( logger.isTraceEnabled() )
+                    logger.trace( dump( jarEntry ) );
 
-				if (jarEntry.isDirectory()) {
-					continue;
-				}
+                if( jarEntry.isDirectory() ) {
+                    continue;
+                }
 
-				if (jarEntryContents.containsKey(jarEntry.getName())) {
-					if (!Configuration.supressCollisionException())
-						throw new JclException("Class/Resource " + jarEntry.getName() + " already loaded");
-					else {
-						if (logger.isTraceEnabled())
-							logger.trace("Class/Resource " + jarEntry.getName() + " already loaded; ignoring entry...");
-						continue;
-					}
-				}
+                if( jarEntryContents.containsKey( jarEntry.getName() ) ) {
+                    if( !Configuration.supressCollisionException() )
+                        throw new JclException( "Class/Resource " + jarEntry.getName() + " already loaded" );
+                    else {
+                        if( logger.isTraceEnabled() )
+                            logger
+                                    .trace( "Class/Resource " + jarEntry.getName()
+                                            + " already loaded; ignoring entry..." );
+                        continue;
+                    }
+                }
 
-				if (logger.isTraceEnabled())
-					logger.trace("Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize());
+                if( logger.isTraceEnabled() )
+                    logger.trace( "Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize() );
 
-				byte[] b = new byte[2048];
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
+                byte[] b = new byte[2048];
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-				int len = 0;
-				while ((len = jis.read(b)) > 0) {
-					out.write(b, 0, len);
-				}
+                int len = 0;
+                while(( len = jis.read( b ) ) > 0) {
+                    out.write( b, 0, len );
+                }
 
-				// add to internal resource HashMap
-				jarEntryContents.put(jarEntry.getName(), out.toByteArray());
+                // add to internal resource HashMap
+                jarEntryContents.put( jarEntry.getName(), out.toByteArray() );
 
-				if (logger.isTraceEnabled())
-					logger.trace(jarEntry.getName() + ": size=" + out.size() + " ,csize="
-							+ jarEntry.getCompressedSize());
+                if( logger.isTraceEnabled() )
+                    logger.trace( jarEntry.getName() + ": size=" + out.size() + " ,csize="
+                            + jarEntry.getCompressedSize() );
 
-				out.close();
-			}
-		} catch (NullPointerException e) {
-			if (logger.isTraceEnabled())
-				logger.trace("Done loading.");
-		} finally {
-			jis.close();
-			bis.close();
-		}
-	}
+                out.close();
+            }
+        } catch (NullPointerException e) {
+            if( logger.isTraceEnabled() )
+                logger.trace( "Done loading." );
+        } finally {
+            jis.close();
+            bis.close();
+        }
+    }
 
-	/**
-	 * For debugging
-	 * 
-	 * @param je
-	 * @return String
-	 */
-	private String dump(JarEntry je) {
-		StringBuffer sb = new StringBuffer();
-		if (je.isDirectory()) {
-			sb.append("d ");
-		} else {
-			sb.append("f ");
-		}
+    /**
+     * For debugging
+     * 
+     * @param je
+     * @return String
+     */
+    private String dump(JarEntry je) {
+        StringBuffer sb = new StringBuffer();
+        if( je.isDirectory() ) {
+            sb.append( "d " );
+        } else {
+            sb.append( "f " );
+        }
 
-		if (je.getMethod() == JarEntry.STORED) {
-			sb.append("stored   ");
-		} else {
-			sb.append("defalted ");
-		}
+        if( je.getMethod() == JarEntry.STORED ) {
+            sb.append( "stored   " );
+        } else {
+            sb.append( "defalted " );
+        }
 
-		sb.append(je.getName());
-		sb.append("\t");
-		sb.append("" + je.getSize());
-		if (je.getMethod() == JarEntry.DEFLATED) {
-			sb.append("/" + je.getCompressedSize());
-		}
+        sb.append( je.getName() );
+        sb.append( "\t" );
+        sb.append( "" + je.getSize() );
+        if( je.getMethod() == JarEntry.DEFLATED ) {
+            sb.append( "/" + je.getCompressedSize() );
+        }
 
-		return (sb.toString());
-	}
+        return ( sb.toString() );
+    }
 }
