@@ -44,34 +44,34 @@ public class Configuration {
         if( System.getProperty( JCL_SUPPRESS_COLLISION_EXCEPTION ) == null )
             return true;
 
-        return System.getProperty( JCL_SUPPRESS_COLLISION_EXCEPTION ).equals( "true" ) ? true : false;
+        return Boolean.parseBoolean( JCL_SUPPRESS_COLLISION_EXCEPTION );
     }
 
     public static boolean isLocalLoaderEnabled() {
         if( System.getProperty( JCL_CLASSLOADER_LOCAL ) == null )
             return true;
 
-        return System.getProperty( JCL_CLASSLOADER_LOCAL ).equals( "true" ) ? true : false;
+        return Boolean.parseBoolean( System.getProperty( JCL_CLASSLOADER_LOCAL ) );
     }
 
     public static boolean isCurrentLoaderEnabled() {
         if( System.getProperty( JCL_CLASSLOADER_CURRENT ) == null )
             return true;
 
-        return System.getProperty( JCL_CLASSLOADER_CURRENT ).equals( "true" ) ? true : false;
+        return Boolean.parseBoolean( JCL_CLASSLOADER_CURRENT );
     }
 
     public static boolean isParentLoaderEnabled() {
         if( System.getProperty( JCL_CLASSLOADER_PARENT ) == null )
             return true;
 
-        return System.getProperty( JCL_CLASSLOADER_PARENT ).equals( "true" ) ? true : false;
+        return Boolean.parseBoolean( JCL_CLASSLOADER_PARENT );
     }
 
     public static boolean isSystemLoaderEnabled() {
         if( System.getProperty( JCL_CLASSLOADER_SYSTEM ) == null )
             return true;
 
-        return System.getProperty( JCL_CLASSLOADER_SYSTEM ).equals( "true" ) ? true : false;
+        return Boolean.parseBoolean( JCL_CLASSLOADER_SYSTEM );
     }
 }
