@@ -34,44 +34,44 @@ package xeus.jcl;
  */
 public class Configuration {
 
-    private static final String JCL_CLASSLOADER_SYSTEM = "jcl.classloader.system";
-    private static final String JCL_CLASSLOADER_PARENT = "jcl.classloader.parent";
-    private static final String JCL_CLASSLOADER_CURRENT = "jcl.classloader.current";
-    private static final String JCL_CLASSLOADER_LOCAL = "jcl.classloader.local";
-    private static final String JCL_SUPPRESS_COLLISION_EXCEPTION = "jcl.suppressCollisionException";
+	private static final String JCL_CLASSLOADER_SYSTEM = "jcl.classloader.system";
+	private static final String JCL_CLASSLOADER_PARENT = "jcl.classloader.parent";
+	private static final String JCL_CLASSLOADER_CURRENT = "jcl.classloader.current";
+	private static final String JCL_CLASSLOADER_LOCAL = "jcl.classloader.local";
+	private static final String JCL_SUPPRESS_COLLISION_EXCEPTION = "jcl.suppressCollisionException";
 
-    public static boolean supressCollisionException() {
-        if( System.getProperty( JCL_SUPPRESS_COLLISION_EXCEPTION ) == null )
-            return true;
+	public static boolean supressCollisionException() {
+		if (System.getProperty(JCL_SUPPRESS_COLLISION_EXCEPTION) == null)
+			return true;
 
-        return Boolean.parseBoolean( JCL_SUPPRESS_COLLISION_EXCEPTION );
-    }
+		return Boolean.parseBoolean(System.getProperty(JCL_SUPPRESS_COLLISION_EXCEPTION));
+	}
 
-    public static boolean isLocalLoaderEnabled() {
-        if( System.getProperty( JCL_CLASSLOADER_LOCAL ) == null )
-            return true;
+	public static boolean isLocalLoaderEnabled() {
+		if (System.getProperty(JCL_CLASSLOADER_LOCAL) == null)
+			return true;
 
-        return Boolean.parseBoolean( System.getProperty( JCL_CLASSLOADER_LOCAL ) );
-    }
+		return Boolean.parseBoolean(System.getProperty(JCL_CLASSLOADER_LOCAL));
+	}
 
-    public static boolean isCurrentLoaderEnabled() {
-        if( System.getProperty( JCL_CLASSLOADER_CURRENT ) == null )
-            return true;
+	public static boolean isCurrentLoaderEnabled() {
+		if (System.getProperty(JCL_CLASSLOADER_CURRENT) == null)
+			return true;
 
-        return Boolean.parseBoolean( JCL_CLASSLOADER_CURRENT );
-    }
+		return Boolean.parseBoolean(System.getProperty(JCL_CLASSLOADER_CURRENT));
+	}
 
-    public static boolean isParentLoaderEnabled() {
-        if( System.getProperty( JCL_CLASSLOADER_PARENT ) == null )
-            return true;
+	public static boolean isParentLoaderEnabled() {
+		if (System.getProperty(JCL_CLASSLOADER_PARENT) == null)
+			return true;
 
-        return Boolean.parseBoolean( JCL_CLASSLOADER_PARENT );
-    }
+		return Boolean.parseBoolean(System.getProperty(JCL_CLASSLOADER_PARENT));
+	}
 
-    public static boolean isSystemLoaderEnabled() {
-        if( System.getProperty( JCL_CLASSLOADER_SYSTEM ) == null )
-            return true;
+	public static boolean isSystemLoaderEnabled() {
+		if (System.getProperty(JCL_CLASSLOADER_SYSTEM) == null)
+			return true;
 
-        return Boolean.parseBoolean( JCL_CLASSLOADER_SYSTEM );
-    }
+		return Boolean.parseBoolean(System.getProperty(JCL_CLASSLOADER_SYSTEM));
+	}
 }
