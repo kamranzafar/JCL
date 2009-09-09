@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<!-- ====================================================================== 
-     4 Jul 2007 11:21:27                                                        
+<!-- ======================================================================
+     4 Jul 2007 11:21:27
 
-     JCL    
+     JCL
      Jar Class Loader 1.3
-                   
-     kzafar                                                                
+
+     kzafar
      ====================================================================== -->
 <project name="JCL" default="jar">
 	<description>
@@ -42,8 +42,6 @@
 		</copy>
 		<copy file="${test-src-dir}/log4j.properties" todir="${test-classes-dir}">
 		</copy>
-		<copy file="${src-dir}/jcl.properties" todir="${classes-dir}">
-		</copy>
 
 		<javac classpathref="master-classpath" srcdir="${src-dir}" destdir="${classes-dir}">
 			<compilerarg value="-nowarn" />
@@ -52,7 +50,7 @@
 			<compilerarg value="-nowarn" />
 		</javac>
 	</target>
-	
+
 	<target name="run-test" depends="compile">
 		<junit fork="yes" haltonfailure="yes" >
 			<test name="xeus.jcl.junit.LoadTest"></test>

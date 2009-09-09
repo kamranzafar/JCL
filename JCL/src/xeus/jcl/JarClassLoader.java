@@ -51,6 +51,7 @@ import xeus.jcl.loader.Loader;
 public class JarClassLoader extends AbstractClassLoader {
     protected final Map<String, Class> classes;
     protected final ClasspathResources classpathResources;
+    protected char classNameReplacementChar;
     private static Logger logger = Logger.getLogger( JarClassLoader.class );
     private final Loader localLoader = new LocalLoader();
 
@@ -112,16 +113,31 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * 
      * Reads the class bytes from different local and remote resources using
      * ClasspathResources
      * 
-     * @see xeus.jcl.AbstractClassLoader#loadClassBytes(java.lang.String)
+     * @param className
+     * @return class bytes
      */
-    @Override
     protected byte[] loadClassBytes(String className) {
         className = formatClassName( className );
 
         return classpathResources.getResource( className );
+    }
+
+    /**
+     * @param className
+     * @return String
+     */
+    protected String formatClassName(String className) {
+        if( classNameReplacementChar == '\u0000' ) {
+            // '/' is used to map the package to the path
+            return className.replace( '.', '/' ) + ".class";
+        } else {
+            // Replace '.' with custom char, such as '_'
+            return className.replace( '.', classNameReplacementChar ) + ".class";
+        }
     }
 
     /**
@@ -152,6 +168,20 @@ public class JarClassLoader extends AbstractClassLoader {
                         + "[Possible reason: Class belongs to the system]", e );
             }
         }
+    }
+
+    /**
+     * @param replacement
+     */
+    public void setClassNameReplacementChar(char replacement) {
+        classNameReplacementChar = replacement;
+    }
+
+    /**
+     * @return char
+     */
+    public char getClassNameReplacementChar() {
+        return classNameReplacementChar;
     }
 
     /**

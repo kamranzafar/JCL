@@ -3,19 +3,19 @@
  *
  *  Copyright (C) 2009  Xeus Technologies
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or (at your option) any later version.
+ *  This file is part of Jar Class Loader (JCL).
+ *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *  This program is distributed in the hope that it will be useful,
+ *  JarClassLoader is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  @author Kamran Zafar
  *
@@ -45,7 +45,6 @@ import xeus.jcl.loader.Loader;
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
-    private char classNameReplacementChar;
     protected final List<Loader> loaders = new ArrayList<Loader>();
 
     private final Loader systemLoader = new SystemLoader();
@@ -65,8 +64,8 @@ public abstract class AbstractClassLoader extends ClassLoader {
         loaders.add( loader );
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Override loadClass
      * 
      * @see java.lang.ClassLoader#loadClass(java.lang.String)
      */
@@ -124,42 +123,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         return is;
 
-    }
-
-    /**
-     * @param replacement
-     */
-    public void setClassNameReplacementChar(char replacement) {
-        classNameReplacementChar = replacement;
-    }
-
-    /**
-     * @return char
-     */
-    public char getClassNameReplacementChar() {
-        return classNameReplacementChar;
-    }
-
-    /**
-     * Abstarct method that allows class content to be loaded from other sources
-     * 
-     * @param className
-     * @return byte[]
-     */
-    protected abstract byte[] loadClassBytes(String className);
-
-    /**
-     * @param className
-     * @return String
-     */
-    protected String formatClassName(String className) {
-        if( classNameReplacementChar == '\u0000' ) {
-            // '/' is used to map the package to the path
-            return className.replace( '.', '/' ) + ".class";
-        } else {
-            // Replace '.' with custom char, such as '_'
-            return className.replace( '.', classNameReplacementChar ) + ".class";
-        }
     }
 
     /**
