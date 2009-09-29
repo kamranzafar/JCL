@@ -5,16 +5,16 @@
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
  *  JarClassLoader is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
+ *  You should have received a copy of the GNU Lesser General Public License
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  @author Kamran Zafar
@@ -68,14 +68,29 @@ public abstract class Loader implements Comparable<Loader> {
      */
     public abstract InputStream loadResource(String name);
 
+    /**
+     * Checks if Loader is Enabled/Disabled
+     * 
+     * @return
+     */
     public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     * Enable/Disable Laoder
+     * 
+     * @param enabled
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
     public int compareTo(Loader o) {
         return order - o.getOrder();
     }
