@@ -15,7 +15,7 @@
  *  GNU Lesser General Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser General Public License
- *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with JCL.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  @author Kamran Zafar
  *
@@ -64,14 +64,14 @@ public abstract class Loader implements Comparable<Loader> {
      * Loads the resource
      * 
      * @param name
-     * @return
+     * @return java.io.InputStream
      */
     public abstract InputStream loadResource(String name);
 
     /**
      * Checks if Loader is Enabled/Disabled
      * 
-     * @return
+     * @return boolean
      */
     public boolean isEnabled() {
         return enabled;
