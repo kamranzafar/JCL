@@ -1,0 +1,28 @@
+									 -----
+									 Jar Class Loader
+									 -----
+									 Xeus Technologies
+									 -----
+									 October 2009
+
+
+Overview
+
+ JCL is a simple Java API that allows loading classes from Jar files. It uses
+ custom class loaders to load classes from JARs, which helps in isolating class
+ loaders and it even makes it possible to load multiple versions of the same class
+ file from different jars. JCL also integrates with Spring; the integration is
+ tested with Spring 2.5.
+
+
+* Installation
+
+
+ To use JCL, {{{http://www.sourceforge.net/projects/jcloader"}download}}
+ and build the JCL project and put jcl.jar and dependencies in the application's
+ classpath. See the {{{downloads.html}downloads section}} for more details on the available builds and source.
+
+
+* Requirements
+
+ JCL requires JDK 1.5 or later; and will pull in all its dependencies using maven.

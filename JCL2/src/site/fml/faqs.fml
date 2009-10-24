@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="Frequently Asked Questions"
+  toplink="false">
+
+  <part id="general">
+    <faq id="logging">
+      <question>How to turn off JCL logging?</question>
+      <answer>
+        <p> JCL uses an isolated log4j logger, which sometimes spits out unneccessary lines on the console. The default log level
+ has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM.</p>
+		<source>-Djcl.isolateLogging=false</source>
+      </answer>
+    </faq>
+    <faq id="spring-global">
+      <question>How to use JCL globally with Spring?</question>
+      <answer>
+        <p>Programmatically it is possible to override the spring's default classloader with JCL. Though at the moment this is not supported as part of JCL xml extension,
+         and each bean loaded with JCL must have a <b>jcl-ref</b> element pointing to a jcl bean. Programmatically this is done as follows:</p>
+        <source>JarClassLoader jcl=new JarClassLoader();
+jcl.add("myjar.jar"); // Add some class source
+
+ClassPathXmlApplicationContext c=new ClassPathXmlApplicationContext("applicationContext.xml");
+c.setClassLoader( jcl ); // Override the default classloader with JCL</source>
+      </answer>
+    </faq>
+  </part>
+</faqs>
+

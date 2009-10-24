@@ -1,0 +1,240 @@
+									 -----
+									 Jar Class Loader
+									 -----
+									 Xeus Technologies
+									 -----
+									 October 2009
+
+
+Getting started
+
+ Below is a little tutorial on JCL v2 with examples. Please also see the {{{index.html}overview}} section for installation.
+
+* What's new in v2.0
+
+ First of all version 2.0 does not deprecate version 1.x. The bugs found in 1.x would still be fixed but all new development will
+ be done under JCL 2. The documentation for v1.x is available {{{http://jcloader.sourceforge.net/jcl_v1.php}here}}.
+ Following is a list of updates and changes in v2.0:
+
+ * The classes and package names have been changed
+
+ * Maven is being used for project management instead of ANT
+
+ * Added more robust spring and web support
+
+ * Added OSGi boot loading
+
+ * JCL 2 is more customizable and configurable
+
+* Using JCL
+
+
+ JCL is a light weight API and has only a few but useful classes. Here is a
+ simple example on how to programmatically use JCL. JarClassLoader has an arguments-constructor and <add> methods that
+ take jar-file/class-folder paths, URLs and InputStreams.
+
++-----------------------------------------------------------------------------------------------
+  JarClassLoader jcl = new JarClassLoader();
+
+  //Loading classes from different sources
+  jcl.add("myjar.jar");
+  jcl.add(new URL("http://myserver.com/myjar.jar"));
+  jcl.add(new FileInputStream("myotherjar.jar"));
+  jcl.add("myclassfolder/");
+
+  //Recursively load all jar files in the folder/sub-folder(s)
+  jcl.add("myjarlib/");
+
+  JclObjectFactory factory = JclObjectFactory.getInstance();
+
+  //Create object of loaded class
+  Object obj = factory.create(jcl, "mypackage.MyClass");
++------------------------------------------------------------------------------------------------
+
+ Now we can use reflection to invoke methods of this object. It is also possible to create object proxies
+ and call methods the normal way, this is done by using <cast(able)> methods available in <JclUtils> class explained later.
+
+* Using JCL with Spring Framework
+
+
+ JCL can be used with spring framework. JCL v2 provides Spring XML extension to load beans via JCL. The JCL bean is created using
+ the new <<jcl:jcl>> element and spring beans can reference the <jcl> bean by using the <<jcl:jcl-ref>> element as shown in the example below.
+ These elements are defined in the <jcl-schema.xsd>. This also works well in a web app using the Spring <ContextLoaderListener>. In addition to
+ this JCL v2 also supports the older way of Spring integration, please see the <spring-test.xml> file provided with the source or
+ {{{http://jcloader.sourceforge.net/jcl_v1.php}v1.x documentation}}.
+
++--------------------------------------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jcl="http://www.xeustechnologies.org/schema/jcl"
+    xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schema/jcl/jcl.xsd">
+
+    <jcl:jcl id="jcl1">
+        <constructor-arg>
+            <list>
+                <value>target/test-jcl.jar</value>
+            </list>
+        </constructor-arg>
+    </jcl:jcl>
+
+    <jcl:jcl id="jcl2">
+        <constructor-arg>
+            <list>
+                <value>target/test-jcl.jar</value>
+            </list>
+        </constructor-arg>
+    </jcl:jcl>
+
+    <bean id="test1" class="org.xeustechnologies.jcl.test.Test">
+        <jcl:jcl-ref ref="jcl" />
+        <constructor-arg ref="name"/>
+        <property name="lastName">
+	        <value>Zafar</value>
+        </property>
+    </bean>
+
+    <bean id="name" class="java.lang.String">
+        <jcl:jcl-ref ref="jcl2" />
+        <constructor-arg>
+            <value>Kamran</value>
+        </constructor-arg>
+    </bean>
+</beans>
++--------------------------------------------------------------------------------------------
+
+* Casting objects loaded in JCL
+
+
+ Java disallows casting objects loaded in a different classloader; such casting attempt results in a <ClassCastException>.
+ But sometimes it is necessary to cast objects to obtain interface references loaded in the current classloader. E.g.
+ suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it
+ is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface
+ references and converting the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the
+ JCL-loaded objects.
+
++--------------------------------------------------------------------------------------------
+  JarClassLoader jcl = new JarClassLoader();
+  jcl.add("myapi-impl.jar"); //Load jar file
+
+  JclObjectFactory factory = JclObjectFactory.getInstance();
+
+  //Create object of loaded class
+  Object obj = factory.create(jcl,"myapi.impl.MyInterfaceImpl");
+
+  //Obtain interface reference in the current classloader
+  MyInterface mi = JclUtils.cast(obj, MyInterface.class);
+
+  //Convert the object into a castable object in the current classloader
+  MyInterface mi1 = (MyInterface) JclUtils.toCastable(obj, MyInterface.class);
+
+  //Clone "Serializable" object into a castable object in the current classloader
+  //The JCL-loaded object must implement Serializable
+  //This method is now deprecated and the use of deepClone is recommended
+  MyInterface mi2 = (MyInterface) JclUtils.clone(obj);
+
+  //Clone any object Serializable and non-Serializable
+  MyInterface mi2 = (MyInterface) JclUtils.deepClone(obj);
++--------------------------------------------------------------------------------------------
+
+* Manipulating class loading order & adding custom classloaders
+
+ JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1),
+ current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and
+ then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described
+ later in the document. In addition to built-in loaders More class loaders can be added by extending the
+ <org.xeustechnologies.jcl.ProxyClassLoader> class. Each loader has a loading order and these default loading orders
+ can be changed. Below is an example that shows how to do this:
+
++--------------------------------------------------------------------------------------------
+  JarClassLoader jcl=new JarClassLoader();
+  jcl.add("myjar.jar"); // Add some class source
+
+  jcl.getSystemLoader().setOrder(1); // Look in system class loader first
+  jcl.getLocalLoader().setOrder(2); // if not found look in local class loader
+  jcl.getParentLoader().setOrder(3); // if not found look in parent class loader
+  jcl.getThreadLoader().setOrder(4); // if not found look in thread context class loader
+  jcl.getCurrentLoader().setOrder(5); // if not found look in current class loader
+
+  // A custom class loader that extends org.xeustechnologies.jcl.ProxyClassLoader
+  MyLoader loader=new MyLoader();
+  loader.setOrder(6);
+
+  jcl.addLoader(loader); //Add custom loader
++--------------------------------------------------------------------------------------------
+
+* Enable/Disable classloaders
+
+ JCL also provides a way to enable/disable classloaders. This can be done both programmetically
+ and by passing a JVM -D arg.
+
++--------------------------------------------------------------------------------------------
+  JarClassLoader jcl=new JarClassLoader();
+  jcl.add("myjar.jar"); // Add some class source
+
+  //Disable parent class loader
+  jcl.getParentLoader().setEnabled(false);
++--------------------------------------------------------------------------------------------
+
+ Similarly a -D argument can be passed to the VM; this is done by passing a boolean values to the
+ loader's class name.
+
++--------------------------------------------------------------------------------------------
+  -Dorg.xeustechnologies.jcl.AbstractClassLoader$ParentLoader=false\
+  -Dmypack.MyLoader=false
++--------------------------------------------------------------------------------------------
+
+* Enable OSGi boot delegation
+
+ Sometimes it is required to delegate some classes to the parent loader; this is part of the OSGi Spec
+ for boot delegation. This can be enabled by passing the following argument to the JVM.
+
++--------------------------------------------------------------------------------------------
+  -Dosgi.bootdelegation=true
++--------------------------------------------------------------------------------------------
+
+ And as spec'd, you can also pass classes and packages as a JVM argument
+
++--------------------------------------------------------------------------------------------
+  -Dorg.osgi.framework.bootdelegation=mypack.*
++--------------------------------------------------------------------------------------------
+
+ By default the OSGi boot delegation is not strict and if the class is not found in the parent classloader
+ then JCL will try to find it in other loaders. OSGi boot delegation can be made strict and a <ClassNotFoundException>
+ is thrown if the class is not found in parent.
+
++--------------------------------------------------------------------------------------------
+  -Dosgi.bootdelegation.strict=true
++--------------------------------------------------------------------------------------------
+
+ <<Note:>> This can also be done programetically, please see the <LoadTest.java> provided with the source.
+
+* Other configuration
+
+ Some other JCL tweaks.
+
+** Class collisions
+
+ JCL by default ignore class collisions and the first class that is found gets loaded. It is also
+ possible to throw exception on collision, this is done as follows:
+
++--------------------------------------------------------------------------------------------
+  -Djcl.suppressCollisionException=false
++--------------------------------------------------------------------------------------------
+
+** Using parent log config.
+
+ JCL uses an isolated log4j logger, which sometimes spits out unneccessary lines on the console. The default log level
+ has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM.
+
++--------------------------------------------------------------------------------------------
+  -Djcl.isolateLogging=false
++--------------------------------------------------------------------------------------------
+
+* Resources
+
+ * A nice {{{http://thinkinginsoftware.blogspot.com/2009/01/using-java-class-loader-jcl-to-reload.html}tutorial with examples}} by Nestor
+
+ * Javadoc {{{apidocs/index.html}API}} for more details.
