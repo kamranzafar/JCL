@@ -11,6 +11,7 @@
     <properties>
         <test-jar-file>test-jcl.jar</test-jar-file>
         <skipTest>false</skipTest>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <developers>
         <developer>
@@ -30,11 +31,11 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader
+        <connection>scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
         </connection>
-        <developerConnection>scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader
+        <developerConnection>scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
         </developerConnection>
-        <url>https://jcloader.svn.sourceforge.net/svnroot/jcloader
+        <url>https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
         </url>
     </scm>
     <issueManagement>
@@ -43,7 +44,7 @@
     </issueManagement>
     <distributionManagement>
         <site>
-            <id>sourceforge</id>
+            <id>sourceforge-jcl</id>
             <url>scp://shell.sourceforge.net/home/groups/j/jc/jcloader/htdocs
             </url>
         </site>
