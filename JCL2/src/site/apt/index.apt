@@ -18,7 +18,7 @@ Overview
 * Installation
 
 
- To use JCL, {{{http://www.sourceforge.net/projects/jcloader"}download}}
+ To use JCL, {{{http://www.sourceforge.net/projects/jcloader}download}}
  and build the JCL project and put jcl(-2.x).jar and dependencies in the application's
  classpath. See the {{{downloads.html}downloads section}} for more details on the available builds and source.
 
