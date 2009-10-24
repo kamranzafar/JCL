@@ -14,5 +14,5 @@ Downloads
  the following command:
 
 +------------------------------------------------------------------------------
-  svn co https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL JCL
+  svn co https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2 JCL
 +------------------------------------------------------------------------------

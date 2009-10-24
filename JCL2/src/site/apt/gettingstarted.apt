@@ -13,7 +13,7 @@ Getting started
 * What's new in v2.0
 
  First of all version 2.0 does not deprecate version 1.x. The bugs found in 1.x would still be fixed but all new development will
- be done under JCL 2. The documentation for v1.x is available {{{http://jcloader.sourceforge.net/jcl_v1.php}here}}.
+ be done under JCL 2. The documentation for v1.x is available {{{http://jcloader.sourceforge.net/jclv1}here}}.
  Following is a list of updates and changes in v2.0:
 
  * The classes and package names have been changed
