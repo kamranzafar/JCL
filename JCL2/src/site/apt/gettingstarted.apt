@@ -61,7 +61,7 @@ Getting started
  the new <<jcl:jcl>> element and spring beans can reference the <jcl> bean by using the <<jcl:jcl-ref>> element as shown in the example below.
  These elements are defined in the <jcl-schema.xsd>. This also works well in a web app using the Spring <ContextLoaderListener>. In addition to
  this JCL v2 also supports the older way of Spring integration, please see the <spring-test.xml> file provided with the source or
- {{{http://jcloader.sourceforge.net/jcl_v1.php}v1.x documentation}}.
+ {{{http://jcloader.sourceforge.net/jclv1}v1.x documentation}}.
 
 +--------------------------------------------------------------------------------------------
 <?xml version="1.0" encoding="UTF-8"?>
