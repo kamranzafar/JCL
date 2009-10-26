@@ -38,7 +38,6 @@ public class JclNamespaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
         registerBeanDefinitionParser( JCL_ELEMENT, new JclBeanDefinitionParser() );
-        registerBeanDefinitionParser( "jcl-bean", new JclBeanDefinitionParser() );
         registerBeanDefinitionDecorator( JCL_REF_ELEMENT, new JclBeanDefinitionDecorator() );
     }
 
