@@ -1,0 +1,25 @@
+<xsd:schema xmlns="http://www.xeustechnologies.org/schema/jcl"
+            xmlns:beans="http://www.springframework.org/schema/beans"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.xeustechnologies.org/schema/jcl"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:import
+        schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+        namespace="http://www.springframework.org/schema/beans" />
+
+    <xsd:complexType name="jclType">
+        <xsd:complexContent>
+            <xsd:extension base="beans:identifiedType">
+                <xsd:group ref="beans:beanElements" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="jclRefType">
+        <xsd:attribute name="ref" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:element name="jcl" type="jclType" />
+    <xsd:element name="jcl-ref" type="jclRefType" />
+</xsd:schema>

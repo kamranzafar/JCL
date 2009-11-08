@@ -1,0 +1,18 @@
+									 -----
+									 Jar Class Loader
+									 -----
+									 Xeus Technologies
+									 -----
+									 October 2009
+
+
+Downloads
+
+ JCL is open source under {{{http://www.gnu.org/copyleft/lesser.html}LGPL}}
+ and is available for {{{http://www.sourceforge.net/projects/jcloader}download}}
+ on sourceforge. The source can be anonymously checked-out from subversion using
+ the following command:
+
++------------------------------------------------------------------------------
+  svn co https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2 JCL
++------------------------------------------------------------------------------

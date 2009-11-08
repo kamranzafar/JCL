@@ -1,0 +1,53 @@
+									 -----
+									 Jar Class Loader
+									 -----
+									 Xeus Technologies
+									 -----
+									 October 2009
+
+
+Overview
+
+ JCL is a configurable, dynamic and extensible custom classloader that loads java classes directly
+ from Jar files and other sources. The motivation was to create isolated classloaders, which can be easily
+ integrated with IoC frameworks like Spring and with web applications. Click {{{gettingstarted.html}here}}
+ for more details on usage.
+
+
+* Installation
+
+
+ To use JCL, {{{http://www.sourceforge.net/projects/jcloader}download}}
+ and build the JCL project and put jcl(-core-2.x).jar and dependencies in the application's
+ classpath. See the {{{downloads.html}downloads section}} for more details on the available builds and source.
+ 
+ 
+* Building JCL
+
+ JCL is a multi-module maven project that has four modules as shown below:
+ 
++-----------------------------------------------------------------------------------------------
+  JCL
+  |---> core
+  |---> spring
+  |---> test-jar
+  |---> test-web
++----------------------------------------------------------------------------------------------- 
+ 
+ The <test-*> modules create resources to run the unit tests and a sample web application. The <core> module
+ builds an artifact with all the main JCL class files. The <spring> module generates an artifact for spring
+ integration.
+ 
+ To build JCL, check-out the source code and run the following command:
+ 
++-----------------------------------------------------------------------------------------------
+  mvn clean install
++----------------------------------------------------------------------------------------------- 
+ 
+ This command will create <jcl-core> and <jcl-spring> artifacts, and will also create a sample <war> file
+ to test JCL web integration.
+
+
+* Requirements
+
+ JCL requires JDK 1.5 or later; and will pull in all its dependencies using maven.

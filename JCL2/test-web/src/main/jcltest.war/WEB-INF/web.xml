@@ -1,0 +1,12 @@
+<web-app>
+  <context-param>
+		<param-name>jcl-context</param-name>
+		<param-value>
+			classpath:jcl.xml
+		</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.xeustechnologies.jcl.web.JclContextLoaderListener</listener-class>
+	</listener>	
+</web-app>
