@@ -9,7 +9,7 @@
     <faq id="logging">
       <question>How to turn off JCL logging?</question>
       <answer>
-        <p>JCL uses an isolated log4j logger, which sometimes spits out unneccessary lines on the console. The default log level
+        <p>JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on the console. The default log level
  has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM.</p>
 		<source>-Djcl.isolateLogging=false</source>
       </answer>

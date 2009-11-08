@@ -345,7 +345,7 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 
 ** Using parent log config.
 
- JCL uses an isolated log4j logger, which sometimes spits out unneccessary lines on the console. The default log level
+ JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on the console. The default log level
  has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM.
 
 +--------------------------------------------------------------------------------------------
