@@ -130,7 +130,7 @@ Getting started
 </jcl-context>
 +-----------------------------------------------------------------------------------------------
 
- In this example two classloaders are created in a single context. The source paths starting with <<webapp:>> will be treated as
+ In this example two classloaders are created in a single context. The source paths starting with <<webapp:>> are treated as
  paths to internal web application <<jar files and folders>>. After this configuration, the context can be loaded in the web application
  by adding the JclContextLoaderListener in the application's web.xml file.
 
@@ -157,7 +157,7 @@ Getting started
 ** Sample web application
 
  The JCL project also includes a sample web application that demonstrates JCL web-app integration. The <<jcltest.war>> file is created in the <test-web>
- module at <jcl-project/test-web/target> when the project is built. There content of the war file is also under the same module and is located in 
+ module at <jcl-project/test-web/target> when the project is built. The content of the war file is also under the same module and is located in 
  <jcl-project/test-web/src/main> folder. The exploded war folder contains all the files that clearly shows the usage of JCL in web applications. 
  See the {{{index.html}overview}} section for more details on how to build and create all JCL artifacts.
  

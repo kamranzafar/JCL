@@ -21,6 +21,25 @@ Overview
  and build the JCL project and put jcl(-core-2.x).jar and dependencies in the application's
  classpath. See the {{{downloads.html}downloads section}} for more details on the available builds and source.
  
+ After the jar files are downloaded; use commands, like the following, to install the downloaded artifacts to the
+ local maven repository so that they can be pulled into your maven projects: 
+ 
++-----------------------------------------------------------------------------------------------
+  mvn install:install-file -Dfile=jcl-core-2.0.jar -DgroupId=org.xeustechnologies \
+       -DartifactId=jcl-core -Dversion=2.0 -Dpackaging=jar -DgeneratePom=true
++-----------------------------------------------------------------------------------------------
+
+ As of v2.1, in order to include JCL as dependency apart from the command above, you can add the following 
+ repository to your maven project:
+
++-----------------------------------------------------------------------------------------------
+  <repositories>
+    <repository>
+      <id>jcl-sourceforge</id>
+      <url>http://jcloader.sourceforge.net/mvn-repo</url>
+    </repository>
+  </repositories>
++-----------------------------------------------------------------------------------------------
  
 * Building JCL
 

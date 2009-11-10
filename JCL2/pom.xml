@@ -65,7 +65,7 @@
 		</site>
 		<repository>
 			<id>sourceforge-jcl</id>
-			<url>scp://frs.sourceforge.net:/home/frs/project/j/jc/jcloader/jcl2
+			<url>scp://shell.sourceforge.net/home/groups/j/jc/jcloader/htdocs/mvn-repo
 			</url>
 		</repository>
 	</distributionManagement>
