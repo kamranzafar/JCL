@@ -34,7 +34,7 @@
     <xsd:element name="sources">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="source" />
+                <xsd:element ref="source" maxOccurs="unbounded"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
