@@ -3,6 +3,7 @@ package org.xeustechnologies.jcl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
@@ -41,6 +42,20 @@ public class LoadTest extends TestCase {
         // Locally loaded
         testObj = jc.loadClass( "org.xeustechnologies.jcl.test.Test" ).newInstance();
         assertNotNull( testObj );
+    }
+
+    @Test
+    public void testPackagedResource() throws IOException, InstantiationException, IllegalAccessException,
+            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
+            NoSuchMethodException {
+        JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
+
+        InputStream is = jc.getResourceAsStream( "test/test.properties" );
+
+        if( logger.isDebugEnabled() )
+            logger.debug( is );
+
+        assertNotNull( is );
     }
 
     @Test

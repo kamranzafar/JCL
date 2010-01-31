@@ -60,9 +60,9 @@ public class ClasspathResources extends JarResources {
      * 
      * @param resource
      */
-    private void loadResourceContent(String resource) {
+    private void loadResourceContent(String resource, String pack) {
         File resourceFile = new File( resource );
-
+        String entryName = "";
         FileInputStream fis = null;
         byte[] content = null;
         try {
@@ -70,20 +70,22 @@ public class ClasspathResources extends JarResources {
             content = new byte[(int) resourceFile.length()];
 
             if( fis.read( content ) != -1 ) {
-                if( jarEntryContents.containsKey( resourceFile.getName() ) ) {
+                entryName = pack + "/" + resourceFile.getName();
+
+                if( jarEntryContents.containsKey( entryName ) ) {
                     if( !collisionAllowed )
-                        throw new JclException( "Resource " + resourceFile.getName() + " already loaded" );
+                        throw new JclException( "Resource " + entryName + " already loaded" );
                     else {
                         if( logger.isTraceEnabled() )
-                            logger.trace( "Resource " + resourceFile.getName() + " already loaded; ignoring entry..." );
+                            logger.trace( "Resource " + entryName + " already loaded; ignoring entry..." );
                         return;
                     }
                 }
 
                 if( logger.isTraceEnabled() )
-                    logger.trace( "Loading resource: " + resourceFile.getName() );
+                    logger.trace( "Loading resource: " + entryName );
 
-                jarEntryContents.put( resourceFile.getName(), content );
+                jarEntryContents.put( entryName, content );
             }
         } catch (IOException e) {
             throw new JclException( e );
@@ -117,7 +119,7 @@ public class ClasspathResources extends JarResources {
             out = new ByteArrayOutputStream();
 
             int byt;
-            while(( ( byt = stream.read() ) != -1 )) {
+            while (( ( byt = stream.read() ) != -1 )) {
                 out.write( byt );
             }
 
@@ -253,7 +255,7 @@ public class ClasspathResources extends JarResources {
                 if( fol.getName().toLowerCase().endsWith( ".jar" ) ) {
                     loadJar( fol.getAbsolutePath() );
                 } else {
-                    loadResourceContent( fol.getAbsolutePath() );
+                    loadResourceContent( fol.getAbsolutePath(), packName );
                 }
             }
 
