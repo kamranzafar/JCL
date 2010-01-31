@@ -63,7 +63,7 @@ public class JclObjectFactory {
      * @return Object
      */
     public Object create(JarClassLoader jcl, String className) {
-        return create( jcl, className, null );
+        return create( jcl, className, (Object[]) null );
     }
 
     /**
@@ -88,6 +88,29 @@ public class JclObjectFactory {
 
         for( int i = 0; i < args.length; i++ )
             types[i] = args[i].getClass();
+
+        return create( jcl, className, args, types );
+    }
+
+    /**
+     * Creates the object of the specified class from the specified class loader
+     * by invoking the right arguments-constructor based on the passed types
+     * parameter
+     * 
+     * @param jcl
+     * @param className
+     * @param args
+     * @param types
+     * @return Object
+     */
+    public Object create(JarClassLoader jcl, String className, Object[] args, Class[] types) {
+        if( args == null || args.length == 0 ) {
+            try {
+                return jcl.loadClass( className ).newInstance();
+            } catch (Throwable e) {
+                throw new JclException( e );
+            }
+        }
 
         Object obj = null;
         try {
@@ -121,6 +144,29 @@ public class JclObjectFactory {
 
         for( int i = 0; i < args.length; i++ )
             types[i] = args[i].getClass();
+
+        return create( jcl, className, methodName, args, types );
+    }
+
+    /**
+     * Creates the object of the specified class from the specified class loader
+     * by invoking the right static factory method based on the types parameter
+     * 
+     * @param jcl
+     * @param className
+     * @param methodName
+     * @param args
+     * @param types
+     * @return Object
+     */
+    public Object create(JarClassLoader jcl, String className, String methodName, Object[] args, Class[] types) {
+        if( args == null || args.length == 0 ) {
+            try {
+                return jcl.loadClass( className ).getMethod( methodName ).invoke( null );
+            } catch (Exception e) {
+                throw new JclException( e );
+            }
+        }
 
         Object obj = null;
         try {
