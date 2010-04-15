@@ -29,7 +29,7 @@ Overview
        -DartifactId=jcl-core -Dversion=2.0 -Dpackaging=jar -DgeneratePom=true
 +-----------------------------------------------------------------------------------------------
 
- As of v2.1, in order to include JCL as dependency apart from the command above, you can add the following 
+ As of v2.1, in order to include JCL as a dependency apart from the command above, you can add the following 
  repository to your maven project:
 
 +-----------------------------------------------------------------------------------------------

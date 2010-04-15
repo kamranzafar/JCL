@@ -38,7 +38,7 @@
 	<licenses>
 		<license>
 			<name>GNU Lesser General Public License</name>
-			<url>${basedir}/src/site/resources/LICENSE.txt
+			<url>${basedir}/src/main/resources/LICENSE.txt
 			</url>
 		</license>
 	</licenses>
@@ -202,7 +202,7 @@
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
+			<artifactId>cglib-nodep</artifactId>
 			<version>2.2</version>
 		</dependency>
 	</dependencies>
