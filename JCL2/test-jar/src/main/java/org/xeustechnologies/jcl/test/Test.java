@@ -3,8 +3,9 @@ package org.xeustechnologies.jcl.test;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+import org.xeustechnologies.jcl.test.TestInterface;
 
-public class Test implements Serializable {
+public class Test implements Serializable, TestInterface {
 
     private String firstName;
     private String lastName;

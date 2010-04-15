@@ -38,11 +38,13 @@ import org.xeustechnologies.jcl.exception.JclException;
 @SuppressWarnings("unchecked")
 public class JclObjectFactory {
     private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
+    private static boolean autoProxy;
 
     /**
      * private constructor
      */
     private JclObjectFactory() {
+        autoProxy = Configuration.autoProxy();
     }
 
     /**
@@ -51,6 +53,17 @@ public class JclObjectFactory {
      * @return JclObjectFactory
      */
     public static JclObjectFactory getInstance() {
+        return jclObjectFactory;
+    }
+
+    /**
+     * Returns the instance of the singleton factory that can be used to create
+     * auto proxies for jcl-created objects
+     * 
+     * @return JclObjectFactory
+     */
+    public static JclObjectFactory getInstance(boolean autoProxy) {
+        JclObjectFactory.autoProxy = autoProxy;
         return jclObjectFactory;
     }
 
@@ -78,7 +91,7 @@ public class JclObjectFactory {
     public Object create(JarClassLoader jcl, String className, Object... args) {
         if( args == null || args.length == 0 ) {
             try {
-                return jcl.loadClass( className ).newInstance();
+                return newInstance( jcl.loadClass( className ).newInstance() );
             } catch (Throwable e) {
                 throw new JclException( e );
             }
@@ -104,22 +117,23 @@ public class JclObjectFactory {
      * @return Object
      */
     public Object create(JarClassLoader jcl, String className, Object[] args, Class[] types) {
+        Object obj = null;
+
         if( args == null || args.length == 0 ) {
             try {
-                return jcl.loadClass( className ).newInstance();
+                obj = jcl.loadClass( className ).newInstance();
             } catch (Throwable e) {
+                throw new JclException( e );
+            }
+        } else {
+            try {
+                obj = jcl.loadClass( className ).getConstructor( types ).newInstance( args );
+            } catch (Exception e) {
                 throw new JclException( e );
             }
         }
 
-        Object obj = null;
-        try {
-            obj = jcl.loadClass( className ).getConstructor( types ).newInstance( args );
-        } catch (Exception e) {
-            throw new JclException( e );
-        }
-
-        return obj;
+        return newInstance( obj );
     }
 
     /**
@@ -135,7 +149,7 @@ public class JclObjectFactory {
     public Object create(JarClassLoader jcl, String className, String methodName, Object... args) {
         if( args == null || args.length == 0 ) {
             try {
-                return jcl.loadClass( className ).getMethod( methodName ).invoke( null );
+                return newInstance( jcl.loadClass( className ).getMethod( methodName ).invoke( null ) );
             } catch (Exception e) {
                 throw new JclException( e );
             }
@@ -160,21 +174,35 @@ public class JclObjectFactory {
      * @return Object
      */
     public Object create(JarClassLoader jcl, String className, String methodName, Object[] args, Class[] types) {
+        Object obj = null;
         if( args == null || args.length == 0 ) {
             try {
-                return jcl.loadClass( className ).getMethod( methodName ).invoke( null );
+                obj = jcl.loadClass( className ).getMethod( methodName ).invoke( null );
+            } catch (Exception e) {
+                throw new JclException( e );
+            }
+        } else {
+            try {
+                obj = jcl.loadClass( className ).getMethod( methodName, types ).invoke( null, args );
             } catch (Exception e) {
                 throw new JclException( e );
             }
         }
 
-        Object obj = null;
-        try {
-            obj = jcl.loadClass( className ).getMethod( methodName, types ).invoke( null, args );
-        } catch (Exception e) {
-            throw new JclException( e );
+        return newInstance( obj );
+    }
+
+    /**
+     * Creates a proxy
+     * 
+     * @param object
+     * @return
+     */
+    private Object newInstance(Object object) {
+        if( autoProxy ) {
+            return JclUtils.toCastable( object );
         }
 
-        return obj;
+        return object;
     }
 }

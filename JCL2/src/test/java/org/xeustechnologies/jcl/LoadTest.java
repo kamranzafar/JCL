@@ -4,9 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import junit.framework.AssertionFailedError;
@@ -22,6 +21,7 @@ import org.xeustechnologies.jcl.context.JclContext;
 import org.xeustechnologies.jcl.context.JclContextLoader;
 import org.xeustechnologies.jcl.context.XmlContextLoader;
 import org.xeustechnologies.jcl.exception.JclContextException;
+import org.xeustechnologies.jcl.test.TestInterface;
 
 @SuppressWarnings("all")
 @RunWith(JUnit4ClassRunner.class)
@@ -30,9 +30,7 @@ public class LoadTest extends TestCase {
     private static Logger logger = Logger.getLogger( LoadTest.class );
 
     @Test
-    public void testWithResourceName() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testWithResourceName() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
 
         // New class
@@ -45,9 +43,7 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testPackagedResource() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testPackagedResource() {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
 
         InputStream is = jc.getResourceAsStream( "test/test.properties" );
@@ -59,9 +55,7 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testWithClassFolder() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testWithClassFolder() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
 
         Object testObj = jc.loadClass( "org.xeustechnologies.jcl.test.Test" ).newInstance();
@@ -69,9 +63,8 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testWithUrl() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException, URISyntaxException {
+    public void testWithUrl() throws MalformedURLException, InstantiationException, IllegalAccessException,
+            ClassNotFoundException {
         // URL url = new URL("http://localhost:8080/blank/test-jcl.jar");
         File f = new File( "./target/test-jcl.jar" );
 
@@ -81,9 +74,8 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testWithInputStream() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testWithInputStream() throws InstantiationException, IllegalAccessException, ClassNotFoundException,
+            IOException {
         FileInputStream fis = new FileInputStream( "./target/test-jcl.jar" );
         JarClassLoader jc = new JarClassLoader( new FileInputStream[] { fis } );
         Object testObj = jc.loadClass( "org.xeustechnologies.jcl.test.Test" ).newInstance();
@@ -92,9 +84,7 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testAddingClassSources() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testAddingClassSources() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader();
         jc.add( "./target/test-jcl.jar" );
         Object testObj = jc.loadClass( "org.xeustechnologies.jcl.test.Test" ).newInstance();
@@ -102,9 +92,8 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testChangeClassLoadingOrder() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testChangeClassLoadingOrder() throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader();
         jc.getSystemLoader().setOrder( 1 );
         jc.getParentLoader().setOrder( 3 );
@@ -118,30 +107,41 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testInterfaceCast() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testInterfaceCast() {
         JarClassLoader jc = new JarClassLoader();
         jc.add( "./target/test-jcl.jar" );
 
         JclObjectFactory factory = JclObjectFactory.getInstance();
-        Object serializable = factory.create( jc, "org.xeustechnologies.jcl.test.Test" );
+        Object testObj = factory.create( jc, "org.xeustechnologies.jcl.test.Test" );
 
-        Serializable s = JclUtils.cast( serializable, Serializable.class );
+        TestInterface ti = JclUtils.cast( testObj, TestInterface.class );
 
-        assertNotNull( s );
+        assertNotNull( ti );
 
-        s = (Serializable) JclUtils.toCastable( serializable, Serializable.class );
+        ti = (TestInterface) JclUtils.toCastable( testObj, TestInterface.class );
 
-        assertNotNull( s );
+        assertNotNull( ti );
 
-        s = (Serializable) JclUtils.clone( serializable );
+        ti = (TestInterface) JclUtils.clone( testObj );
 
-        assertNotNull( s );
+        assertNotNull( ti );
 
-        s = (Serializable) JclUtils.deepClone( serializable );
+        // Obtain a proxy and then deep-clone.
+        ti = (TestInterface) JclUtils.deepClone( JclUtils.cast( testObj, TestInterface.class ) );
 
-        assertNotNull( s );
+        assertNotNull( ti );
+    }
+
+    @Test
+    public void testAutoProxy() {
+        JarClassLoader jc = new JarClassLoader();
+        jc.add( "./target/test-jcl.jar" );
+
+        // Create auto proxies
+        JclObjectFactory factory = JclObjectFactory.getInstance( true );
+        TestInterface test = (TestInterface) factory.create( jc, "org.xeustechnologies.jcl.test.Test" );
+
+        assertNotNull( test );
     }
 
     @Test
@@ -170,9 +170,7 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testEnabledFlag() throws IOException, InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IllegalArgumentException, SecurityException, InvocationTargetException,
-            NoSuchMethodException {
+    public void testEnabledFlag() {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
         jc.getLocalLoader().setEnabled( false );
         jc.getCurrentLoader().setEnabled( false );
@@ -192,7 +190,7 @@ public class LoadTest extends TestCase {
     }
 
     @Test
-    public void testOsgiBootLoading() throws IOException, ClassNotFoundException {
+    public void testOsgiBootLoading() throws ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
 
         AbstractClassLoader.OsgiBootLoader obl = (AbstractClassLoader.OsgiBootLoader) jc.getOsgiBootLoader();

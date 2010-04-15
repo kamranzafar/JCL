@@ -37,6 +37,7 @@ public class Configuration {
     private static final String JCL_SUPPRESS_COLLISION_EXCEPTION = "jcl.suppressCollisionException";
     private static final String JCL_SUPPRESS_MISSING_RESOURCE_EXCEPTION = "jcl.suppressMissingResourceException";
     private static final String ISOLATE_LOGGING = "jcl.isolateLogging";
+    private static final String AUTO_PROXY = "jcl.autoProxy";
 
     /**
      * OSGi boot delegation
@@ -65,6 +66,14 @@ public class Configuration {
         }
 
         return Boolean.parseBoolean( System.getProperty( ISOLATE_LOGGING ) );
+    }
+
+    public static boolean autoProxy() {
+        if( System.getProperty( AUTO_PROXY ) == null ) {
+            return false;
+        }
+
+        return Boolean.parseBoolean( System.getProperty( AUTO_PROXY ) );
     }
 
     @SuppressWarnings("unchecked")

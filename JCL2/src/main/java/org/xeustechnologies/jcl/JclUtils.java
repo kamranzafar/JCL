@@ -34,6 +34,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;
+
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.utils.ObjectCloner;
 
@@ -49,7 +53,8 @@ public class JclUtils {
 
     /**
      * Casts the object ref to the passed interface class ref. It actually
-     * returns a dynamic proxy for the passed object in the given classloader
+     * returns a dynamic jdk proxy for the passed object in the given
+     * classloader
      * 
      * @param object
      * @param classes
@@ -59,6 +64,34 @@ public class JclUtils {
     public static Object toCastable(Object object, Class[] classes, ClassLoader cl) {
         JclProxyHandler handler = new JclProxyHandler( object );
         return Proxy.newProxyInstance( cl == null ? JclUtils.class.getClassLoader() : cl, classes, handler );
+    }
+
+    /**
+     * Creates a cglib proxy
+     * 
+     * @param object
+     * @param cl
+     * @return
+     */
+    public static Object toCastable(Object object, ClassLoader cl) {
+        JclProxyHandler handler = new JclProxyHandler( object );
+
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass( object.getClass() );
+        enhancer.setCallback( handler );
+        enhancer.setClassLoader( cl == null ? JclUtils.class.getClassLoader() : cl );
+
+        return enhancer.create();
+    }
+
+    /**
+     * Creates a cglib proxy
+     * 
+     * @param object
+     * @return
+     */
+    public static Object toCastable(Object object) {
+        return toCastable( object, (ClassLoader) null );
     }
 
     /**
@@ -185,23 +218,31 @@ public class JclUtils {
      * proxy method invocation handler
      * 
      */
-    private static class JclProxyHandler implements InvocationHandler {
+    private static class JclProxyHandler implements InvocationHandler, MethodInterceptor {
         private final Object delegate;
 
         public JclProxyHandler(Object delegate) {
             this.delegate = delegate;
         }
 
-        /*
-         * (non-Javadoc)
+        /**
          * 
          * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object,
-         * java.lang.reflect.Method, java.lang.Object[])
+         *      java.lang.reflect.Method, java.lang.Object[])
          */
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Method delegateMethod = delegate.getClass().getMethod( method.getName(), method.getParameterTypes() );
             return delegateMethod.invoke( delegate, args );
         }
-    }
 
+        /**
+         * 
+         * @see net.sf.cglib.proxy.MethodInterceptor#intercept(java.lang.Object,
+         *      java.lang.reflect.Method, java.lang.Object[],
+         *      net.sf.cglib.proxy.MethodProxy)
+         */
+        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+            return invoke( obj, method, args );
+        }
+    }
 }
