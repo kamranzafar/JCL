@@ -3,7 +3,7 @@
 									 -----
 									 Xeus Technologies
 									 -----
-									 October 2009
+									 October 2010
 
 
 Overview
@@ -64,7 +64,7 @@ Overview
 +----------------------------------------------------------------------------------------------- 
  
  This command will create <jcl-core> and <jcl-spring> artifacts, and will also create a sample <war> file
- to test JCL web integration.
+ to test JCL web integration. It will also copy the dependencies of each artifact in the <dependecies> folder.
 
 
 * Requirements
