@@ -68,7 +68,7 @@
                     </execution>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>compile</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -76,6 +76,7 @@
                             <outputDirectory>./target/dependencies</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
+                            <excludeArtifactIds>junit,test-jcl</excludeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
