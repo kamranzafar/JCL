@@ -8,7 +8,7 @@
 
 Downloads
 
- JCL is open source under {{{http://www.gnu.org/copyleft/lesser.html}LGPL}}
+ JCL is open source under {{{http://www.gnu.org/licenses/lgpl.html}LGPL}}
  and is available for {{{http://www.sourceforge.net/projects/jcloader}download}}
  on sourceforge. The source can be anonymously checked-out from subversion using
  the following command:

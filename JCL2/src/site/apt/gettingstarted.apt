@@ -219,19 +219,19 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 * Casting objects of types loaded in JCL
 
 
- Java disallows casting objects of types loaded in a different classloader; such casting attempt results in a <ClassCastException>.
+ Java does not allow casting objects of types loaded in a different classloader; such casting attempt results in a <ClassCastException>.
  But sometimes it is necessary to cast objects to obtain interface references loaded in the current classloader. E.g.
  suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it
  is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface
- references and converting the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the
+ references and to convert the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the
  JCL-loaded objects. JCL, as of version 2.2, can also create {{{http://cglib.sourceforge.net/}cglib}} dynamic proxies apart from the regular 
  jdk proxies, which makes it possible to create proxies for any class not just interfaces. It is also possible to create 
  auto-proxies/castable-objects from the object factory, which is very handy because then the objects can be used and casted the normal way. 
 
 ** Auto creating castable objects from factory
 
-  The <JclObjectFactory> can be used to auto-create "castable" objects, by passing <true> to the <getInstance> method. Now every time an object
-  is created, it can be casted to references in the current classloader without the need of <JclUtils>.  
+  In version 2.2 and later, the <JclObjectFactory> can be used to auto-create "castable" objects, by passing <true> to the <getInstance> method. 
+  Now every time an object is created, it can be casted to references in the current classloader without the need of <JclUtils>.  
 
 +--------------------------------------------------------------------------------------------
   JarClassLoader jcl = new JarClassLoader();
@@ -353,7 +353,8 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
   -Dosgi.bootdelegation.strict=true
 +--------------------------------------------------------------------------------------------
 
- <<Note:>> This can also be done programetically, please see the <LoadTest.java> provided with the source.
+ <<Note:>> The <order> of OSGi boot loader cannot be changed. The osgi boot delegation can also be turned on programetically, 
+ please see the <LoadTest.java> provided with the source. 
 
 * Other configuration
 
