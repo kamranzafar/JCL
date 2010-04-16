@@ -47,8 +47,6 @@ import org.xeustechnologies.jcl.utils.Utils;
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
-    private static final String JAVA_PACKAGE = "java.";
-
     protected final List<ProxyClassLoader> loaders = new ArrayList<ProxyClassLoader>();
 
     private final ProxyClassLoader systemLoader = new SystemLoader();
@@ -65,7 +63,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
         loaders.add( parentLoader );
         loaders.add( currentLoader );
         loaders.add( threadLoader );
-        loaders.add( osgiBootLoader );
     }
 
     public void addLoader(ProxyClassLoader loader) {
@@ -98,11 +95,18 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         Class clazz = null;
 
-        for( ProxyClassLoader l : loaders ) {
-            if( l.isEnabled() ) {
-                clazz = l.loadClass( className, resolveIt );
-                if( clazz != null )
-                    break;
+        // Check osgi boot delegation
+        if( osgiBootLoader.isEnabled() ) {
+            clazz = osgiBootLoader.loadClass( className, resolveIt );
+        }
+
+        if( clazz == null ) {
+            for( ProxyClassLoader l : loaders ) {
+                if( l.isEnabled() ) {
+                    clazz = l.loadClass( className, resolveIt );
+                    if( clazz != null )
+                        break;
+                }
             }
         }
 
@@ -128,11 +132,18 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         InputStream is = null;
 
-        for( ProxyClassLoader l : loaders ) {
-            if( l.isEnabled() ) {
-                is = l.loadResource( name );
-                if( is != null )
-                    break;
+        // Check osgi boot delegation
+        if( osgiBootLoader.isEnabled() ) {
+            is = osgiBootLoader.loadResource( name );
+        }
+
+        if( is == null ) {
+            for( ProxyClassLoader l : loaders ) {
+                if( l.isEnabled() ) {
+                    is = l.loadResource( name );
+                    if( is != null )
+                        break;
+                }
             }
         }
 
@@ -323,9 +334,10 @@ public abstract class AbstractClassLoader extends ClassLoader {
      */
     public final class OsgiBootLoader extends ProxyClassLoader {
         private final Logger logger = Logger.getLogger( OsgiBootLoader.class );
-
         private boolean strictLoading;
         private String[] bootDelagation;
+
+        private static final String JAVA_PACKAGE = "java.";
 
         public OsgiBootLoader() {
             enabled = Configuration.isOsgiBootDelegationEnabled();

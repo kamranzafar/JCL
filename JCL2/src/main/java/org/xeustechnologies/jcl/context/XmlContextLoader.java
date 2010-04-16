@@ -236,7 +236,7 @@ public class XmlContextLoader implements JclContextLoader {
         NodeList oe = node.getChildNodes();
         for( int i = 0; i < oe.getLength(); i++ ) {
             Node noe = oe.item( i );
-            if( noe.getNodeName().equals( ELEMENT_ORDER ) ) {
+            if( noe.getNodeName().equals( ELEMENT_ORDER ) && !( loader instanceof AbstractClassLoader.OsgiBootLoader ) ) {
                 loader.setOrder( Integer.parseInt( noe.getTextContent() ) );
             } else if( noe.getNodeName().equals( ELEMENT_ENABLED ) ) {
                 loader.setEnabled( Boolean.parseBoolean( noe.getTextContent() ) );
