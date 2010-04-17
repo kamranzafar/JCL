@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2009  Xeus Technologies
+ *  Copyright (C) 2010  Xeus Technologies
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2009  Xeus Technologies
+ *  Copyright (C) 2010  Xeus Technologies
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -236,7 +236,7 @@ public class ObjectCloner {
 
             Class<?> sc = c;
 
-            while(( sc = sc.getSuperclass() ) != Object.class && sc != null) {
+            while (( sc = sc.getSuperclass() ) != Object.class && sc != null) {
                 addAll( l, sc.getDeclaredFields() );
             }
 

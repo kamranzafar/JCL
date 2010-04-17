@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2009  Xeus Technologies
+ *  Copyright (C) 2010  Xeus Technologies
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -143,7 +143,7 @@ public class JarResources {
             jis = new JarInputStream( bis );
 
             JarEntry jarEntry = null;
-            while(( jarEntry = jis.getNextJarEntry() ) != null) {
+            while (( jarEntry = jis.getNextJarEntry() ) != null) {
                 if( logger.isTraceEnabled() )
                     logger.trace( dump( jarEntry ) );
 
@@ -170,7 +170,7 @@ public class JarResources {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
 
                 int len = 0;
-                while(( len = jis.read( b ) ) > 0) {
+                while (( len = jis.read( b ) ) > 0) {
                     out.write( b, 0, len );
                 }
 
