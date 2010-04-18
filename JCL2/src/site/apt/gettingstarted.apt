@@ -288,8 +288,8 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
  JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1),
  current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and
  then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described
- later in the document. In addition to built-in loaders More class loaders can be added by extending the
- <org.xeustechnologies.jcl.ProxyClassLoader> class. Each loader has a loading order and these default loading orders
+ later in the document. In addition to built-in loaders, more class loaders can be added by extending the
+ <org.xeustechnologies.jcl.ProxyClassLoader> class. Each loader has a loading order and the default loading orders
  can be changed. Below is an example that shows how to do this:
 
 +--------------------------------------------------------------------------------------------
