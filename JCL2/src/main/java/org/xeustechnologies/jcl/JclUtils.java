@@ -67,7 +67,8 @@ public class JclUtils {
     }
 
     /**
-     * Creates a cglib proxy
+     * Creates a cglib proxy, in the passed in class loader. If the second
+     * argument is null then it will create a proxy in the current class loader
      * 
      * @param object
      * @param cl
@@ -82,6 +83,30 @@ public class JclUtils {
         enhancer.setClassLoader( cl == null ? JclUtils.class.getClassLoader() : cl );
 
         return enhancer.create();
+    }
+
+    /**
+     * Creates a cglib proxy, tries to cast it to the reference type <T>.
+     * 
+     * @param <T>
+     * @param object
+     * @return
+     */
+    public static <T> T cast(Object object) {
+        return (T) toCastable( object );
+    }
+
+    /**
+     * Creates a cglib proxy in the passed in class loader, and tries to cast it
+     * to the reference type <T>.
+     * 
+     * @param <T>
+     * @param object
+     * @param cl
+     * @return
+     */
+    public static <T> T cast(Object object, ClassLoader cl) {
+        return (T) toCastable( object, cl );
     }
 
     /**
@@ -200,7 +225,8 @@ public class JclUtils {
      */
     public static Object deepClone(Object original) {
         ObjectCloner cloner = new ObjectCloner();
-        return cloner.deepClone( original );
+
+        return cloner.deepClone( cloneable( original ) );
     }
 
     /**
@@ -211,7 +237,19 @@ public class JclUtils {
      */
     public static Object shallowClone(Object original) {
         ObjectCloner cloner = new ObjectCloner();
-        return cloner.shallowClone( original );
+
+        return cloner.shallowClone( cloneable( original ) );
+    }
+
+    /**
+     * Private helper to obtain a proxy if required
+     * 
+     * @param original
+     * @return
+     */
+    private static Object cloneable(Object original) {
+        return original.getClass().getClassLoader().getClass().equals( JarClassLoader.class ) ? toCastable( original )
+                : original;
     }
 
     /**

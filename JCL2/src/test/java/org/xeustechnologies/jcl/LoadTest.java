@@ -118,6 +118,14 @@ public class LoadTest extends TestCase {
 
         assertNotNull( ti );
 
+        ti = JclUtils.cast( testObj );
+
+        assertNotNull( ti );
+
+        ti = (TestInterface) JclUtils.toCastable( testObj );
+
+        assertNotNull( ti );
+
         ti = (TestInterface) JclUtils.toCastable( testObj, TestInterface.class );
 
         assertNotNull( ti );
@@ -126,8 +134,8 @@ public class LoadTest extends TestCase {
 
         assertNotNull( ti );
 
-        // Obtain a proxy and then deep-clone.
-        ti = (TestInterface) JclUtils.deepClone( JclUtils.cast( testObj, TestInterface.class ) );
+        // Deep clone.
+        ti = (TestInterface) JclUtils.deepClone( testObj );
 
         assertNotNull( ti );
     }
