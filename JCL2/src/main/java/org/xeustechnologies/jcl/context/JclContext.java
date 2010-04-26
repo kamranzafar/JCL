@@ -45,7 +45,7 @@ public class JclContext {
             .synchronizedMap( new HashMap<String, JarClassLoader>() );
     public static final String DEFAULT_NAME = "jcl";
 
-    JclContext() {
+    public JclContext() {
         validate();
     }
 
@@ -65,7 +65,7 @@ public class JclContext {
      * @param name
      * @param jcl
      */
-    void addJcl(String name, JarClassLoader jcl) {
+    public void addJcl(String name, JarClassLoader jcl) {
         if( loaders.containsKey( name ) )
             throw new JclContextException( "JarClassLoader[" + name + "] already exist. Name must be unique" );
 
