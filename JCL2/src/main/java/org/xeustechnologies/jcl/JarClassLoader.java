@@ -48,7 +48,11 @@ import org.xeustechnologies.jcl.logging.JclRepositorySelector;
  */
 @SuppressWarnings("unchecked")
 public class JarClassLoader extends AbstractClassLoader {
+    /**
+     * Class cache
+     */
     protected final Map<String, Class> classes;
+
     protected final ClasspathResources classpathResources;
     private char classNameReplacementChar;
     private final ProxyClassLoader localLoader = new LocalLoader();
@@ -241,7 +245,7 @@ public class JarClassLoader extends AbstractClassLoader {
             result = classes.get( className );
             if( result != null ) {
                 if( logger.isTraceEnabled() )
-                    logger.trace( "Returning local loaded class " + className );
+                    logger.trace( "Returning local loaded class [" + className + "] from cache" );
                 return result;
             }
 
@@ -261,7 +265,7 @@ public class JarClassLoader extends AbstractClassLoader {
 
             classes.put( className, result );
             if( logger.isTraceEnabled() )
-                logger.trace( "Return newly loaded class " + className );
+                logger.trace( "Return new local loaded class " + className );
             return result;
         }
 
