@@ -29,6 +29,7 @@ package org.xeustechnologies.jcl.spring;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
@@ -48,15 +49,15 @@ import org.xeustechnologies.jcl.exception.JclException;
 public class JclBeanDefinitionDecorator implements BeanDefinitionDecorator {
 
     private static final String JCL_REF = "ref";
+    private static final String JCL_FACTORY = "jcl-factory-" + UUID.randomUUID();
     private static final String JCL_FACTORY_METHOD = "create";
-    private static final String JCL_FACTORY_PREFIX = "-factory";
     private static final String JCL_FACTORY_CONSTRUCTOR = "getInstance";
 
     public BeanDefinitionHolder decorate(Node node, BeanDefinitionHolder holder, ParserContext parserContext) {
         String jclRef = node.getAttributes().getNamedItem( JCL_REF ).getNodeValue();
 
         GenericBeanDefinition bd = new GenericBeanDefinition();
-        bd.setFactoryBeanName( jclRef + JCL_FACTORY_PREFIX );
+        bd.setFactoryBeanName( JCL_FACTORY );
         bd.setFactoryMethodName( JCL_FACTORY_METHOD );
         bd.setConstructorArgumentValues( holder.getBeanDefinition().getConstructorArgumentValues() );
         bd.setPropertyValues( holder.getBeanDefinition().getPropertyValues() );
@@ -76,22 +77,21 @@ public class JclBeanDefinitionDecorator implements BeanDefinitionDecorator {
     private void createDependencyOnJcl(Node node, BeanDefinitionHolder holder, ParserContext parserContext) {
         AbstractBeanDefinition definition = ( (AbstractBeanDefinition) holder.getBeanDefinition() );
         String jclRef = node.getAttributes().getNamedItem( JCL_REF ).getNodeValue();
-        String jclFactory = jclRef + JCL_FACTORY_PREFIX;
 
-        if( !parserContext.getRegistry().containsBeanDefinition( jclFactory ) ) {
+        if( !parserContext.getRegistry().containsBeanDefinition( JCL_FACTORY ) ) {
             BeanDefinitionBuilder initializer = BeanDefinitionBuilder.rootBeanDefinition( JclObjectFactory.class,
                     JCL_FACTORY_CONSTRUCTOR );
-            parserContext.getRegistry().registerBeanDefinition( jclFactory, initializer.getBeanDefinition() );
+            parserContext.getRegistry().registerBeanDefinition( JCL_FACTORY, initializer.getBeanDefinition() );
         }
 
         if( parserContext.getRegistry().containsBeanDefinition( jclRef ) ) {
             String[] dependsOn = definition.getDependsOn();
             if( dependsOn == null ) {
-                dependsOn = new String[] { jclRef, jclFactory };
+                dependsOn = new String[] { jclRef, JCL_FACTORY };
             } else {
                 List dependencies = new ArrayList( Arrays.asList( dependsOn ) );
                 dependencies.add( jclRef );
-                dependencies.add( jclFactory );
+                dependencies.add( JCL_FACTORY );
                 dependsOn = (String[]) dependencies.toArray( new String[0] );
             }
             definition.setDependsOn( dependsOn );
