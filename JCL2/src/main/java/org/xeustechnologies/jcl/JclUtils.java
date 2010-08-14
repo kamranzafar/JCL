@@ -30,15 +30,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
 
 import org.xeustechnologies.jcl.exception.JclException;
+import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
 import org.xeustechnologies.jcl.utils.ObjectCloner;
 
 /**
@@ -51,84 +45,8 @@ import org.xeustechnologies.jcl.utils.ObjectCloner;
 @SuppressWarnings("unchecked")
 public class JclUtils {
 
-    /**
-     * Casts the object ref to the passed interface class ref. It actually
-     * returns a dynamic jdk proxy for the passed object in the given
-     * classloader
-     * 
-     * @param object
-     * @param classes
-     * @param cl
-     * @return castable
-     */
-    public static Object toCastable(Object object, Class[] classes, ClassLoader cl) {
-        JclProxyHandler handler = new JclProxyHandler( object );
-        return Proxy.newProxyInstance( cl == null ? JclUtils.class.getClassLoader() : cl, classes, handler );
-    }
-
-    /**
-     * Creates a cglib proxy, in the passed in class loader. If the second
-     * argument is null then it will create a proxy in the current class loader
-     * 
-     * @param object
-     * @param cl
-     * @return
-     */
-    public static Object toCastable(Object object, ClassLoader cl) {
-        JclProxyHandler handler = new JclProxyHandler( object );
-
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass( object.getClass() );
-        enhancer.setCallback( handler );
-        enhancer.setClassLoader( cl == null ? JclUtils.class.getClassLoader() : cl );
-
-        return enhancer.create();
-    }
-
-    /**
-     * Creates a cglib proxy, tries to cast it to the reference type <T>.
-     * 
-     * @param <T>
-     * @param object
-     * @return
-     */
-    public static <T> T cast(Object object) {
-        return (T) toCastable( object );
-    }
-
-    /**
-     * Creates a cglib proxy in the passed in class loader, and tries to cast it
-     * to the reference type <T>.
-     * 
-     * @param <T>
-     * @param object
-     * @param cl
-     * @return
-     */
-    public static <T> T cast(Object object, ClassLoader cl) {
-        return (T) toCastable( object, cl );
-    }
-
-    /**
-     * Creates a cglib proxy
-     * 
-     * @param object
-     * @return
-     */
-    public static Object toCastable(Object object) {
-        return toCastable( object, (ClassLoader) null );
-    }
-
-    /**
-     * Casts the object ref to the passed interface class ref. It actually
-     * returns a dynamic proxy for the passed object
-     * 
-     * @param object
-     * @param classes
-     * @return castable
-     */
-    public static Object toCastable(Object object, Class[] classes) {
-        return toCastable( object, classes, null );
+    public static Object createProxy(Object object, Class superClass, Class[] interfaces, ClassLoader cl) {
+        return ProxyProviderFactory.create().createProxy( object, superClass, interfaces, cl );
     }
 
     /**
@@ -140,7 +58,20 @@ public class JclUtils {
      * @return castable
      */
     public static Object toCastable(Object object, Class clazz) {
-        return toCastable( object, clazz, null );
+        return createProxy( object, clazz, new Class[] { clazz }, null );
+    }
+
+    /**
+     * Casts the object ref to the passed interface class ref. It actually
+     * returns a dynamic proxy for the passed object
+     * 
+     * @param object
+     * @param clazz
+     *            []
+     * @return castable
+     */
+    public static Object toCastable(Object object, Class[] clazz) {
+        return createProxy( object, clazz[0], clazz, null );
     }
 
     /**
@@ -152,7 +83,20 @@ public class JclUtils {
      * @return castable
      */
     public static Object toCastable(Object object, Class clazz, ClassLoader cl) {
-        return toCastable( object, new Class[] { clazz }, cl );
+        return createProxy( object, clazz, new Class[] { clazz }, cl );
+    }
+
+    /**
+     * Casts the object ref to the passed interface class ref
+     * 
+     * @param object
+     * @param clazz
+     *            []
+     * @param cl
+     * @return castable
+     */
+    public static Object toCastable(Object object, Class[] clazz, ClassLoader cl) {
+        return createProxy( object, clazz[0], clazz, cl );
     }
 
     /**
@@ -226,7 +170,7 @@ public class JclUtils {
     public static Object deepClone(Object original) {
         ObjectCloner cloner = new ObjectCloner();
 
-        return cloner.deepClone( cloneable( original ) );
+        return cloner.deepClone( original );
     }
 
     /**
@@ -238,49 +182,6 @@ public class JclUtils {
     public static Object shallowClone(Object original) {
         ObjectCloner cloner = new ObjectCloner();
 
-        return cloner.shallowClone( cloneable( original ) );
-    }
-
-    /**
-     * Private helper to obtain a proxy if required
-     * 
-     * @param original
-     * @return
-     */
-    private static Object cloneable(Object original) {
-        return original.getClass().getClassLoader().getClass().equals( JarClassLoader.class ) ? toCastable( original )
-                : original;
-    }
-
-    /**
-     * proxy method invocation handler
-     * 
-     */
-    private static class JclProxyHandler implements InvocationHandler, MethodInterceptor {
-        private final Object delegate;
-
-        public JclProxyHandler(Object delegate) {
-            this.delegate = delegate;
-        }
-
-        /**
-         * 
-         * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object,
-         *      java.lang.reflect.Method, java.lang.Object[])
-         */
-        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Method delegateMethod = delegate.getClass().getMethod( method.getName(), method.getParameterTypes() );
-            return delegateMethod.invoke( delegate, args );
-        }
-
-        /**
-         * 
-         * @see net.sf.cglib.proxy.MethodInterceptor#intercept(java.lang.Object,
-         *      java.lang.reflect.Method, java.lang.Object[],
-         *      net.sf.cglib.proxy.MethodProxy)
-         */
-        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-            return invoke( obj, method, args );
-        }
+        return cloner.shallowClone( original );
     }
 }

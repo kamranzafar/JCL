@@ -70,7 +70,12 @@ public class ClasspathResources extends JarResources {
             content = new byte[(int) resourceFile.length()];
 
             if( fis.read( content ) != -1 ) {
-                entryName = pack + "/" + resourceFile.getName();
+
+                if( pack.length() > 0 ) {
+                    entryName = pack + "/";
+                }
+
+                entryName += resourceFile.getName();
 
                 if( jarEntryContents.containsKey( entryName ) ) {
                     if( !collisionAllowed )

@@ -21,6 +21,8 @@ import org.xeustechnologies.jcl.context.JclContext;
 import org.xeustechnologies.jcl.context.JclContextLoader;
 import org.xeustechnologies.jcl.context.XmlContextLoader;
 import org.xeustechnologies.jcl.exception.JclContextException;
+import org.xeustechnologies.jcl.proxy.CglibProxyProvider;
+import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
 import org.xeustechnologies.jcl.test.TestInterface;
 
 @SuppressWarnings("all")
@@ -118,13 +120,13 @@ public class LoadTest extends TestCase {
 
         assertNotNull( ti );
 
-        ti = JclUtils.cast( testObj );
-
-        assertNotNull( ti );
-
-        ti = (TestInterface) JclUtils.toCastable( testObj );
-
-        assertNotNull( ti );
+        // ti = JclUtils.cast( testObj );
+        //
+        // assertNotNull( ti );
+        //
+        // ti = (TestInterface) JclUtils.toCastable( testObj );
+        //
+        // assertNotNull( ti );
 
         ti = (TestInterface) JclUtils.toCastable( testObj, TestInterface.class );
 
@@ -144,6 +146,9 @@ public class LoadTest extends TestCase {
     public void testAutoProxy() {
         JarClassLoader jc = new JarClassLoader();
         jc.add( "./target/test-jcl.jar" );
+
+        // Set default to cglib
+        ProxyProviderFactory.setDefaultProxyProvider( new CglibProxyProvider() );
 
         // Create auto proxies
         JclObjectFactory factory = JclObjectFactory.getInstance( true );

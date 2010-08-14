@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.xeustechnologies</groupId>
         <artifactId>jcl</artifactId>
-        <version>2.2</version>
+        <version>2.2.1</version>
     </parent>
 
     <artifactId>jcl-core</artifactId>
@@ -94,21 +94,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>org/xeustechnologies/jcl/LoadTest.java
-                                </include>
-                            </includes>
-                            <skip>${skipTest}</skip>
-                        </configuration>
-                    </execution>
-                </executions>
                 <configuration>
                     <includes>
                         <include>org/xeustechnologies/jcl/LoadTest.java

@@ -26,6 +26,10 @@
 
 package org.xeustechnologies.jcl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.exception.JclException;
 
 /**
@@ -39,6 +43,7 @@ import org.xeustechnologies.jcl.exception.JclException;
 public class JclObjectFactory {
     private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
     private static boolean autoProxy;
+    private Logger logger = Logger.getLogger( JclObjectFactory.class );
 
     /**
      * private constructor
@@ -200,7 +205,40 @@ public class JclObjectFactory {
      */
     private Object newInstance(Object object) {
         if( autoProxy ) {
-            return JclUtils.toCastable( object );
+
+            Class superClass = null;
+
+            // Check class
+            try {
+                Class.forName( object.getClass().getSuperclass().getName() );
+                superClass = object.getClass().getSuperclass();
+            } catch (ClassNotFoundException e) {
+            }
+
+            Class[] interfaces = object.getClass().getInterfaces();
+
+            List<Class> il = new ArrayList<Class>();
+
+            // Check available interfaces
+            for( Class i : interfaces ) {
+                try {
+                    Class.forName( i.getClass().getName() );
+                    il.add( i );
+                } catch (ClassNotFoundException e) {
+                }
+            }
+
+            if( logger.isDebugEnabled() ) {
+                logger.debug( "Class: " + superClass );
+                logger.debug( "Class Interfaces: " + il );
+            }
+
+            if( superClass == null && il.size() == 0 ) {
+                throw new JclException( "Neither the class [" + object.getClass().getSuperclass().getName()
+                        + "] nor all the implemented interfaces found in the current classloader" );
+            }
+
+            return JclUtils.createProxy( object, superClass, il.toArray( new Class[il.size()] ), null );
         }
 
         return object;
