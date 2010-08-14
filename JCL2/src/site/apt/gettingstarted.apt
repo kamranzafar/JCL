@@ -231,11 +231,15 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 ** Auto creating castable objects from factory
 
   In version 2.2 and later, the <JclObjectFactory> can be used to auto-create "castable" objects, by passing <true> to the <getInstance> method. 
-  Now every time an object is created, it can be casted to references in the current classloader without the need of <JclUtils>.  
+  Now every time an object is created, it can be casted to references in the current classloader without the need of <JclUtils>. By default JCL2 uses
+  jdk proxies but that can be changed by specifying the proxy provider, as shown in the example below. 
 
 +--------------------------------------------------------------------------------------------
   JarClassLoader jcl = new JarClassLoader();
   jcl.add("myapi-impl.jar"); //Load jar file
+
+  // Set default to cglib (from version 2.2.1)
+  ProxyProviderFactory.setDefaultProxyProvider( new CglibProxyProvider() );
 
   //Create a factory of castable objects/proxies
   JclObjectFactory factory = JclObjectFactory.getInstance(true);
@@ -265,10 +269,7 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
   //Create object of loaded class
   Object obj = factory.create(jcl,"myapi.impl.MyInterfaceImpl");
 
-  //Create castable object (cglib proxy)
-  MyInterface mi = (MyInterface) JclUtils.toCastable(obj)
-
-  //Obtain interface reference in the current classloader (jdk proxy)
+  //Obtain interface reference in the current classloader
   MyInterface mi = JclUtils.cast(obj, MyInterface.class);
 
   //Convert the object into a castable object in the current classloader (jdk proxy)
