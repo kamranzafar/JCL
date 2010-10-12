@@ -9,7 +9,13 @@
 	<version>2.2.1</version>
 	<packaging>pom</packaging>
 	<description>Jar Class Loader</description>
-
+	
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>5</version>
+	</parent>
+	
 	<modules>
         <module>test-jar</module>
 		<module>core</module>
@@ -63,11 +69,6 @@
 			<url>scp://shell.sourceforge.net/home/groups/j/jc/jcloader/htdocs
 			</url>
 		</site>
-		<repository>
-			<id>sourceforge-jcl</id>
-			<url>scp://shell.sourceforge.net/home/groups/j/jc/jcloader/htdocs/mvn-repo
-			</url>
-		</repository>
 	</distributionManagement>
 	<mailingLists>
 		<mailingList>
