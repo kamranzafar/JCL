@@ -25,8 +25,10 @@ Overview
  details on the available builds and source.
 
 ** Maven repository
+ 
+ As of version 2.2.1 the JCL artifacts are available in Maven Central Repository; so now JCL can easily be added to the maven projects as a dependency.
 
- After the jar files are downloaded; use commands, like the following, to install the downloaded artifacts to the
+ For versions prior to 2.1, download the jar files and use commands, like the following, to install the downloaded artifacts to the
  local maven repository so that they can be pulled into your maven projects: 
  
 +-----------------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ Overview
        -DartifactId=jcl-core -Dversion=2.0 -Dpackaging=jar -DgeneratePom=true
 +-----------------------------------------------------------------------------------------------
 
- As of v2.1, in order to include JCL as a dependency apart from the command above, you can add the following 
+ In order to include JCL v2.1 to v2.2 as a dependency apart from the command above, you can add the following 
  repository to your maven project:
 
 +-----------------------------------------------------------------------------------------------
