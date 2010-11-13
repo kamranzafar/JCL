@@ -9,15 +9,15 @@
 	<version>2.2.2</version>
 	<packaging>pom</packaging>
 	<description>Jar Class Loader</description>
-	
+
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
 		<version>5</version>
 	</parent>
-	
+
 	<modules>
-        <module>test-jar</module>
+		<module>test-jar</module>
 		<module>core</module>
 		<module>spring</module>
 		<module>test-web</module>
@@ -112,6 +112,21 @@
 				<version>1.0-beta-6</version>
 			</extension>
 		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 	<reporting>
 		<plugins>
@@ -119,7 +134,8 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<aggregate>true</aggregate>
-					<excludePackageNames>org.xeustechnologies.jcl.test</excludePackageNames>
+					<excludePackageNames>org.xeustechnologies.jcl.test
+					</excludePackageNames>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -131,7 +147,7 @@
 					<reportsDirectories>
 						<reportsDirectory>
 							${basedir}/core/target/surefire-reports
-                        </reportsDirectory>
+						</reportsDirectory>
 						<reportsDirectory>${basedir}/spring/target/surefire-reports
 						</reportsDirectory>
 					</reportsDirectories>
