@@ -102,13 +102,13 @@ Now "jcl" can be accessed from anywhere in the application as follows.
 </code>
 </pre>
 
-It is also possible to create an XML configuration file for JCL and use XmlContextLoader to create the context.
+It is also possible to create an XML configuration file for JCL and use __XmlContextLoader__ to create the context.
 
 h2. Using JCL in Web Applications
 
 One of the motivations behind JCL was to be able to create multiple isolated classloaders in a single web application hosted on application servers like JBoss, Tomcat etc. This is achieved with JclContextLoaderListener.
 
-The JCL configuration is put in a XML file and then the JclContextLoaderListener is used to load the context. Below is an example of JCL XML configuration.
+The JCL configuration is put in a XML file and then the __JclContextLoaderListener__ is used to load the context. Below is an example of JCL XML configuration.
 
 <pre>
 <code>
@@ -187,7 +187,7 @@ h3. Sample web application
 
 The JCL project also includes a sample web application that demonstrates JCL web-app integration. The jcltest.war file is created in the test-web module at jcl-project/test-web/target when the project is built. The content of the war file is also under the same module and is located in jcl-project/test-web/src/main folder. The exploded war folder contains all the files that clearly shows the usage of JCL in web applications.
 
-After deploying the sample web application, go to http://<server-name>:8080/jcltest; this will print "Hello World" on the screen with classloader details. This message is returned from a JCL-loaded object, see jcl-project/test-web/src/main/jcltest.war/index.jsp for more details.
+After deploying the sample web application, go to http://server-name:8080/jcltest; this will print "Hello World" on the screen with classloader details. This message is returned from a JCL-loaded object, see jcl-project/test-web/src/main/jcltest.war/index.jsp for more details.
 
 h2. Using JCL with Spring Framework
 
@@ -239,7 +239,7 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 
 h2. Casting objects of types loaded in JCL
 
-Java does not allow casting objects of types loaded in a different classloader; such casting attempt results in a ClassCastException. But sometimes it is necessary to cast objects to obtain interface references loaded in the current classloader. E.g. suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface references and to convert the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the JCL-loaded objects. JCL, as of version 2.2, can also create cglib dynamic proxies apart from the regular jdk proxies, which makes it possible to create proxies for any class not just interfaces. It is also possible to create auto-proxies/castable-objects from the object factory, which is very handy because then the objects can be used and casted the normal way.
+Java does not allow casting objects of types loaded in a different classloader; such casting attempt results in a __ClassCastException__. But sometimes it is necessary to cast objects to obtain interface references loaded in the current classloader. E.g. suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface references and to convert the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the JCL-loaded objects. JCL, as of version 2.2, can also create "cglib":http://cglib.sourceforge.net/ dynamic proxies apart from the regular jdk proxies, which makes it possible to create proxies for any class not just interfaces. It is also possible to create auto-proxies/castable-objects from the object factory, which is very handy because then the objects can be used and casted the normal way.
 
 h2. Auto creating castable objects from factory
 
@@ -302,7 +302,7 @@ By default the object factory creates objects of classes loaded in JCL without p
 
 h2. Manipulating class loading order & adding custom classloaders
 
-JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1), current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described later in the document. In addition to built-in loaders, more class loaders can be added by extending the org.xeustechnologies.jcl.ProxyClassLoader class. Each loader has a loading order and the default loading orders can be changed. Below is an example that shows how to do this:
+JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1), current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described later in the document. In addition to built-in loaders, more class loaders can be added by extending the __org.xeustechnologies.jcl.ProxyClassLoader__ class. Each loader has a loading order and the default loading orders can be changed. Below is an example that shows how to do this:
 
 <pre>
 <code>
@@ -372,7 +372,7 @@ By default the OSGi boot delegation is not strict and if the class is not found 
 </code>
 </pre>
 
-**Note:** The order of OSGi boot loader cannot be changed. The osgi boot delegation can also be turned on programetically, please see the LoadTest.java provided with the source.
+**Note:** The order of OSGi boot loader cannot be changed. The osgi boot delegation can also be turned on programetically, please see the __LoadTest.java__ provided with the source.
 
 h2. Other configuration
 
