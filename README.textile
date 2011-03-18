@@ -46,13 +46,14 @@ Below is a little tutorial on JCL v2 with examples. Please also see the overview
 
 h2. What's new in v2
 
-First of all version 2.x does not deprecate version 1.x. The bugs found in 1.x would still be fixed but all new development will be done under JCL 2. The documentation for v1.x is available here. Following is a list of updates and changes in v2.x:
+Version 2.x now deprecates version 1.x so we recommend users to switch to version 2, which was a complete refactoring of version 1 and has a better design with a lot more features. Following is a list of __some__ updates and changes in v2.x:
 
-* The classes and package names have been changed
+* Total refactoring of version 1
 * Maven is being used for project management instead of ANT
 * Added more robust spring and web support
 * Added OSGi boot loading
 * JCL 2 is more customizable and configurable
+* etc. etc.
 
 h2. Using JCL
 
