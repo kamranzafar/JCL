@@ -82,7 +82,7 @@
 				<executions>
 					<execution>
 						<id>copy</id>
-						<phase>install</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>copy</goal>
 						</goals>
@@ -133,7 +133,7 @@
 					<generateReports>false</generateReports>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<executions>
@@ -145,7 +145,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin-->
 		</plugins>
 	</build>
 	<dependencies>
