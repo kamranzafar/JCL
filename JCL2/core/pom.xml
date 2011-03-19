@@ -82,7 +82,7 @@
 				<executions>
 					<execution>
 						<id>copy</id>
-						<phase>compile</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>copy</goal>
 						</goals>
