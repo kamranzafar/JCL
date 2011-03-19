@@ -26,7 +26,7 @@ JCL is a multi-module maven project that has four modules as shown below:
 
 The test-* modules create resources to run the unit tests and a sample web application. The core module builds an artifact with all the main JCL class files. The spring module generates an artifact for spring integration.
 
-To build JCL, check-out the source code and run the following command:
+To build JCL, check-out the source code of JCL2 from "github":https://github.com/xeusman/JCL and run the following command:
 
 <pre>
 <code>
