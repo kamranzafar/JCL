@@ -33,9 +33,9 @@
 		<developer>
 			<id>kzafar</id>
 			<name>Kamran Zafar</name>
-			<email>kamran.zafar@xeustechnologies.org
+			<email>kamran@kamranzafar.org
 			</email>
-			<organization>Xeus Technologies</organization>
+			<organization>Kamran Zafar</organization>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -101,8 +101,8 @@
 		</mailingList>
 	</mailingLists>
 	<organization>
-		<name>Xeus Technologies</name>
-		<url>http://www.xeustechnologies.org</url>
+		<name>Kamran Zafar</name>
+		<url>http://kamranzafar.org</url>
 	</organization>
 	<build>
 		<extensions>

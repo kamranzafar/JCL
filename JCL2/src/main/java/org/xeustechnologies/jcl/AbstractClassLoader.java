@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Xeus Technologies
+ *  Copyright (C) 2010  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -30,10 +30,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
 import org.xeustechnologies.jcl.utils.Utils;
@@ -88,7 +88,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
      */
     @Override
     public Class loadClass(String className, boolean resolveIt) throws ClassNotFoundException {
-        if( className == null || className.trim().equals( "" ) )
+        if (className == null || className.trim().equals( "" ))
             return null;
 
         Collections.sort( loaders );
@@ -96,21 +96,21 @@ public abstract class AbstractClassLoader extends ClassLoader {
         Class clazz = null;
 
         // Check osgi boot delegation
-        if( osgiBootLoader.isEnabled() ) {
+        if (osgiBootLoader.isEnabled()) {
             clazz = osgiBootLoader.loadClass( className, resolveIt );
         }
 
-        if( clazz == null ) {
-            for( ProxyClassLoader l : loaders ) {
-                if( l.isEnabled() ) {
+        if (clazz == null) {
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
                     clazz = l.loadClass( className, resolveIt );
-                    if( clazz != null )
+                    if (clazz != null)
                         break;
                 }
             }
         }
 
-        if( clazz == null )
+        if (clazz == null)
             throw new ClassNotFoundException( className );
 
         return clazz;
@@ -125,7 +125,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
      */
     @Override
     public InputStream getResourceAsStream(String name) {
-        if( name == null || name.trim().equals( "" ) )
+        if (name == null || name.trim().equals( "" ))
             return null;
 
         Collections.sort( loaders );
@@ -133,21 +133,21 @@ public abstract class AbstractClassLoader extends ClassLoader {
         InputStream is = null;
 
         // Check osgi boot delegation
-        if( osgiBootLoader.isEnabled() ) {
+        if (osgiBootLoader.isEnabled()) {
             is = osgiBootLoader.loadResource( name );
         }
 
-        if( is == null ) {
-            for( ProxyClassLoader l : loaders ) {
-                if( l.isEnabled() ) {
+        if (is == null) {
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
                     is = l.loadResource( name );
-                    if( is != null )
+                    if (is != null)
                         break;
                 }
             }
         }
 
-        if( is == null )
+        if (is == null)
             throw new ResourceNotFoundException( "Resource " + name + " not found." );
 
         return is;
@@ -177,7 +177,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
                 return null;
             }
 
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Returning system class " + className );
 
             return result;
@@ -187,8 +187,8 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public InputStream loadResource(String name) {
             InputStream is = getSystemResourceAsStream( name );
 
-            if( is != null ) {
-                if( logger.isTraceEnabled() )
+            if (is != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning system resource " + name );
 
                 return is;
@@ -220,7 +220,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
                 return null;
             }
 
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Returning class " + className + " loaded with parent classloader" );
 
             return result;
@@ -230,8 +230,8 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public InputStream loadResource(String name) {
             InputStream is = getParent().getResourceAsStream( name );
 
-            if( is != null ) {
-                if( logger.isTraceEnabled() )
+            if (is != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning resource " + name + " loaded with parent classloader" );
 
                 return is;
@@ -263,7 +263,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
                 return null;
             }
 
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Returning class " + className + " loaded with current classloader" );
 
             return result;
@@ -273,8 +273,8 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public InputStream loadResource(String name) {
             InputStream is = getClass().getClassLoader().getResourceAsStream( name );
 
-            if( is != null ) {
-                if( logger.isTraceEnabled() )
+            if (is != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning resource " + name + " loaded with current classloader" );
 
                 return is;
@@ -306,7 +306,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
                 return null;
             }
 
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Returning class " + className + " loaded with thread context classloader" );
 
             return result;
@@ -316,8 +316,8 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public InputStream loadResource(String name) {
             InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream( name );
 
-            if( is != null ) {
-                if( logger.isTraceEnabled() )
+            if (is != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning resource " + name + " loaded with thread context classloader" );
 
                 return is;
@@ -350,15 +350,15 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public Class loadClass(String className, boolean resolveIt) {
             Class clazz = null;
 
-            if( enabled && isPartOfOsgiBootDelegation( className ) ) {
+            if (enabled && isPartOfOsgiBootDelegation( className )) {
                 clazz = getParentLoader().loadClass( className, resolveIt );
 
-                if( clazz == null && strictLoading ) {
+                if (clazz == null && strictLoading) {
                     throw new JclException( new ClassNotFoundException( "JCL OSGi Boot Delegation: Class " + className
                             + " not found." ) );
                 }
 
-                if( logger.isTraceEnabled() )
+                if (logger.isTraceEnabled())
                     logger.trace( "Class " + className + " loaded via OSGi boot delegation." );
             }
 
@@ -369,14 +369,14 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public InputStream loadResource(String name) {
             InputStream is = null;
 
-            if( enabled && isPartOfOsgiBootDelegation( name ) ) {
+            if (enabled && isPartOfOsgiBootDelegation( name )) {
                 is = getParentLoader().loadResource( name );
 
-                if( is == null && strictLoading ) {
+                if (is == null && strictLoading) {
                     throw new ResourceNotFoundException( "JCL OSGi Boot Delegation: Resource " + name + " not found." );
                 }
 
-                if( logger.isTraceEnabled() )
+                if (logger.isTraceEnabled())
                     logger.trace( "Resource " + name + " loaded via OSGi boot delegation." );
             }
 
@@ -390,17 +390,17 @@ public abstract class AbstractClassLoader extends ClassLoader {
          * @return
          */
         private boolean isPartOfOsgiBootDelegation(String resourceName) {
-            if( resourceName.startsWith( JAVA_PACKAGE ) )
+            if (resourceName.startsWith( JAVA_PACKAGE ))
                 return true;
 
             String[] bootPkgs = bootDelagation;
 
-            if( bootPkgs != null ) {
-                for( String bc : bootPkgs ) {
+            if (bootPkgs != null) {
+                for (String bc : bootPkgs) {
                     Pattern pat = Pattern.compile( Utils.wildcardToRegex( bc ), Pattern.CASE_INSENSITIVE );
 
                     Matcher matcher = pat.matcher( resourceName );
-                    if( matcher.find() ) {
+                    if (matcher.find()) {
                         return true;
                     }
                 }

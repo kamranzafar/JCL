@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Xeus Technologies
+ *  Copyright (C) 2010  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -33,8 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
 
@@ -69,25 +69,25 @@ public class ClasspathResources extends JarResources {
             fis = new FileInputStream( resourceFile );
             content = new byte[(int) resourceFile.length()];
 
-            if( fis.read( content ) != -1 ) {
+            if (fis.read( content ) != -1) {
 
-                if( pack.length() > 0 ) {
+                if (pack.length() > 0) {
                     entryName = pack + "/";
                 }
 
                 entryName += resourceFile.getName();
 
-                if( jarEntryContents.containsKey( entryName ) ) {
-                    if( !collisionAllowed )
+                if (jarEntryContents.containsKey( entryName )) {
+                    if (!collisionAllowed)
                         throw new JclException( "Resource " + entryName + " already loaded" );
                     else {
-                        if( logger.isTraceEnabled() )
+                        if (logger.isTraceEnabled())
                             logger.trace( "Resource " + entryName + " already loaded; ignoring entry..." );
                         return;
                     }
                 }
 
-                if( logger.isTraceEnabled() )
+                if (logger.isTraceEnabled())
                     logger.trace( "Loading resource: " + entryName );
 
                 jarEntryContents.put( entryName, content );
@@ -109,10 +109,10 @@ public class ClasspathResources extends JarResources {
      * @param url
      */
     private void loadRemoteResource(URL url) {
-        if( logger.isTraceEnabled() )
+        if (logger.isTraceEnabled())
             logger.trace( "Attempting to load a remote resource." );
 
-        if( url.toString().toLowerCase().endsWith( ".jar" ) ) {
+        if (url.toString().toLowerCase().endsWith( ".jar" )) {
             loadJar( url );
             return;
         }
@@ -130,30 +130,30 @@ public class ClasspathResources extends JarResources {
 
             byte[] content = out.toByteArray();
 
-            if( jarEntryContents.containsKey( url.toString() ) ) {
-                if( !collisionAllowed )
+            if (jarEntryContents.containsKey( url.toString() )) {
+                if (!collisionAllowed)
                     throw new JclException( "Resource " + url.toString() + " already loaded" );
                 else {
-                    if( logger.isTraceEnabled() )
+                    if (logger.isTraceEnabled())
                         logger.trace( "Resource " + url.toString() + " already loaded; ignoring entry..." );
                     return;
                 }
             }
 
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Loading remote resource." );
 
             jarEntryContents.put( url.toString(), content );
         } catch (IOException e) {
             throw new JclException( e );
         } finally {
-            if( out != null )
+            if (out != null)
                 try {
                     out.close();
                 } catch (IOException e) {
                     throw new JclException( e );
                 }
-            if( stream != null )
+            if (stream != null)
                 try {
                     stream.close();
                 } catch (IOException e) {
@@ -178,20 +178,20 @@ public class ClasspathResources extends JarResources {
             fis = new FileInputStream( cf );
             content = new byte[(int) cf.length()];
 
-            if( fis.read( content ) != -1 ) {
+            if (fis.read( content ) != -1) {
                 entryName = pack + "/" + cf.getName();
 
-                if( jarEntryContents.containsKey( entryName ) ) {
-                    if( !collisionAllowed )
+                if (jarEntryContents.containsKey( entryName )) {
+                    if (!collisionAllowed)
                         throw new JclException( "Class " + entryName + " already loaded" );
                     else {
-                        if( logger.isTraceEnabled() )
+                        if (logger.isTraceEnabled())
                             logger.trace( "Class " + entryName + " already loaded; ignoring entry..." );
                         return;
                     }
                 }
 
-                if( logger.isTraceEnabled() )
+                if (logger.isTraceEnabled())
                     logger.trace( "Loading class: " + entryName );
 
                 jarEntryContents.put( entryName, content );
@@ -199,7 +199,7 @@ public class ClasspathResources extends JarResources {
         } catch (IOException e) {
             throw new JclException( e );
         } finally {
-            if( fis != null )
+            if (fis != null)
                 try {
                     fis.close();
                 } catch (IOException e) {
@@ -233,12 +233,12 @@ public class ClasspathResources extends JarResources {
      * @param path
      */
     public void loadResource(String path) {
-        if( logger.isTraceEnabled() )
+        if (logger.isTraceEnabled())
             logger.trace( "Resource: " + path );
 
         File fp = new File( path );
 
-        if( !fp.exists() && !ignoreMissingResources ) {
+        if (!fp.exists() && !ignoreMissingResources) {
             throw new JclException( "File/Path does not exist" );
         }
 
@@ -253,11 +253,11 @@ public class ClasspathResources extends JarResources {
      * @param packName
      */
     private void loadResource(File fol, String packName) {
-        if( fol.isFile() ) {
-            if( fol.getName().toLowerCase().endsWith( ".class" ) ) {
+        if (fol.isFile()) {
+            if (fol.getName().toLowerCase().endsWith( ".class" )) {
                 loadClassContent( fol.getAbsolutePath(), packName );
             } else {
-                if( fol.getName().toLowerCase().endsWith( ".jar" ) ) {
+                if (fol.getName().toLowerCase().endsWith( ".jar" )) {
                     loadJar( fol.getAbsolutePath() );
                 } else {
                     loadResourceContent( fol.getAbsolutePath(), packName );
@@ -267,15 +267,15 @@ public class ClasspathResources extends JarResources {
             return;
         }
 
-        if( fol.list() != null ) {
-            for( String f : fol.list() ) {
+        if (fol.list() != null) {
+            for (String f : fol.list()) {
                 File fl = new File( fol.getAbsolutePath() + "/" + f );
 
                 String pn = packName;
 
-                if( fl.isDirectory() ) {
+                if (fl.isDirectory()) {
 
-                    if( !pn.equals( "" ) )
+                    if (!pn.equals( "" ))
                         pn = pn + "/";
 
                     pn = pn + fl.getName();
@@ -292,8 +292,8 @@ public class ClasspathResources extends JarResources {
      * @param resource
      */
     public void unload(String resource) {
-        if( jarEntryContents.containsKey( resource ) ) {
-            if( logger.isTraceEnabled() )
+        if (jarEntryContents.containsKey( resource )) {
+            if (logger.isTraceEnabled())
                 logger.trace( "Removing resource " + resource );
             jarEntryContents.remove( resource );
         } else {

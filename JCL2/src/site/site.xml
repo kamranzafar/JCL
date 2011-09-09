@@ -7,7 +7,7 @@
 	<body>
 		<links>
 			<item name="Maven" href="http://maven.apache.org/" />
-			<item name="Xeus Technologies" href="http://www.xeustechnologies.org/" />
+			<item name="Kamran Zafar" href="http://www.xeustechnologies.org/" />
 		</links>
 
 		<menu name="JCL">
@@ -19,7 +19,7 @@
 
 		<menu ref="reports" />
 
-		<menu name="Xeus Technologies">
+		<menu name="Kamran Zafar">
 			<item name="JCL" href="/index.html" />
 			<item name="Bottomline" href="http://bottomline.sourceforge.net" />
 			<item name="Hotfusion" href="http://hotfusion.xtreemhost.com/" />

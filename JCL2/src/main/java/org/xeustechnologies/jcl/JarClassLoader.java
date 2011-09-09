@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Xeus Technologies
+ *  Copyright (C) 2010  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -33,8 +33,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
 import org.xeustechnologies.jcl.logging.JclRepositorySelector;
@@ -72,7 +72,7 @@ public class JarClassLoader extends AbstractClassLoader {
     public void initialize() {
         loaders.add( localLoader );
 
-        if( Configuration.isolateLogging() )
+        if (Configuration.isolateLogging())
             JclRepositorySelector.init();
     }
 
@@ -102,7 +102,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param sources
      */
     public void addAll(Object[] sources) {
-        for( Object source : sources ) {
+        for (Object source : sources) {
             add( source );
         }
     }
@@ -113,7 +113,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param sources
      */
     public void addAll(List sources) {
-        for( Object source : sources ) {
+        for (Object source : sources) {
             add( source );
         }
     }
@@ -124,11 +124,11 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param source
      */
     public void add(Object source) {
-        if( source instanceof InputStream )
+        if (source instanceof InputStream)
             add( (InputStream) source );
-        else if( source instanceof URL )
+        else if (source instanceof URL)
             add( (URL) source );
-        else if( source instanceof String )
+        else if (source instanceof String)
             add( (String) source );
         else
             throw new JclException( "Unknown Resource type" );
@@ -182,11 +182,11 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param className
      */
     public void unloadClass(String className) {
-        if( logger.isTraceEnabled() )
+        if (logger.isTraceEnabled())
             logger.trace( "Unloading class " + className );
 
-        if( classes.containsKey( className ) ) {
-            if( logger.isTraceEnabled() )
+        if (classes.containsKey( className )) {
+            if (logger.isTraceEnabled())
                 logger.trace( "Removing loaded class " + className );
             classes.remove( className );
             try {
@@ -212,7 +212,7 @@ public class JarClassLoader extends AbstractClassLoader {
     protected String formatClassName(String className) {
         className = className.replace( '/', '~' );
 
-        if( classNameReplacementChar == '\u0000' ) {
+        if (classNameReplacementChar == '\u0000') {
             // '/' is used to map the package to the path
             className = className.replace( '.', '/' ) + ".class";
         } else {
@@ -243,36 +243,36 @@ public class JarClassLoader extends AbstractClassLoader {
             byte[] classBytes;
 
             result = classes.get( className );
-            if( result != null ) {
-                if( logger.isTraceEnabled() )
+            if (result != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning local loaded class [" + className + "] from cache" );
                 return result;
             }
 
             classBytes = loadClassBytes( className );
-            if( classBytes == null ) {
+            if (classBytes == null) {
                 return null;
             }
 
             result = defineClass( className, classBytes, 0, classBytes.length );
 
-            if( result == null ) {
+            if (result == null) {
                 return null;
             }
 
             /*
              * Preserve package name.
              */
-            if( result.getPackage() == null ) {
+            if (result.getPackage() == null) {
                 String packageName = className.substring( 0, className.lastIndexOf( '.' ) );
                 definePackage( packageName, null, null, null, null, null, null, null );
             }
 
-            if( resolveIt )
+            if (resolveIt)
                 resolveClass( result );
 
             classes.put( className, result );
-            if( logger.isTraceEnabled() )
+            if (logger.isTraceEnabled())
                 logger.trace( "Return new local loaded class " + className );
             return result;
         }
@@ -280,8 +280,8 @@ public class JarClassLoader extends AbstractClassLoader {
         @Override
         public InputStream loadResource(String name) {
             byte[] arr = classpathResources.getResource( name );
-            if( arr != null ) {
-                if( logger.isTraceEnabled() )
+            if (arr != null) {
+                if (logger.isTraceEnabled())
                     logger.trace( "Returning newly loaded resource " + name );
 
                 return new ByteArrayInputStream( arr );
