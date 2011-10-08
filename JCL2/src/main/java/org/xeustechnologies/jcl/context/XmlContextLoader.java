@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -28,6 +28,8 @@ package org.xeustechnologies.jcl.context;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -35,7 +37,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 
-import org.apache.log4j.Logger;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.w3c.dom.Document;
@@ -85,7 +86,7 @@ public class XmlContextLoader implements JclContextLoader {
 
     private final List<PathResolver> pathResolvers = new ArrayList<PathResolver>();
 
-    private static Logger logger = Logger.getLogger( XmlContextLoader.class );
+    private static Logger logger = Logger.getLogger( XmlContextLoader.class.getName() );
 
     public XmlContextLoader(String file) {
         this.file = file;
@@ -97,6 +98,7 @@ public class XmlContextLoader implements JclContextLoader {
      * 
      * @see org.xeustechnologies.jcl.context.JclContextLoader#loadContext()
      */
+    @Override
     public void loadContext() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating( false );
@@ -116,14 +118,14 @@ public class XmlContextLoader implements JclContextLoader {
 
             Document d = null;
 
-            if( file.startsWith( CLASSPATH ) )
+            if (file.startsWith( CLASSPATH ))
                 d = builder.parse( getClass().getClassLoader().getResourceAsStream( file.split( CLASSPATH )[1] ) );
             else {
                 d = builder.parse( file );
             }
 
             NodeList nl = d.getElementsByTagName( ELEMENT_JCL );
-            for( int i = 0; i < nl.getLength(); i++ ) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 Node n = nl.item( i );
 
                 String name = n.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue();
@@ -132,19 +134,19 @@ public class XmlContextLoader implements JclContextLoader {
 
                 NodeList config = n.getChildNodes();
 
-                for( int j = 0; j < config.getLength(); j++ ) {
+                for (int j = 0; j < config.getLength(); j++) {
                     Node c = config.item( j );
-                    if( c.getNodeName().equals( ELEMENT_LOADERS ) ) {
+                    if (c.getNodeName().equals( ELEMENT_LOADERS )) {
                         processLoaders( jcl, c );
-                    } else if( c.getNodeName().equals( ELEMENT_SOURCES ) ) {
+                    } else if (c.getNodeName().equals( ELEMENT_SOURCES )) {
                         processSources( jcl, c );
                     }
                 }
 
                 jclContext.addJcl( name, jcl );
 
-                if( logger.isDebugEnabled() )
-                    logger.debug( "JarClassLoader[" + name + "] loaded into context." );
+                if (logger.isLoggable( Level.FINER ))
+                    logger.finer( "JarClassLoader[" + name + "] loaded into context." );
             }
 
         } catch (SAXParseException e) {
@@ -165,31 +167,32 @@ public class XmlContextLoader implements JclContextLoader {
      * 
      * @see org.xeustechnologies.jcl.context.JclContextLoader#unloadContext()
      */
+    @Override
     public void unloadContext() {
         JclContext.destroy();
     }
 
     private void processSources(JarClassLoader jcl, Node c) {
         NodeList sources = c.getChildNodes();
-        for( int k = 0; k < sources.getLength(); k++ ) {
+        for (int k = 0; k < sources.getLength(); k++) {
             Node s = sources.item( k );
 
-            if( s.getNodeName().equals( ELEMENT_SOURCE ) ) {
+            if (s.getNodeName().equals( ELEMENT_SOURCE )) {
                 String path = s.getTextContent();
                 Object[] res = null;
 
-                for( PathResolver pr : pathResolvers ) {
+                for (PathResolver pr : pathResolvers) {
                     res = pr.resolvePath( path );
 
-                    if( res != null ) {
-                        for( Object r : res )
+                    if (res != null) {
+                        for (Object r : res)
                             jcl.add( r );
 
                         break;
                     }
                 }
 
-                if( res == null )
+                if (res == null)
                     jcl.add( path );
             }
         }
@@ -197,20 +200,20 @@ public class XmlContextLoader implements JclContextLoader {
 
     private void processLoaders(JarClassLoader jcl, Node c) {
         NodeList loaders = c.getChildNodes();
-        for( int k = 0; k < loaders.getLength(); k++ ) {
+        for (int k = 0; k < loaders.getLength(); k++) {
             Node l = loaders.item( k );
-            if( l.getNodeName().equals( ELEMENT_LOADER ) ) {
-                if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_PARENT ) ) {
+            if (l.getNodeName().equals( ELEMENT_LOADER )) {
+                if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_PARENT )) {
                     processLoader( jcl.getParentLoader(), l );
-                } else if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_CURRENT ) ) {
+                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_CURRENT )) {
                     processLoader( jcl.getCurrentLoader(), l );
-                } else if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_LOCAL ) ) {
+                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_LOCAL )) {
                     processLoader( jcl.getLocalLoader(), l );
-                } else if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_THREAD ) ) {
+                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_THREAD )) {
                     processLoader( jcl.getThreadLoader(), l );
-                } else if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_SYSTEM ) ) {
+                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_SYSTEM )) {
                     processLoader( jcl.getSystemLoader(), l );
-                } else if( l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_BOOTOSGI ) ) {
+                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_BOOTOSGI )) {
                     processLoader( jcl.getOsgiBootLoader(), l );
                 } else {
                     Objenesis objenesis = new ObjenesisStd();
@@ -234,24 +237,24 @@ public class XmlContextLoader implements JclContextLoader {
 
     private void processLoader(ProxyClassLoader loader, Node node) {
         NodeList oe = node.getChildNodes();
-        for( int i = 0; i < oe.getLength(); i++ ) {
+        for (int i = 0; i < oe.getLength(); i++) {
             Node noe = oe.item( i );
-            if( noe.getNodeName().equals( ELEMENT_ORDER ) && !( loader instanceof AbstractClassLoader.OsgiBootLoader ) ) {
+            if (noe.getNodeName().equals( ELEMENT_ORDER ) && !( loader instanceof AbstractClassLoader.OsgiBootLoader )) {
                 loader.setOrder( Integer.parseInt( noe.getTextContent() ) );
-            } else if( noe.getNodeName().equals( ELEMENT_ENABLED ) ) {
+            } else if (noe.getNodeName().equals( ELEMENT_ENABLED )) {
                 loader.setEnabled( Boolean.parseBoolean( noe.getTextContent() ) );
-            } else if( noe.getNodeName().equals( ELEMENT_STRICT )
-                    && loader instanceof AbstractClassLoader.OsgiBootLoader ) {
+            } else if (noe.getNodeName().equals( ELEMENT_STRICT )
+                    && loader instanceof AbstractClassLoader.OsgiBootLoader) {
                 ( (AbstractClassLoader.OsgiBootLoader) loader ).setStrictLoading( Boolean.parseBoolean( noe
                         .getTextContent() ) );
-            } else if( noe.getNodeName().equals( ELEMENT_BOOT_DELEGATION )
-                    && loader instanceof AbstractClassLoader.OsgiBootLoader ) {
+            } else if (noe.getNodeName().equals( ELEMENT_BOOT_DELEGATION )
+                    && loader instanceof AbstractClassLoader.OsgiBootLoader) {
                 ( (AbstractClassLoader.OsgiBootLoader) loader ).setBootDelagation( noe.getTextContent().split( "," ) );
             }
         }
 
-        if( logger.isTraceEnabled() )
-            logger.trace( "Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
+        if (logger.isLoggable( Level.FINEST ))
+            logger.finest( "Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
                     + loader.isEnabled() + "]" );
     }
 

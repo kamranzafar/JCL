@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -33,11 +33,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
-import org.xeustechnologies.jcl.logging.JclRepositorySelector;
 
 /**
  * Reads the class bytes from jar files and other resources using
@@ -57,7 +57,7 @@ public class JarClassLoader extends AbstractClassLoader {
     private char classNameReplacementChar;
     private final ProxyClassLoader localLoader = new LocalLoader();
 
-    private static Logger logger = Logger.getLogger( JarClassLoader.class );
+    private static Logger logger = Logger.getLogger( JarClassLoader.class.getName() );
 
     public JarClassLoader() {
         classpathResources = new ClasspathResources();
@@ -71,9 +71,6 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     public void initialize() {
         loaders.add( localLoader );
-
-        if (Configuration.isolateLogging())
-            JclRepositorySelector.init();
     }
 
     /**
@@ -182,12 +179,12 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param className
      */
     public void unloadClass(String className) {
-        if (logger.isTraceEnabled())
-            logger.trace( "Unloading class " + className );
+        if (logger.isLoggable( Level.FINEST ))
+            logger.finest( "Unloading class " + className );
 
         if (classes.containsKey( className )) {
-            if (logger.isTraceEnabled())
-                logger.trace( "Removing loaded class " + className );
+            if (logger.isLoggable( Level.FINEST ))
+                logger.finest( "Removing loaded class " + className );
             classes.remove( className );
             try {
                 classpathResources.unload( formatClassName( className ) );
@@ -230,7 +227,7 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     class LocalLoader extends ProxyClassLoader {
 
-        private final Logger logger = Logger.getLogger( LocalLoader.class );
+        private final Logger logger = Logger.getLogger( LocalLoader.class.getName() );
 
         public LocalLoader() {
             order = 1;
@@ -244,8 +241,8 @@ public class JarClassLoader extends AbstractClassLoader {
 
             result = classes.get( className );
             if (result != null) {
-                if (logger.isTraceEnabled())
-                    logger.trace( "Returning local loaded class [" + className + "] from cache" );
+                if (logger.isLoggable( Level.FINEST ))
+                    logger.finest( "Returning local loaded class [" + className + "] from cache" );
                 return result;
             }
 
@@ -272,8 +269,8 @@ public class JarClassLoader extends AbstractClassLoader {
                 resolveClass( result );
 
             classes.put( className, result );
-            if (logger.isTraceEnabled())
-                logger.trace( "Return new local loaded class " + className );
+            if (logger.isLoggable( Level.FINEST ))
+                logger.finest( "Return new local loaded class " + className );
             return result;
         }
 
@@ -281,8 +278,8 @@ public class JarClassLoader extends AbstractClassLoader {
         public InputStream loadResource(String name) {
             byte[] arr = classpathResources.getResource( name );
             if (arr != null) {
-                if (logger.isTraceEnabled())
-                    logger.trace( "Returning newly loaded resource " + name );
+                if (logger.isLoggable( Level.FINEST ))
+                    logger.finest( "Returning newly loaded resource " + name );
 
                 return new ByteArrayInputStream( arr );
             }

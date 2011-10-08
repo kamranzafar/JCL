@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -31,10 +31,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
-import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.utils.PathResolver;
 
 /**
@@ -46,7 +47,7 @@ import org.xeustechnologies.jcl.utils.PathResolver;
  */
 public class WebAppPathResolver implements PathResolver {
 
-    private static Logger logger = Logger.getLogger( WebAppPathResolver.class );
+    private static Logger logger = Logger.getLogger( WebAppPathResolver.class.getName() );
 
     private static final String JAR = ".jar";
     private static final String WEB_APP = "webapp:";
@@ -61,14 +62,15 @@ public class WebAppPathResolver implements PathResolver {
      * 
      * @see org.xeustechnologies.jcl.utils.PathResolver#resolvePath(java.lang.String)
      */
+    @Override
     @SuppressWarnings("unchecked")
     public Object[] resolvePath(String path) {
-        if( path.startsWith( WEB_APP ) ) {
+        if (path.startsWith( WEB_APP )) {
             String webpath = "/" + path.split( ":" )[1];
 
-            if( isJar( webpath ) ) {
-                if( logger.isTraceEnabled() ) {
-                    logger.trace( "Found jar: " + webpath );
+            if (isJar( webpath )) {
+                if (logger.isLoggable( Level.FINEST )) {
+                    logger.finest( "Found jar: " + webpath );
                 }
 
                 return new InputStream[] { servletContext.getResourceAsStream( webpath ) };
@@ -76,19 +78,19 @@ public class WebAppPathResolver implements PathResolver {
 
             Set<String> paths = servletContext.getResourcePaths( webpath );
 
-            if( paths.size() > 0 ) {
+            if (paths.size() > 0) {
                 Iterator<String> itr = paths.iterator();
                 List<InputStream> streams = new ArrayList<InputStream>();
 
                 while (itr.hasNext()) {
                     String source = itr.next();
 
-                    if( isJar( source ) ) {
+                    if (isJar( source )) {
                         InputStream stream = servletContext.getResourceAsStream( source );
 
-                        if( stream != null ) {
-                            if( logger.isTraceEnabled() ) {
-                                logger.trace( "Found jar: " + source );
+                        if (stream != null) {
+                            if (logger.isLoggable( Level.FINEST )) {
+                                logger.finest( "Found jar: " + source );
                             }
 
                             streams.add( stream );

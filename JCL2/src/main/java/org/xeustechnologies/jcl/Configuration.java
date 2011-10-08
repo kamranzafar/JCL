@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -36,7 +36,6 @@ public class Configuration {
 
     private static final String JCL_SUPPRESS_COLLISION_EXCEPTION = "jcl.suppressCollisionException";
     private static final String JCL_SUPPRESS_MISSING_RESOURCE_EXCEPTION = "jcl.suppressMissingResourceException";
-    private static final String ISOLATE_LOGGING = "jcl.isolateLogging";
     private static final String AUTO_PROXY = "jcl.autoProxy";
 
     /**
@@ -58,14 +57,6 @@ public class Configuration {
             return true;
 
         return Boolean.parseBoolean( System.getProperty( JCL_SUPPRESS_MISSING_RESOURCE_EXCEPTION ) );
-    }
-
-    public static boolean isolateLogging() {
-        if (System.getProperty( ISOLATE_LOGGING ) == null) {
-            return true;
-        }
-
-        return Boolean.parseBoolean( System.getProperty( ISOLATE_LOGGING ) );
     }
 
     public static boolean autoProxy() {

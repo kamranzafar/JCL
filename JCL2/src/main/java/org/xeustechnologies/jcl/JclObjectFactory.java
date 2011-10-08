@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -28,8 +28,9 @@ package org.xeustechnologies.jcl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.xeustechnologies.jcl.exception.JclException;
 
 /**
@@ -43,7 +44,7 @@ import org.xeustechnologies.jcl.exception.JclException;
 public class JclObjectFactory {
     private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
     private static boolean autoProxy;
-    private Logger logger = Logger.getLogger( JclObjectFactory.class );
+    private final Logger logger = Logger.getLogger( JclObjectFactory.class.getName() );
 
     /**
      * private constructor
@@ -94,7 +95,7 @@ public class JclObjectFactory {
      * @return Object
      */
     public Object create(JarClassLoader jcl, String className, Object... args) {
-        if( args == null || args.length == 0 ) {
+        if (args == null || args.length == 0) {
             try {
                 return newInstance( jcl.loadClass( className ).newInstance() );
             } catch (Throwable e) {
@@ -104,7 +105,7 @@ public class JclObjectFactory {
 
         Class[] types = new Class[args.length];
 
-        for( int i = 0; i < args.length; i++ )
+        for (int i = 0; i < args.length; i++)
             types[i] = args[i].getClass();
 
         return create( jcl, className, args, types );
@@ -124,7 +125,7 @@ public class JclObjectFactory {
     public Object create(JarClassLoader jcl, String className, Object[] args, Class[] types) {
         Object obj = null;
 
-        if( args == null || args.length == 0 ) {
+        if (args == null || args.length == 0) {
             try {
                 obj = jcl.loadClass( className ).newInstance();
             } catch (Throwable e) {
@@ -152,7 +153,7 @@ public class JclObjectFactory {
      * @return Object
      */
     public Object create(JarClassLoader jcl, String className, String methodName, Object... args) {
-        if( args == null || args.length == 0 ) {
+        if (args == null || args.length == 0) {
             try {
                 return newInstance( jcl.loadClass( className ).getMethod( methodName ).invoke( null ) );
             } catch (Exception e) {
@@ -161,7 +162,7 @@ public class JclObjectFactory {
         }
         Class[] types = new Class[args.length];
 
-        for( int i = 0; i < args.length; i++ )
+        for (int i = 0; i < args.length; i++)
             types[i] = args[i].getClass();
 
         return create( jcl, className, methodName, args, types );
@@ -180,7 +181,7 @@ public class JclObjectFactory {
      */
     public Object create(JarClassLoader jcl, String className, String methodName, Object[] args, Class[] types) {
         Object obj = null;
-        if( args == null || args.length == 0 ) {
+        if (args == null || args.length == 0) {
             try {
                 obj = jcl.loadClass( className ).getMethod( methodName ).invoke( null );
             } catch (Exception e) {
@@ -204,7 +205,7 @@ public class JclObjectFactory {
      * @return
      */
     private Object newInstance(Object object) {
-        if( autoProxy ) {
+        if (autoProxy) {
 
             Class superClass = null;
 
@@ -220,7 +221,7 @@ public class JclObjectFactory {
             List<Class> il = new ArrayList<Class>();
 
             // Check available interfaces
-            for( Class i : interfaces ) {
+            for (Class i : interfaces) {
                 try {
                     Class.forName( i.getClass().getName() );
                     il.add( i );
@@ -228,12 +229,12 @@ public class JclObjectFactory {
                 }
             }
 
-            if( logger.isDebugEnabled() ) {
-                logger.debug( "Class: " + superClass );
-                logger.debug( "Class Interfaces: " + il );
+            if (logger.isLoggable( Level.FINER )) {
+                logger.finer( "Class: " + superClass );
+                logger.finer( "Class Interfaces: " + il );
             }
 
-            if( superClass == null && il.size() == 0 ) {
+            if (superClass == null && il.size() == 0) {
                 throw new JclException( "Neither the class [" + object.getClass().getSuperclass().getName()
                         + "] nor all the implemented interfaces found in the current classloader" );
             }

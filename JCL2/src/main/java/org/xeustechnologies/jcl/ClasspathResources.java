@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.xeustechnologies.jcl.exception.JclException;
@@ -47,7 +48,7 @@ import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
  */
 public class ClasspathResources extends JarResources {
 
-    private static Logger logger = Logger.getLogger( ClasspathResources.class );
+    private static Logger logger = Logger.getLogger( ClasspathResources.class.getName() );
     private boolean ignoreMissingResources;
 
     public ClasspathResources() {
@@ -81,14 +82,14 @@ public class ClasspathResources extends JarResources {
                     if (!collisionAllowed)
                         throw new JclException( "Resource " + entryName + " already loaded" );
                     else {
-                        if (logger.isTraceEnabled())
-                            logger.trace( "Resource " + entryName + " already loaded; ignoring entry..." );
+                        if (logger.isLoggable( Level.FINEST ))
+                            logger.finest( "Resource " + entryName + " already loaded; ignoring entry..." );
                         return;
                     }
                 }
 
-                if (logger.isTraceEnabled())
-                    logger.trace( "Loading resource: " + entryName );
+                if (logger.isLoggable( Level.FINEST ))
+                    logger.finest( "Loading resource: " + entryName );
 
                 jarEntryContents.put( entryName, content );
             }
@@ -109,8 +110,8 @@ public class ClasspathResources extends JarResources {
      * @param url
      */
     private void loadRemoteResource(URL url) {
-        if (logger.isTraceEnabled())
-            logger.trace( "Attempting to load a remote resource." );
+        if (logger.isLoggable( Level.FINEST ))
+            logger.finest( "Attempting to load a remote resource." );
 
         if (url.toString().toLowerCase().endsWith( ".jar" )) {
             loadJar( url );
@@ -134,14 +135,14 @@ public class ClasspathResources extends JarResources {
                 if (!collisionAllowed)
                     throw new JclException( "Resource " + url.toString() + " already loaded" );
                 else {
-                    if (logger.isTraceEnabled())
-                        logger.trace( "Resource " + url.toString() + " already loaded; ignoring entry..." );
+                    if (logger.isLoggable( Level.FINEST ))
+                        logger.finest( "Resource " + url.toString() + " already loaded; ignoring entry..." );
                     return;
                 }
             }
 
-            if (logger.isTraceEnabled())
-                logger.trace( "Loading remote resource." );
+            if (logger.isLoggable( Level.FINEST ))
+                logger.finest( "Loading remote resource." );
 
             jarEntryContents.put( url.toString(), content );
         } catch (IOException e) {
@@ -185,14 +186,14 @@ public class ClasspathResources extends JarResources {
                     if (!collisionAllowed)
                         throw new JclException( "Class " + entryName + " already loaded" );
                     else {
-                        if (logger.isTraceEnabled())
-                            logger.trace( "Class " + entryName + " already loaded; ignoring entry..." );
+                        if (logger.isLoggable( Level.FINEST ))
+                            logger.finest( "Class " + entryName + " already loaded; ignoring entry..." );
                         return;
                     }
                 }
 
-                if (logger.isTraceEnabled())
-                    logger.trace( "Loading class: " + entryName );
+                if (logger.isLoggable( Level.FINEST ))
+                    logger.finest( "Loading class: " + entryName );
 
                 jarEntryContents.put( entryName, content );
             }
@@ -233,8 +234,8 @@ public class ClasspathResources extends JarResources {
      * @param path
      */
     public void loadResource(String path) {
-        if (logger.isTraceEnabled())
-            logger.trace( "Resource: " + path );
+        if (logger.isLoggable( Level.FINEST ))
+            logger.finest( "Resource: " + path );
 
         File fp = new File( path );
 
@@ -293,8 +294,8 @@ public class ClasspathResources extends JarResources {
      */
     public void unload(String resource) {
         if (jarEntryContents.containsKey( resource )) {
-            if (logger.isTraceEnabled())
-                logger.trace( "Removing resource " + resource );
+            if (logger.isLoggable( Level.FINEST ))
+                logger.finest( "Removing resource " + resource );
             jarEntryContents.remove( resource );
         } else {
             throw new ResourceNotFoundException( resource, "Resource not found in local ClasspathResources" );

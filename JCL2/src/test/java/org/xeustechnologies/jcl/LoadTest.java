@@ -7,12 +7,13 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ import org.xeustechnologies.jcl.test.TestInterface;
 @RunWith(JUnit4ClassRunner.class)
 public class LoadTest extends TestCase {
 
-    private static Logger logger = Logger.getLogger( LoadTest.class );
+    private static Logger logger = Logger.getLogger( LoadTest.class.getName() );
 
     @Test
     public void testWithResourceName() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -50,8 +51,8 @@ public class LoadTest extends TestCase {
 
         InputStream is = jc.getResourceAsStream( "test/test.properties" );
 
-        if( logger.isDebugEnabled() )
-            logger.debug( is );
+        if (logger.isLoggable( Level.FINER ))
+            logger.finer( is.toString() );
 
         assertNotNull( is );
     }
@@ -171,9 +172,7 @@ public class LoadTest extends TestCase {
             testObj = jc.loadClass( "org.xeustechnologies.jcl.test.Test" ).newInstance();
 
             // Must have been loaded by a CL other than JCL-Local
-            Assert
-                    .assertFalse( testObj.getClass().getClassLoader()
-                            .equals( "org.xeustechnologies.jcl.JarClassLoader" ) );
+            Assert.assertFalse( testObj.getClass().getClassLoader().equals( "org.xeustechnologies.jcl.JarClassLoader" ) );
             return;
         } catch (ClassNotFoundException cnfe) {
             // expected if not found
@@ -231,8 +230,9 @@ public class LoadTest extends TestCase {
             // expected
         }
 
-        assertEquals( "sun.misc.Launcher$AppClassLoader", JclContext.get( "jcl3" ).loadClass(
-                "org.xeustechnologies.jcl.test.Test" ).getClassLoader().getClass().getName() );
+        assertEquals( "sun.misc.Launcher$AppClassLoader",
+                JclContext.get( "jcl3" ).loadClass( "org.xeustechnologies.jcl.test.Test" ).getClassLoader().getClass()
+                        .getName() );
     }
 
     @Test

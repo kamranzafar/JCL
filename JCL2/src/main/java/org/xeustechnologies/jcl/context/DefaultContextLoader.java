@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -26,7 +26,9 @@
 
 package org.xeustechnologies.jcl.context;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.xeustechnologies.jcl.JarClassLoader;
 
 /**
@@ -40,7 +42,7 @@ public class DefaultContextLoader implements JclContextLoader {
     private final JclContext jclContext;
     private final JarClassLoader jcl;
 
-    private static Logger logger = Logger.getLogger( DefaultContextLoader.class );
+    private static Logger logger = Logger.getLogger( DefaultContextLoader.class.getName() );
 
     public DefaultContextLoader(JarClassLoader jcl) {
         jclContext = new JclContext();
@@ -52,13 +54,15 @@ public class DefaultContextLoader implements JclContextLoader {
      * 
      * @see org.xeustechnologies.jcl.context.JclContextLoader#loadContext()
      */
+    @Override
     public void loadContext() {
         jclContext.addJcl( JclContext.DEFAULT_NAME, jcl );
 
-        if( logger.isDebugEnabled() )
-            logger.debug( "Default JarClassLoader loaded into context." );
+        if (logger.isLoggable( Level.FINER ))
+            logger.finer( "Default JarClassLoader loaded into context." );
     }
 
+    @Override
     public void unloadContext() {
         JclContext.destroy();
     }

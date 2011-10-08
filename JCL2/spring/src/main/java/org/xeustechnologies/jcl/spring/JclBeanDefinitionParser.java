@@ -1,7 +1,7 @@
 /**
  *  JCL (Jar Class Loader)
  *
- *  Copyright (C) 2010  Kamran Zafar
+ *  Copyright (C) 2011  Kamran Zafar
  *
  *  This file is part of Jar Class Loader (JCL).
  *  Jar Class Loader (JCL) is free software: you can redistribute it and/or modify
@@ -26,7 +26,8 @@
 
 package org.xeustechnologies.jcl.spring;
 
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -40,7 +41,7 @@ import org.xeustechnologies.jcl.JarClassLoader;
  */
 public class JclBeanDefinitionParser implements BeanDefinitionParser {
 
-    private static Logger logger = Logger.getLogger( JclBeanDefinitionParser.class );
+    private static Logger logger = Logger.getLogger( JclBeanDefinitionParser.class.getName() );
 
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         BeanDefinitionHolder holder = parserContext.getDelegate().parseBeanDefinitionElement( element );
