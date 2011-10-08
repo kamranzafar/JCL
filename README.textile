@@ -401,7 +401,7 @@ JCL by default ignores all missing jars/class sources. This default behaviour ca
 
 h3. Using parent log config.
 
-JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on the console. The default log level has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM.
+JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on the console. The default log level has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM. __Version 2.3 and above does not use Log4J.__
 
 <pre>
 <code>
