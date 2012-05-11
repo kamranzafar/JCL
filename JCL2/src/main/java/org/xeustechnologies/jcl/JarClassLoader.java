@@ -261,7 +261,8 @@ public class JarClassLoader extends AbstractClassLoader {
              * Preserve package name.
              */
             if (result.getPackage() == null) {
-                String packageName = className.substring( 0, className.lastIndexOf( '.' ) );
+                int lastDotIndex = className.lastIndexOf( '.' );
+                String packageName = (lastDotIndex >= 0) ? className.substring( 0, lastDotIndex) : "";
                 definePackage( packageName, null, null, null, null, null, null, null );
             }
 
