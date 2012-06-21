@@ -1,0 +1,79 @@
+									 -----
+									 Jar Class Loader
+									 -----
+									 Kamran Zafar
+									 -----
+									 October 2010
+
+
+Overview
+
+ JCL is a configurable, dynamic and extensible custom classloader that loads java classes directly
+ from Jar files and other sources. The motivation was to create isolated classloaders, which can be easily
+ integrated with IoC frameworks like Spring and with web applications. Click {{{gettingstarted.html}here}}
+ for more details on usage.
+
+ This library, as is and modified, can be used for free in personal and commercial applications under the 
+ terms and conditions of {{{http://www.gnu.org/licenses/lgpl.html}GNU Lesser General Public License (LGPL)}}.
+
+* Installation
+
+
+ To use JCL, {{{http://www.sourceforge.net/projects/jcloader}download}}
+ and build the JCL project and put jcl(-core-2.x).jar and dependencies in the application's
+ classpath. See the build section below and also check out the {{{downloads.html}downloads section}} for more 
+ details on the available builds and source.
+
+** Maven repository
+ 
+ As of version 2.2.1 the JCL artifacts are available in Maven Central Repository; so now JCL can easily be added to the maven projects as a dependency.
+
+ For versions prior to 2.1, download the jar files and use commands, like the following, to install the downloaded artifacts to the
+ local maven repository so that they can be pulled into your maven projects: 
+ 
++-----------------------------------------------------------------------------------------------
+  mvn install:install-file -Dfile=jcl-core-2.0.jar -DgroupId=org.xeustechnologies \
+       -DartifactId=jcl-core -Dversion=2.0 -Dpackaging=jar -DgeneratePom=true
++-----------------------------------------------------------------------------------------------
+
+ In order to include JCL v2.1 to v2.2 as a dependency apart from the command above, you can add the following 
+ repository to your maven project:
+
++-----------------------------------------------------------------------------------------------
+  <repositories>
+    <repository>
+      <id>jcl-sourceforge</id>
+      <url>http://jcloader.sourceforge.net/mvn-repo</url>
+    </repository>
+  </repositories>
++-----------------------------------------------------------------------------------------------
+ 
+* Building JCL
+
+ JCL is a multi-module maven project that has four modules as shown below:
+ 
++-----------------------------------------------------------------------------------------------
+  JCL
+  |---> core
+  |---> spring
+  |---> test-jar
+  |---> test-web
++----------------------------------------------------------------------------------------------- 
+ 
+ The <test-*> modules create resources to run the unit tests and a sample web application. The <core> module
+ builds an artifact with all the main JCL class files. The <spring> module generates an artifact for spring
+ integration.
+ 
+ To build JCL, check-out the source code and run the following command:
+ 
++-----------------------------------------------------------------------------------------------
+  mvn clean install
++----------------------------------------------------------------------------------------------- 
+ 
+ This command will create <jcl-core> and <jcl-spring> artifacts, and will also create a sample <war> file
+ to test JCL web integration. It will also copy the dependencies of each artifact in the <dependecies> folder.
+
+
+* Requirements
+
+ JCL requires JDK 1.5 or later; and will pull in all its dependencies using maven.

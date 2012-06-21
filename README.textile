@@ -19,7 +19,7 @@ JCL is a multi-module maven project that has four modules as shown below:
  JCL
   |---> core
   |---> spring
-  |---> test-jar
+  |---> test-jcl
   |---> test-web
 </code>
 </pre>
@@ -406,5 +406,17 @@ JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on t
 <pre>
 <code>
   -Djcl.isolateLogging=false
+</code>
+</pre>
+
+h2. Maven Dependency
+
+<pre>
+<code>
+  <dependency>
+ 	<groupId>org.xeustechnologies</groupId>
+	<artifactId>jcl-core</artifactId> 
+	<version>2.3</version>
+  </dependency>
 </code>
 </pre>
