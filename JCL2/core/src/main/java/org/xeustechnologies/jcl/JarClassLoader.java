@@ -230,7 +230,7 @@ public class JarClassLoader extends AbstractClassLoader {
         private final Logger logger = Logger.getLogger( LocalLoader.class.getName() );
 
         public LocalLoader() {
-            order = 1;
+            order = 10;
             enabled = Configuration.isLocalLoaderEnabled();
         }
 

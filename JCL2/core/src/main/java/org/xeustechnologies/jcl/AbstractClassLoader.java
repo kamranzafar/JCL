@@ -161,7 +161,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
         private final Logger logger = Logger.getLogger( SystemLoader.class.getName() );
 
         public SystemLoader() {
-            order = 5;
+            order = 50;
             enabled = Configuration.isSystemLoaderEnabled();
         }
 
@@ -204,7 +204,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
         private final Logger logger = Logger.getLogger( ParentLoader.class.getName() );
 
         public ParentLoader() {
-            order = 3;
+            order = 30;
             enabled = Configuration.isParentLoaderEnabled();
         }
 
@@ -247,7 +247,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
         private final Logger logger = Logger.getLogger( CurrentLoader.class.getName() );
 
         public CurrentLoader() {
-            order = 2;
+            order = 20;
             enabled = Configuration.isCurrentLoaderEnabled();
         }
 
@@ -291,7 +291,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
         private final Logger logger = Logger.getLogger( ThreadContextLoader.class.getName() );
 
         public ThreadContextLoader() {
-            order = 4;
+            order = 40;
             enabled = Configuration.isThreadContextLoaderEnabled();
         }
 
