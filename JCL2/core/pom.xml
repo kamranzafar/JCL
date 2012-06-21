@@ -1,45 +1,16 @@
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.xeustechnologies</groupId>
 		<artifactId>jcl</artifactId>
-		<version>2.3</version>
+		<version>2.4-SNAPSHOT</version>
 	</parent>
-
 	<artifactId>jcl-core</artifactId>
 	<name>JCL - Core</name>
-
 	<build>
-		<sourceDirectory>../src/main/java
-        </sourceDirectory>
-		<testSourceDirectory>../src/test/java
-        </testSourceDirectory>
-		<resources>
-			<resource>
-				<directory>../src/main/resources</directory>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>../src/test/resources</directory>
-			</testResource>
-		</testResources>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin
-                </artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -70,8 +41,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addDefaultImplementationEntries>true
-							</addDefaultImplementationEntries>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 						</manifest>
 					</archive>
 				</configuration>
@@ -133,26 +103,13 @@
 					<generateReports>false</generateReports>
 				</configuration>
 			</plugin>
-			<!-- plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin-->
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.xeustechnologies</groupId>
 			<artifactId>test-jcl</artifactId>
-			<version>${project.version}</version>
+			<version>2.4-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
