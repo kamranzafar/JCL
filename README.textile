@@ -19,7 +19,7 @@ JCL is a multi-module maven project that has four modules as shown below:
  JCL
   |---> core
   |---> spring
-  |---> test-jar
+  |---> test-jcl
   |---> test-web
 </code>
 </pre>
