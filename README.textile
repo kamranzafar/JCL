@@ -414,9 +414,9 @@ h2. Maven Dependency
 <pre>
 <code>
   <dependency>
- 	  <groupId>org.xeustechnologies</groupId>
-			 <artifactId>jcl-core</artifactId> 
-			 <version>2.3</version>
-		</dependency>
+ 	<groupId>org.xeustechnologies</groupId>
+	<artifactId>jcl-core</artifactId> 
+	<version>2.3</version>
+  </dependency>
 </code>
 </pre>
