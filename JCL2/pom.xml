@@ -129,6 +129,7 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -139,8 +140,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<aggregate>true</aggregate>
-					<excludePackageNames>org.xeustechnologies.jcl.test
-					</excludePackageNames>
+					<excludePackageNames>org.xeustechnologies.jcl.test</excludePackageNames>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -194,6 +194,12 @@
 				</reportSets>
 				<configuration>
 					<issueLinkTemplate>http://sourceforge.net/support/tracker.php?aid=%ISSUE% </issueLinkTemplate>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<generateReports>false</generateReports>
 				</configuration>
 			</plugin>
 		</plugins>
