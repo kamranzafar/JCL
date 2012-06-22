@@ -21,12 +21,6 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<generateReports>false</generateReports>
-				</configuration>
-			</plugin>
-			<plugin>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<configuration>
 					<skip>true</skip>
