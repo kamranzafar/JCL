@@ -64,7 +64,6 @@
 									<version>${pom.version}</version>
 								</artifactItem>
 							</artifactItems>
-
 							<outputDirectory>./target</outputDirectory>
 							<stripVersion>true</stripVersion>
 							<overWriteReleases>false</overWriteReleases>
@@ -95,12 +94,6 @@
                         </include>
 					</includes>
 					<skip>${skipTest}</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<generateReports>false</generateReports>
 				</configuration>
 			</plugin>
 		</plugins>
