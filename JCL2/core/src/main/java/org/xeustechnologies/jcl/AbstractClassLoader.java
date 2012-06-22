@@ -450,7 +450,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	}
 
 	public ProxyClassLoader getThreadLoader() {
-		return currentLoader;
+		return threadLoader;
 	}
 
 	public ProxyClassLoader getOsgiBootLoader() {

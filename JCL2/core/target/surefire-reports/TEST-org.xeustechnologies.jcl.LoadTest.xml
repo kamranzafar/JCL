@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite failures="0" time="0.296" errors="0" skipped="0" tests="14" name="org.xeustechnologies.jcl.LoadTest">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.6.0_26\jre\bin"/>
+    <property name="java.vm.version" value="20.1-b02"/>
+    <property name="java.vm.vendor" value="Sun Microsystems Inc."/>
+    <property name="java.vendor.url" value="http://java.sun.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) Client VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.country" value="FR"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value="Service Pack 1"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="V:\build\github\JCL\JCL2\core"/>
+    <property name="java.runtime.version" value="1.6.0_26-b03"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="basedir" value="V:\build\github\JCL\JCL2\core"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.6.0_26\jre\lib\endorsed"/>
+    <property name="os.arch" value="x86"/>
+    <property name="surefire.real.class.path" value="C:\cygwin\tmp\surefirebooter1644579914188123145.jar"/>
+    <property name="java.io.tmpdir" value="C:\Users\jgt\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 7"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.6.0_26\jre\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\cygwin\usr\local\bin;C:\cygwin\bin;C:\csvn\bin;C:\csvn\Python25;C:\oraclexe\app\oracle\product\10.2.0\server\bin;C:\oracle\product\11.1.0\client_1\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\ccm71\bin;W:\tools_csm;C:\Program Files\Microsoft SQL Server\100\DTS\Binn;C:\Program Files\Microsoft SQL Server\100\Tools\Binn\VSShell\Common7\IDE;C:\Program Files\Microsoft SQL Server\100\Tools\Binn;C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\PrivateAssemblies;W:\ccmexp\perl5\bin;W:\tools;C:\Program Files\MATLAB\MATLAB Compiler Runtime\v716\runtime\win32;C:\Program Files\QuickTime\QTSystem;C:\Program Files\Git\cmd;C:\Program Files\Git\bin;X:\lift\bin\NT;C:\Program Files\Java\jdk1.6.0_26\bin;X:\lift\contrib\omniorb\bin\x86_win32;C:\Common\Tools\WinNT;C:\Common\MSDev98\Bin;C:\Common\Tools;C:\VC98\bin;C:\bat;W:\tools;V:\buildtools\apache-maven-2.2.1\bin;V:\buildtools\curl;C:\Program Files\Bitvise Tunnelier;V:\buildtools\spring-roo-1.1.5.RELEASE\bin;."/>
+    <property name="surefire.test.class.path" value="V:\build\github\JCL\JCL2\core\target\test-classes;V:\build\github\JCL\JCL2\core\target\classes;V:\m2-repository\org\xeustechnologies\test-jcl\2.4-SNAPSHOT\test-jcl-2.4-SNAPSHOT.jar;V:\m2-repository\org\objenesis\objenesis\1.1\objenesis-1.1.jar;V:\m2-repository\cglib\cglib-nodep\2.2\cglib-nodep-2.2.jar;V:\m2-repository\junit\junit\4.10\junit-4.10.jar;V:\m2-repository\org\hamcrest\hamcrest-core\1.1\hamcrest-core-1.1.jar;V:\m2-repository\javax\servlet\servlet-api\2.5\servlet-api-2.5.jar;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="50.0"/>
+    <property name="sun.management.compiler" value="HotSpot Client Compiler"/>
+    <property name="os.version" value="6.1"/>
+    <property name="user.home" value="C:\Users\jgt"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.6"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="user.name" value="jgt"/>
+    <property name="java.class.path" value="V:\build\github\JCL\JCL2\core\target\test-classes;V:\build\github\JCL\JCL2\core\target\classes;V:\m2-repository\org\xeustechnologies\test-jcl\2.4-SNAPSHOT\test-jcl-2.4-SNAPSHOT.jar;V:\m2-repository\org\objenesis\objenesis\1.1\objenesis-1.1.jar;V:\m2-repository\cglib\cglib-nodep\2.2\cglib-nodep-2.2.jar;V:\m2-repository\junit\junit\4.10\junit-4.10.jar;V:\m2-repository\org\hamcrest\hamcrest-core\1.1\hamcrest-core-1.1.jar;V:\m2-repository\javax\servlet\servlet-api\2.5\servlet-api-2.5.jar;"/>
+    <property name="java.vm.specification.version" value="1.0"/>
+    <property name="sun.arch.data.model" value="32"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.6.0_26\jre"/>
+    <property name="sun.java.command" value="C:\cygwin\tmp\surefirebooter1644579914188123145.jar C:\cygwin\tmp\surefire5742167163260943425tmp C:\cygwin\tmp\surefire7142402765550951184tmp"/>
+    <property name="java.specification.vendor" value="Sun Microsystems Inc."/>
+    <property name="user.language" value="fr"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.6.0_26"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.6.0_26\jre\lib\ext;C:\Windows\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.6.0_26\jre\lib\resources.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\rt.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\jce.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.6.0_26\jre\lib\modules\jdk.boot.jar;C:\Program Files\Java\jdk1.6.0_26\jre\classes"/>
+    <property name="java.vendor" value="Sun Microsystems Inc."/>
+    <property name="localRepository" value="V:\\m2-repository"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
+  </properties>
+  <testcase time="0.018" classname="org.xeustechnologies.jcl.LoadTest" name="testWithResourceName"/>
+  <testcase time="0.003" classname="org.xeustechnologies.jcl.LoadTest" name="testPackagedResource"/>
+  <testcase time="0.004" classname="org.xeustechnologies.jcl.LoadTest" name="testWithClassFolder"/>
+  <testcase time="0.009" classname="org.xeustechnologies.jcl.LoadTest" name="testWithUrl"/>
+  <testcase time="0.003" classname="org.xeustechnologies.jcl.LoadTest" name="testWithInputStream"/>
+  <testcase time="0.004" classname="org.xeustechnologies.jcl.LoadTest" name="testAddingClassSources"/>
+  <testcase time="0.007" classname="org.xeustechnologies.jcl.LoadTest" name="testChangeClassLoadingOrder"/>
+  <testcase time="0.025" classname="org.xeustechnologies.jcl.LoadTest" name="testInterfaceCast"/>
+  <testcase time="0.095" classname="org.xeustechnologies.jcl.LoadTest" name="testAutoProxy"/>
+  <testcase time="0.003" classname="org.xeustechnologies.jcl.LoadTest" name="testUnloading"/>
+  <testcase time="0.002" classname="org.xeustechnologies.jcl.LoadTest" name="testEnabledFlag"/>
+  <testcase time="0.003" classname="org.xeustechnologies.jcl.LoadTest" name="testOsgiBootLoading"/>
+  <testcase time="0.082" classname="org.xeustechnologies.jcl.LoadTest" name="testXmlContextLoader"/>
+  <testcase time="0.003" classname="org.xeustechnologies.jcl.LoadTest" name="testDefaultContextLoader"/>
+</testsuite>

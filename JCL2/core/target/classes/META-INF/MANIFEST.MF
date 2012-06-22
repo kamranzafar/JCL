@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Built-By: jgt
+Build-Jdk: 1.6.0_27
+Implementation-Title: JCL - Core
+Implementation-Version: 2.4-SNAPSHOT
+Implementation-Vendor-Id: org.xeustechnologies
+Implementation-Vendor: Kamran Zafar
+Created-By: Maven Integration for Eclipse
+
