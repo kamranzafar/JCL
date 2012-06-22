@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcl-context>
+    <jcl name="jcl1">
+        <loaders>
+            <loader name="custom" class="org.xeustechnologies.jcl.test.TestLoader">
+                <order>6</order>
+                <enabled>true</enabled>
+            </loader>
+        </loaders>
+        <sources>
+            <source>target/test-jcl.jar</source>
+        </sources>
+    </jcl>
+    <jcl name="jcl2">
+        <loaders>
+            <loader name="jcl.parent">
+                <order>3</order>
+                <enabled>false</enabled>
+            </loader>
+            <loader name="jcl.local">
+                <order>1</order>
+                <enabled>false</enabled>
+            </loader>
+            <loader name="jcl.current">
+                <order>2</order>
+                <enabled>false</enabled>
+            </loader>
+            <loader name="jcl.thread">
+                <order>4</order>
+                <enabled>false</enabled>
+            </loader>
+            <loader name="jcl.system">
+                <order>5</order>
+                <enabled>false</enabled>
+            </loader>
+        </loaders>
+        <sources>
+            <source>target/test-jcl.jar</source>
+        </sources>
+    </jcl>
+    <jcl name="jcl3">
+        <loaders>
+            <loader name="jcl.bootosgi">
+                <enabled>true</enabled>
+                <strict>true</strict>
+                <bootDelegation>org.xeustechnologies.jcl.test.*</bootDelegation>
+            </loader>
+        </loaders>
+        <sources>
+            <source>target/test-jcl.jar</source>
+        </sources>
+    </jcl>
+    <jcl name="jcl4">
+        <sources>
+            <source>target/test-jcl.jar</source>
+        </sources>
+    </jcl>
+</jcl-context>
