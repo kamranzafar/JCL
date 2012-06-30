@@ -7,7 +7,7 @@
 	<name>Jar Class Loader</name>
 	<url>http://jcloader.sourceforge.net
 	</url>
-	<version>2.4-SNAPSHOT</version>
+	<version>2.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Jar Class Loader</description>
 
@@ -29,6 +29,7 @@
 		<skipTest>false</skipTest>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
 	<developers>
 		<developer>
 			<id>kzafar</id>
@@ -50,56 +51,14 @@
 	</licenses>
 	<scm>
 		<connection>
-			scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
+			scm:git://github.com/kamranzafar/JCL.git
 		</connection>
 		<developerConnection>
-			scm:svn:https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
+			scm:git://github.com/kamranzafar/JCL.git
 		</developerConnection>
-		<url>https://jcloader.svn.sourceforge.net/svnroot/jcloader/trunk/JCL2
+		<url>git://github.com/kamranzafar/JCL.git
 		</url>
 	</scm>
-	<issueManagement>
-		<system>sourceforge</system>
-		<url>http://sourceforge.net/tracker/?group_id=177055
-		</url>
-	</issueManagement>
-	<distributionManagement>
-		<site>
-			<id>sourceforge-jcl</id>
-			<url>scp://shell.sourceforge.net/home/groups/j/jc/jcloader/htdocs
-			</url>
-		</site>
-	</distributionManagement>
-	<mailingLists>
-		<mailingList>
-			<name>JCL Development Mailing list</name>
-			<subscribe>
-				http://lists.sourceforge.net/mailman/listinfo/jcloader-development
-			</subscribe>
-			<unsubscribe>
-				http://lists.sourceforge.net/mailman/listinfo/jcloader-development
-			</unsubscribe>
-			<archive>
-				http://sourceforge.net/mailarchive/forum.php?forum_name=jcloader-development
-			</archive>
-			<post>jcloader-development@lists.sourceforge.net
-			</post>
-		</mailingList>
-		<mailingList>
-			<name>JCL User Mailing list</name>
-			<subscribe>
-				http://lists.sourceforge.net/mailman/listinfo/jcloader-users
-			</subscribe>
-			<unsubscribe>
-				http://lists.sourceforge.net/mailman/listinfo/jcloader-users
-			</unsubscribe>
-			<archive>
-				http://sourceforge.net/mailarchive/forum.php?forum_name=jcloader-users
-			</archive>
-			<post>jcloader-users@lists.sourceforge.net
-			</post>
-		</mailingList>
-	</mailingLists>
 	<organization>
 		<name>Kamran Zafar</name>
 		<url>http://kamranzafar.org</url>
@@ -113,9 +72,19 @@
 			</extension>
 		</extensions>
 		<plugins>
-			<!-- plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId> 
-				<executions> <execution> <id>sign-artifacts</id> <phase>verify</phase> <goals> 
-				<goal>sign</goal> </goals> </execution> </executions> </plugin -->
+			<!-- UNCOMMENT FOR RELEASE plugin> 
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin
@@ -193,7 +162,7 @@
 					</reportSet>
 				</reportSets>
 				<configuration>
-					<issueLinkTemplate>http://sourceforge.net/support/tracker.php?aid=%ISSUE% </issueLinkTemplate>
+					<issueLinkTemplate>https://github.com/kamranzafar/JCL</issueLinkTemplate>
 				</configuration>
 			</plugin>
 			<plugin>
