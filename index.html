@@ -1,101 +1,118 @@
 <!DOCTYPE html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Jcl : Jar Class Loader, a configurable and dynamic custom classloader designed to create, manage and manipulate isolated Java classloaders in IoC frameworks and web applications." />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
 
-    <title>Jcl</title>
+    <title>jcl by kamranzafar</title>
   </head>
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/kamranzafar/JCL">Fork Me on GitHub</a>
+    <header>
+      <div class="container">
+        <h1>jcl</h1>
+        <h2>Jar Class Loader, a configurable and dynamic custom classloader designed to create, manage and manipulate isolated Java classloaders in IoC frameworks and web applications.</h2>
 
-          <h1 id="project_title">Jcl</h1>
-          <h2 id="project_tagline">Jar Class Loader, a configurable and dynamic custom classloader designed to create, manage and manipulate isolated Java classloaders in IoC frameworks and web applications.</h2>
+        <section id="downloads">
+          <a href="https://github.com/kamranzafar/JCL/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/kamranzafar/JCL/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/kamranzafar/JCL" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
 
-          <section id="downloads">
-            <a class="zip_download_link" href="https://github.com/kamranzafar/JCL/zipball/master">Download this project as a .zip file</a>
-            <a class="tar_download_link" href="https://github.com/kamranzafar/JCL/tarball/master">Download this project as a tar.gz file</a>
-          </section>
-        </header>
-    </div>
+    <div class="container">
+      <section id="main_content">
+        <h1>Overview</h1>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-	<h3>Overview</h3>
+<p>JCL is a configurable, dynamic and extensible custom classloader that
+loads java classes directly from Jar files and other sources. The
+motivation was to create isolated classloaders, which can be easily
+integrated with IoC frameworks like Spring and with web applications.</p>
 
-	<p>JCL is a configurable, dynamic and extensible custom classloader that loads java classes directly from Jar files and other sources. The motivation was to create isolated classloaders, which can be easily integrated with IoC frameworks like Spring and with web applications.</p>
+<p>The entire library, including it’s code-base and documentation is
+available under a dual-license, whereby it can be used under the terms
+and conditions of <a href="http://www.gnu.org/licenses/lgpl.html">LGPL</a> and
+<a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>.</p>
 
-	<p>This library, as is and modified, can be used for free in personal and commercial applications under the terms and conditions of <a href="http://www.gnu.org/licenses/lgpl.html" title="LGPL">GNU Lesser General Public License</a>.</p>
+<h1>Installation</h1>
 
-	<h3>Installation</h3>
+<p>To use JCL, download and build the JCL project and put jcl
+(~~core~~2.x).jar and dependencies in the application’s classpath. See
+the build section below and also check out the downloads section for
+more details on the available builds and source.</p>
 
-	<p>To use JCL, download and build the JCL project and put jcl(-core-2.x).jar and dependencies in the application&#8217;s classpath. See the build section below and also check out the downloads section for more details on the available builds and source.</p>
+<p>JCL is also available in Maven Central Repository, which makes it very
+easy to use in maven projects as a dependency.</p>
 
-	<p>JCL is also available in Maven Central Repository, which makes it very easy to use in maven projects as a dependency.</p>
+<h1>Building JCL</h1>
 
-	<h3>Building JCL</h3>
+<p>JCL is a multi-module maven project that has four modules as shown
+below:</p>
 
-	<p>JCL is a multi-module maven project that has four modules as shown below:</p>
-
-<pre>
-<code>
+<pre><code>&lt;code&gt;
  JCL
   |---&gt; core
   |---&gt; spring
-  |---&gt; test-jar
+  |---&gt; test-jcl
   |---&gt; test-web
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>The test-* modules create resources to run the unit tests and a sample web application. The core module builds an artifact with all the main JCL class files. The spring module generates an artifact for spring integration.</p>
+<p>The test-* modules create resources to run the unit tests and a sample
+web application. The core module builds an artifact with all the main
+JCL class files. The spring module generates an artifact for spring
+integration.</p>
 
-	<p>To build JCL, check-out the source code of JCL2 from <a href="https://github.com/xeusman/JCL">github</a> and run the following command:</p>
+<p>To build JCL, check-out the source code of JCL2 from
+<a href="https://github.com/xeusman/JCL">github</a> and run the following command:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
  mvn clean install
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>This command will create jcl-core and jcl-spring artifacts, and will also create a sample war file to test JCL web integration. It will also copy the dependencies of each artifact in the dependecies folder.</p>
+<p>This command will create jcl-core and jcl-spring artifacts, and will
+also create a sample war file to test JCL web integration. It will also
+copy the dependencies of each artifact in the dependecies folder.</p>
 
-	<h3>Requirements</h3>
+<h1>Requirements</h1>
 
-	<p>JCL requires JDK 1.5 or later; and will pull in all its dependencies using maven.</p>
+<p>JCL requires JDK 1.5 or later; and will pull in all its dependencies
+using maven.</p>
 
-	<h3>Usage</h3>
+<h1>Usage</h1>
 
-	<p>Below is a little tutorial on JCL v2 with examples. Please also see the overview section for installation.</p>
+<p>Below is a little tutorial on JCL v2 with examples. Please also see the
+overview section for installation.</p>
 
-	<h4>What&#8217;s new in v2</h4>
+<h2>What’s new in v2</h2>
 
-	<p>Version 2.x now deprecates version 1.x so we recommend users to switch to version 2, which was a complete refactoring of version 1 and has a better design with a lot more features. Following is a list of <i>some</i> updates and changes in v2.x:</p>
+<p>Version 2.x now deprecates version 1.x so we recommend users to switch
+to version 2, which was a complete refactoring of version 1 and has a
+better design with a lot more features. Following is a list of <em>some</em>
+updates and changes in v2.x:</p>
 
-	<ul>
-		<li>Total refactoring of version 1</li>
-		<li>Maven is being used for project management instead of ANT</li>
-		<li>Added more robust spring and web support</li>
-		<li>Added OSGi boot loading</li>
-		<li>JCL 2 is more customizable and configurable</li>
-		<li>etc. etc.</li>
-	</ul>
+<ul>
+<li>  Total refactoring of version 1</li>
+<li>  Maven is being used for project management instead of ANT</li>
+<li>  Added more robust spring and web support</li>
+<li>  Added OSGi boot loading</li>
+<li>  JCL 2 is more customizable and configurable</li>
+<li>  etc. etc.</li>
+</ul><h2>Using JCL</h2>
 
-	<h3>Using JCL</h3>
+<p>JCL is a light weight API and has only a few but useful classes. Here is
+a simple example on how to programmatically use JCL. JarClassLoader has
+an arguments-constructor and add methods that take jar-file/class-folder
+paths, URLs and InputStreams.</p>
 
-	<p>JCL is a light weight API and has only a few but useful classes. Here is a simple example on how to programmatically use JCL. JarClassLoader has an arguments-constructor and add methods that take jar-file/class-folder paths, URLs and InputStreams.</p>
-
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl = new JarClassLoader();
 
   //Loading classes from different sources
@@ -111,43 +128,52 @@
 
   //Create object of loaded class
   Object obj = factory.create(jcl, "mypack.MyClass");
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>Now we can use reflection to invoke methods of this object. It is also possible to create object proxies and call methods the normal way, this is done by using cast(able) methods available in JclUtils class explained later.</p>
+<p>Now we can use reflection to invoke methods of this object. It is also
+possible to create object proxies and call methods the normal way, this
+is done by using cast (able) methods available in JclUtils class
+explained later.</p>
 
-	<h4>Creating a JCL Context</h4>
+<h2>Creating a JCL Context</h2>
 
-	<p>In order to access the created JarClassLoader instance from any where in the application a <i>JclContext</i> must be created. The <i>DefaultContextLoader</i> provides a way to create this context for a single programmatically created JarClassLoader instance.</p>
+<p>In order to access the created JarClassLoader instance from any where in
+the application a <em>JclContext</em> must be created. The
+<em>DefaultContextLoader</em> provides a way to create this context for a
+single programmatically created JarClassLoader instance.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl = new JarClassLoader();
   jcl.add("myjarlib/");
 
   DefaultContextLoader context=new DefaultContextLoader(jcl);
   context.loadContext();
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>Now &#8220;jcl&#8221; can be accessed from anywhere in the application as follows.</p>
+<p>Now “jcl” can be accessed from anywhere in the application as follows.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl=JclContext.get(); // returns the Default JCL instance
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>It is also possible to create an XML configuration file for JCL and use <i>XmlContextLoader</i> to create the context.</p>
+<p>It is also possible to create an XML configuration file for JCL and use
+<em>XmlContextLoader</em> to create the context.</p>
 
-	<h4>Using JCL in Web Applications</h4>
+<h2>Using JCL in Web Applications</h2>
 
-	<p>One of the motivations behind JCL was to be able to create multiple isolated classloaders in a single web application hosted on application servers like JBoss, Tomcat etc. This is achieved with JclContextLoaderListener.</p>
+<p>One of the motivations behind JCL was to be able to create multiple
+isolated classloaders in a single web application hosted on application
+servers like JBoss, Tomcat etc. This is achieved with
+JclContextLoaderListener.</p>
 
-	<p>The JCL configuration is put in a XML file and then the <i>JclContextLoaderListener</i> is used to load the context. Below is an example of JCL XML configuration.</p>
+<p>The JCL configuration is put in a XML file and then the
+<em>JclContextLoaderListener</em> is used to load the context. Below is an
+example of JCL XML configuration.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;jcl-context&gt;
     &lt;jcl name="jcl1"&gt;
@@ -190,13 +216,16 @@
         &lt;/sources&gt;
     &lt;/jcl&gt;
 &lt;/jcl-context&gt;
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>In this example two classloaders are created in a single context. The source paths starting with <b>webapp:</b> are treated as paths to internal web application jar files and folders. After this configuration, the context can be loaded in the web application by adding the JclContextLoaderListener in the application&#8217;s web.xml file.</p>
+<p>In this example two classloaders are created in a single context. The
+source paths starting with <strong>webapp:</strong> are treated as paths to internal
+web application jar files and folders. After this configuration, the
+context can be loaded in the web application by adding the
+JclContextLoaderListener in the application’s web.xml file.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
  &lt;context-param&gt;
     &lt;param-name&gt;jcl-context&lt;/param-name&gt;
     &lt;param-value&gt;
@@ -207,30 +236,45 @@
   &lt;listener&gt;
     &lt;listener-class&gt;org.xeustechnologies.jcl.web.JclContextLoaderListener&lt;/listener-class&gt;
   &lt;/listener&gt;
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>The JCL instances can then be accessed by name from anywhere in the web application as shown below.</p>
+<p>The JCL instances can then be accessed by name from anywhere in the web
+application as shown below.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl1=JclContext.get("jcl1");
   JarClassLoader jcl2=JclContext.get("jcl2");
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h5>Sample web application</h5>
+<h3>Sample web application</h3>
 
-	<p>The JCL project also includes a sample web application that demonstrates JCL web-app integration. The jcltest.war file is created in the test-web module at jcl-project/test-web/target when the project is built. The content of the war file is also under the same module and is located in jcl-project/test-web/src/main folder. The exploded war folder contains all the files that clearly shows the usage of JCL in web applications.</p>
+<p>The JCL project also includes a sample web application that demonstrates
+JCL web-app integration. The jcltest.war file is created in the test-web
+module at jcl-project/test-web/target when the project is built. The
+content of the war file is also under the same module and is located in
+jcl-project/test-web/src/main folder. The exploded war folder contains
+all the files that clearly shows the usage of JCL in web applications.</p>
 
-	<p>After deploying the sample web application, go to http://server-name:8080/jcltest; this will print &#8220;Hello World&#8221; on the screen with classloader details. This message is returned from a JCL-loaded object, see jcl-project/test-web/src/main/jcltest.war/index.jsp for more details.</p>
+<p>After deploying the sample web application, go to
+<a href="http://server-name:8080/jcltest">http://server-name:8080/jcltest</a>; this
+will print “Hello World” on the screen with classloader details. This
+message is returned from a JCL-loaded object, see
+jcl-project/test-web/src/main/jcltest.war/index.jsp for more details.</p>
 
-	<h4>Using JCL with Spring Framework</h4>
+<h2>Using JCL with Spring Framework</h2>
 
-	<p>JCL can be used with spring framework. JCL v2 provides Spring XML extension to load beans via JCL. The JCL bean is created using the new <b>jcl:jcl</b> element and spring beans can reference the jcl bean by using the <b>jcl:jcl-ref</b> element as shown in the example below. These elements are defined in the jcl-schema.xsd. This also works well in a web application using the Spring ContextLoaderListener. In addition to this JCL v2 also supports the older way of Spring integration, please see the spring-test.xml file provided with the source.</p>
+<p>JCL can be used with spring framework. JCL v2 provides Spring XML
+extension to load beans via JCL. The JCL bean is created using the new
+<strong>jcl:jcl</strong> element and spring beans can reference the jcl bean by using
+the <strong>jcl:jcl-ref</strong> element as shown in the example below. These
+elements are defined in the jcl-schema.xsd. This also works well in a
+web application using the Spring ContextLoaderListener. In addition to
+this JCL v2 also supports the older way of Spring integration, please
+see the spring-test.xml file provided with the source.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -270,19 +314,37 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
         &lt;/constructor-arg&gt;
     &lt;/bean&gt;
 &lt;/beans&gt;
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h4>Casting objects of types loaded in JCL</h4>
+<h2>Casting objects of types loaded in JCL</h2>
 
-	<p>Java does not allow casting objects of types loaded in a different classloader; such casting attempt results in a <i>ClassCastException</i>. But sometimes it is necessary to cast objects to obtain interface references loaded in the current classloader. E.g. suppose that an API implementation is loaded using JCL and the API itself is loaded in the current classloader, now it is easy to use the interface reference to invoke methods than using reflection. JCL provides a few ways to obtain interface references and to convert the JCL-loaded objects into castable objects. This is actually done by internally creating proxies for the JCL-loaded objects. JCL, as of version 2.2, can also create <a href="http://cglib.sourceforge.net/">cglib</a> dynamic proxies apart from the regular jdk proxies, which makes it possible to create proxies for any class not just interfaces. It is also possible to create auto-proxies/castable-objects from the object factory, which is very handy because then the objects can be used and casted the normal way.</p>
+<p>Java does not allow casting objects of types loaded in a different
+classloader; such casting attempt results in a <em>ClassCastException</em>. But
+sometimes it is necessary to cast objects to obtain interface references
+loaded in the current classloader. E.g. suppose that an API
+implementation is loaded using JCL and the API itself is loaded in the
+current classloader, now it is easy to use the interface reference to
+invoke methods than using reflection. JCL provides a few ways to obtain
+interface references and to convert the JCL-loaded objects into castable
+objects. This is actually done by internally creating proxies for the
+JCL-loaded objects. JCL, as of version 2.2, can also create
+<a href="http://cglib.sourceforge.net/">cglib</a> dynamic proxies apart from the
+regular jdk proxies, which makes it possible to create proxies for any
+class not just interfaces. It is also possible to create
+auto-proxies/castable-objects from the object factory, which is very
+handy because then the objects can be used and casted the normal way.</p>
 
-	<h5>Auto creating castable objects from factory</h5>
+<h3>Auto creating castable objects from factory</h3>
 
-	<p>In version 2.2 and later, the JclObjectFactory can be used to auto-create &#8220;castable&#8221; objects, by passing true to the getInstance method. Now every time an object is created, it can be casted to references in the current classloader without the need of JclUtils. By default JCL2 uses jdk proxies but that can be changed by specifying the proxy provider, as shown in the example below.</p>
+<p>In version 2.2 and later, the JclObjectFactory can be used to
+auto-create “castable” objects, by passing true to the getInstance
+method. Now every time an object is created, it can be casted to
+references in the current classloader without the need of JclUtils. By
+default JCL2 uses jdk proxies but that can be changed by specifying the
+proxy provider, as shown in the example below.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl = new JarClassLoader();
   jcl.add("myapi-impl.jar"); //Load jar file
 
@@ -294,23 +356,24 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 
   //Create and cast object of loaded class
   MyInterface mi = (MyInterface) factory.create(jcl,"myapi.impl.MyInterfaceImpl");
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>Auto proxying can also be dynamically enabled using a jvm command line argument:</p>
+<p>Auto proxying can also be dynamically enabled using a jvm command line
+argument:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Djcl.autoProxy=true
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h5>Casting objects when required</h5>
+<h3>Casting objects when required</h3>
 
-	<p>By default the object factory creates objects of classes loaded in JCL without proxies. So in order to cast/clone the objects, JclUtils class is used as shown in the example below:</p>
+<p>By default the object factory creates objects of classes loaded in JCL
+without proxies. So in order to cast/clone the objects, JclUtils class
+is used as shown in the example below:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl = new JarClassLoader();
   jcl.add("myapi-impl.jar"); //Load jar file
 
@@ -333,15 +396,22 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
 
   //Clone any object Serializable and non-Serializable
   MyInterface mi2 = (MyInterface) JclUtils.deepClone(obj);
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h4>Manipulating class loading order &#38; adding custom classloaders</h4>
+<h2>Manipulating class loading order &amp; adding custom classloaders</h2>
 
-	<p>JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1), current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described later in the document. In addition to built-in loaders, more class loaders can be added by extending the <i>org.xeustechnologies.jcl.ProxyClassLoader</i> class. Each loader has a loading order and the default loading orders can be changed. Below is an example that shows how to do this:</p>
+<p>JCL v2 by default looks for classes in five places in order, local JCL
+class loader (order=1), current class loader (order=2), parent class
+loader (order=3), in thread context class loader (order=4) and then in
+system class loader (order=5). There is a sixth class loader available
+for Osgi boot delegation; it is described later in the document. In
+addition to built-in loaders, more class loaders can be added by
+extending the <em>org.xeustechnologies.jcl.ProxyClassLoader</em> class. Each
+loader has a loading order and the default loading orders can be
+changed. Below is an example that shows how to do this:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl=new JarClassLoader();
   jcl.add("myjar.jar"); // Add some class source
 
@@ -356,106 +426,114 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
   loader.setOrder(6);
 
   jcl.addLoader(loader); //Add custom loader
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h4>Enable/Disable classloaders</h4>
+<h2>Enable/Disable classloaders</h2>
 
-	<p>JCL also provides a way to enable/disable classloaders. This can be done both programmetically and by passing a JVM -D arg.</p>
+<p>JCL also provides a way to enable/disable classloaders. This can be done
+both programmetically and by passing a JVM -D arg.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   JarClassLoader jcl=new JarClassLoader();
   jcl.add("myjar.jar"); // Add some class source
 
   //Disable parent class loader
   jcl.getParentLoader().setEnabled(false);
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>Similarly a -D argument can be passed to the VM; this is done by passing a boolean values to the loader&#8217;s class name.</p>
+<p>Similarly a -D argument can be passed to the VM; this is done by passing
+a boolean values to the loader’s class name.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Dorg.xeustechnologies.jcl.AbstractClassLoader$ParentLoader=false\
   -Dmypack.MyLoader=false
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h4>Enable OSGi boot delegation</h4>
+<h2>Enable OSGi boot delegation</h2>
 
-	<p>Sometimes it is required to delegate some classes to the parent loader; this is part of the OSGi Spec for boot delegation. This can be enabled by passing the following argument to the JVM.</p>
+<p>Sometimes it is required to delegate some classes to the parent loader;
+this is part of the OSGi Spec for boot delegation. This can be enabled
+by passing the following argument to the JVM.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Dosgi.bootdelegation=true
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>And as spec&#8217;d, you can also pass classes and packages as a JVM argument</p>
+<p>And as spec’d, you can also pass classes and packages as a JVM argument</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Dorg.osgi.framework.bootdelegation=mypack.*
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p>By default the OSGi boot delegation is not strict and if the class is not found in the parent classloader then JCL will try to find it in other loaders. OSGi boot delegation can be made strict and a ClassNotFoundException is thrown if the class is not found in parent.</p>
+<p>By default the OSGi boot delegation is not strict and if the class is
+not found in the parent classloader then JCL will try to find it in
+other loaders. OSGi boot delegation can be made strict and a
+ClassNotFoundException is thrown if the class is not found in parent.</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Dosgi.bootdelegation.strict=true
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<p><b>Note:</b> The order of OSGi boot loader cannot be changed. The osgi boot delegation can also be turned on programetically, please see the <i>LoadTest.java</i> provided with the source.</p>
+<p><strong>Note:</strong> The order of OSGi boot loader cannot be changed. The osgi boot
+delegation can also be turned on programetically, please see the
+<em>LoadTest.java</em> provided with the source.</p>
 
-	<h4>Other configuration</h4>
+<h2>Other configuration</h2>
 
-	<p>Some other JCL tweaks.</p>
+<p>Some other JCL tweaks.</p>
 
-	<h5>Class collisions</h5>
+<h3>Class collisions</h3>
 
-	<p>JCL by default ignore class collisions and the first class that is found gets loaded. It is also possible to throw exception on collision, this is done as follows:</p>
+<p>JCL by default ignore class collisions and the first class that is found
+gets loaded. It is also possible to throw exception on collision, this
+is done as follows:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Djcl.suppressCollisionException=false
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h5>Missing Jars</h5>
+<h3>Missing Jars</h3>
 
-	<p>JCL by default ignores all missing jars/class sources. This default behaviour can be changes both programmatically and on runtime:</p>
+<p>JCL by default ignores all missing jars/class sources. This default
+behaviour can be changes both programmatically and on runtime:</p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Djcl.suppressMissingResourceException=false
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
-	<h5>Using parent log config.</h5>
+<h3>Using parent log config.</h3>
 
-	<p>JCL uses an isolated log4j logger, which sometimes spits out a lot of lines on the console. The default log level has now been lowered to INFO but to disable it entirely and use the parent log config, pass the following argument to JVM. <i>Version 2.3 and above does not use Log4J.</i></p>
+<p>JCL uses an isolated log4j logger, which sometimes spits out a lot of
+lines on the console. The default log level has now been lowered to INFO
+but to disable it entirely and use the parent log config, pass the
+following argument to JVM. <em>Version 2.3 and above does not use Log4J.</em></p>
 
-<pre>
-<code>
+<pre><code>&lt;code&gt;
   -Djcl.isolateLogging=false
-</code>
-</pre>
+&lt;/code&gt;
+</code></pre>
 
+<h2>Maven Dependency</h2>
+
+<pre><code>&lt;code&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.xeustechnologies&lt;/groupId&gt;
+    &lt;artifactId&gt;jcl-core&lt;/artifactId&gt; 
+    &lt;version&gt;2.4&lt;/version&gt;
+  &lt;/dependency&gt;
+&lt;/code&gt;
+</code></pre>
       </section>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Jcl maintained by <a href="https://github.com/kamranzafar">kamranzafar</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
     
-
   </body>
 </html>
