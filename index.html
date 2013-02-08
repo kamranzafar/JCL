@@ -55,13 +55,11 @@ easy to use in maven projects as a dependency.</p>
 <p>JCL is a multi-module maven project that has four modules as shown
 below:</p>
 
-<pre><code>&lt;code&gt;
- JCL
+<pre><code> JCL
   |---&gt; core
   |---&gt; spring
   |---&gt; test-jcl
   |---&gt; test-web
-&lt;/code&gt;
 </code></pre>
 
 <p>The test-* modules create resources to run the unit tests and a sample
@@ -72,9 +70,7 @@ integration.</p>
 <p>To build JCL, check-out the source code of JCL2 from
 <a href="https://github.com/xeusman/JCL">github</a> and run the following command:</p>
 
-<pre><code>&lt;code&gt;
- mvn clean install
-&lt;/code&gt;
+<pre><code> mvn clean install
 </code></pre>
 
 <p>This command will create jcl-core and jcl-spring artifacts, and will
@@ -112,8 +108,7 @@ a simple example on how to programmatically use JCL. JarClassLoader has
 an arguments-constructor and add methods that take jar-file/class-folder
 paths, URLs and InputStreams.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl = new JarClassLoader();
+<pre><code>  JarClassLoader jcl = new JarClassLoader();
 
   //Loading classes from different sources
   jcl.add("myjar.jar");
@@ -128,7 +123,6 @@ paths, URLs and InputStreams.</p>
 
   //Create object of loaded class
   Object obj = factory.create(jcl, "mypack.MyClass");
-&lt;/code&gt;
 </code></pre>
 
 <p>Now we can use reflection to invoke methods of this object. It is also
@@ -143,20 +137,16 @@ the application a <em>JclContext</em> must be created. The
 <em>DefaultContextLoader</em> provides a way to create this context for a
 single programmatically created JarClassLoader instance.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl = new JarClassLoader();
+<pre><code>  JarClassLoader jcl = new JarClassLoader();
   jcl.add("myjarlib/");
 
   DefaultContextLoader context=new DefaultContextLoader(jcl);
   context.loadContext();
-&lt;/code&gt;
 </code></pre>
 
 <p>Now “jcl” can be accessed from anywhere in the application as follows.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl=JclContext.get(); // returns the Default JCL instance
-&lt;/code&gt;
+<pre><code>  JarClassLoader jcl=JclContext.get(); // returns the Default JCL instance
 </code></pre>
 
 <p>It is also possible to create an XML configuration file for JCL and use
@@ -173,8 +163,7 @@ JclContextLoaderListener.</p>
 <em>JclContextLoaderListener</em> is used to load the context. Below is an
 example of JCL XML configuration.</p>
 
-<pre><code>&lt;code&gt;
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;jcl-context&gt;
     &lt;jcl name="jcl1"&gt;
         &lt;loaders&gt;
@@ -216,7 +205,6 @@ example of JCL XML configuration.</p>
         &lt;/sources&gt;
     &lt;/jcl&gt;
 &lt;/jcl-context&gt;
-&lt;/code&gt;
 </code></pre>
 
 <p>In this example two classloaders are created in a single context. The
@@ -225,8 +213,7 @@ web application jar files and folders. After this configuration, the
 context can be loaded in the web application by adding the
 JclContextLoaderListener in the application’s web.xml file.</p>
 
-<pre><code>&lt;code&gt;
- &lt;context-param&gt;
+<pre><code> &lt;context-param&gt;
     &lt;param-name&gt;jcl-context&lt;/param-name&gt;
     &lt;param-value&gt;
       classpath:jcl.xml
@@ -236,16 +223,13 @@ JclContextLoaderListener in the application’s web.xml file.</p>
   &lt;listener&gt;
     &lt;listener-class&gt;org.xeustechnologies.jcl.web.JclContextLoaderListener&lt;/listener-class&gt;
   &lt;/listener&gt;
-&lt;/code&gt;
 </code></pre>
 
 <p>The JCL instances can then be accessed by name from anywhere in the web
 application as shown below.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl1=JclContext.get("jcl1");
+<pre><code>  JarClassLoader jcl1=JclContext.get("jcl1");
   JarClassLoader jcl2=JclContext.get("jcl2");
-&lt;/code&gt;
 </code></pre>
 
 <h3>Sample web application</h3>
@@ -274,8 +258,7 @@ web application using the Spring ContextLoaderListener. In addition to
 this JCL v2 also supports the older way of Spring integration, please
 see the spring-test.xml file provided with the source.</p>
 
-<pre><code>&lt;code&gt;
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:jcl="http://www.xeustechnologies.org/schema/jcl"
@@ -314,7 +297,6 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
         &lt;/constructor-arg&gt;
     &lt;/bean&gt;
 &lt;/beans&gt;
-&lt;/code&gt;
 </code></pre>
 
 <h2>Casting objects of types loaded in JCL</h2>
@@ -344,8 +326,7 @@ references in the current classloader without the need of JclUtils. By
 default JCL2 uses jdk proxies but that can be changed by specifying the
 proxy provider, as shown in the example below.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl = new JarClassLoader();
+<pre><code>  JarClassLoader jcl = new JarClassLoader();
   jcl.add("myapi-impl.jar"); //Load jar file
 
   // Set default to cglib (from version 2.2.1)
@@ -356,15 +337,12 @@ proxy provider, as shown in the example below.</p>
 
   //Create and cast object of loaded class
   MyInterface mi = (MyInterface) factory.create(jcl,"myapi.impl.MyInterfaceImpl");
-&lt;/code&gt;
 </code></pre>
 
 <p>Auto proxying can also be dynamically enabled using a jvm command line
 argument:</p>
 
-<pre><code>&lt;code&gt;
-  -Djcl.autoProxy=true
-&lt;/code&gt;
+<pre><code>  -Djcl.autoProxy=true
 </code></pre>
 
 <h3>Casting objects when required</h3>
@@ -373,8 +351,7 @@ argument:</p>
 without proxies. So in order to cast/clone the objects, JclUtils class
 is used as shown in the example below:</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl = new JarClassLoader();
+<pre><code>  JarClassLoader jcl = new JarClassLoader();
   jcl.add("myapi-impl.jar"); //Load jar file
 
   //Create default factory
@@ -396,7 +373,6 @@ is used as shown in the example below:</p>
 
   //Clone any object Serializable and non-Serializable
   MyInterface mi2 = (MyInterface) JclUtils.deepClone(obj);
-&lt;/code&gt;
 </code></pre>
 
 <h2>Manipulating class loading order &amp; adding custom classloaders</h2>
@@ -411,8 +387,7 @@ extending the <em>org.xeustechnologies.jcl.ProxyClassLoader</em> class. Each
 loader has a loading order and the default loading orders can be
 changed. Below is an example that shows how to do this:</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl=new JarClassLoader();
+<pre><code>  JarClassLoader jcl=new JarClassLoader();
   jcl.add("myjar.jar"); // Add some class source
 
   jcl.getSystemLoader().setOrder(1); // Look in system class loader first
@@ -426,7 +401,6 @@ changed. Below is an example that shows how to do this:</p>
   loader.setOrder(6);
 
   jcl.addLoader(loader); //Add custom loader
-&lt;/code&gt;
 </code></pre>
 
 <h2>Enable/Disable classloaders</h2>
@@ -434,22 +408,18 @@ changed. Below is an example that shows how to do this:</p>
 <p>JCL also provides a way to enable/disable classloaders. This can be done
 both programmetically and by passing a JVM -D arg.</p>
 
-<pre><code>&lt;code&gt;
-  JarClassLoader jcl=new JarClassLoader();
+<pre><code>  JarClassLoader jcl=new JarClassLoader();
   jcl.add("myjar.jar"); // Add some class source
 
   //Disable parent class loader
   jcl.getParentLoader().setEnabled(false);
-&lt;/code&gt;
 </code></pre>
 
 <p>Similarly a -D argument can be passed to the VM; this is done by passing
 a boolean values to the loader’s class name.</p>
 
-<pre><code>&lt;code&gt;
-  -Dorg.xeustechnologies.jcl.AbstractClassLoader$ParentLoader=false\
+<pre><code>  -Dorg.xeustechnologies.jcl.AbstractClassLoader$ParentLoader=false\
   -Dmypack.MyLoader=false
-&lt;/code&gt;
 </code></pre>
 
 <h2>Enable OSGi boot delegation</h2>
@@ -458,16 +428,12 @@ a boolean values to the loader’s class name.</p>
 this is part of the OSGi Spec for boot delegation. This can be enabled
 by passing the following argument to the JVM.</p>
 
-<pre><code>&lt;code&gt;
-  -Dosgi.bootdelegation=true
-&lt;/code&gt;
+<pre><code>  -Dosgi.bootdelegation=true
 </code></pre>
 
 <p>And as spec’d, you can also pass classes and packages as a JVM argument</p>
 
-<pre><code>&lt;code&gt;
-  -Dorg.osgi.framework.bootdelegation=mypack.*
-&lt;/code&gt;
+<pre><code>  -Dorg.osgi.framework.bootdelegation=mypack.*
 </code></pre>
 
 <p>By default the OSGi boot delegation is not strict and if the class is
@@ -475,9 +441,7 @@ not found in the parent classloader then JCL will try to find it in
 other loaders. OSGi boot delegation can be made strict and a
 ClassNotFoundException is thrown if the class is not found in parent.</p>
 
-<pre><code>&lt;code&gt;
-  -Dosgi.bootdelegation.strict=true
-&lt;/code&gt;
+<pre><code>  -Dosgi.bootdelegation.strict=true
 </code></pre>
 
 <p><strong>Note:</strong> The order of OSGi boot loader cannot be changed. The osgi boot
@@ -494,9 +458,7 @@ delegation can also be turned on programetically, please see the
 gets loaded. It is also possible to throw exception on collision, this
 is done as follows:</p>
 
-<pre><code>&lt;code&gt;
-  -Djcl.suppressCollisionException=false
-&lt;/code&gt;
+<pre><code>  -Djcl.suppressCollisionException=false
 </code></pre>
 
 <h3>Missing Jars</h3>
@@ -504,9 +466,7 @@ is done as follows:</p>
 <p>JCL by default ignores all missing jars/class sources. This default
 behaviour can be changes both programmatically and on runtime:</p>
 
-<pre><code>&lt;code&gt;
-  -Djcl.suppressMissingResourceException=false
-&lt;/code&gt;
+<pre><code>  -Djcl.suppressMissingResourceException=false
 </code></pre>
 
 <h3>Using parent log config.</h3>
@@ -516,20 +476,16 @@ lines on the console. The default log level has now been lowered to INFO
 but to disable it entirely and use the parent log config, pass the
 following argument to JVM. <em>Version 2.3 and above does not use Log4J.</em></p>
 
-<pre><code>&lt;code&gt;
-  -Djcl.isolateLogging=false
-&lt;/code&gt;
+<pre><code>  -Djcl.isolateLogging=false
 </code></pre>
 
 <h2>Maven Dependency</h2>
 
-<pre><code>&lt;code&gt;
-  &lt;dependency&gt;
+<pre><code>  &lt;dependency&gt;
     &lt;groupId&gt;org.xeustechnologies&lt;/groupId&gt;
     &lt;artifactId&gt;jcl-core&lt;/artifactId&gt; 
     &lt;version&gt;2.4&lt;/version&gt;
   &lt;/dependency&gt;
-&lt;/code&gt;
 </code></pre>
       </section>
     </div>
