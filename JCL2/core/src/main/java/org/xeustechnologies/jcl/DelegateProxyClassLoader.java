@@ -20,6 +20,7 @@
 package org.xeustechnologies.jcl;
 
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * 
@@ -62,6 +63,11 @@ public class DelegateProxyClassLoader extends ProxyClassLoader {
 
 	public InputStream loadResource(String name) {
 		return delegate.getResourceAsStream(name);
+	}
+
+	@Override
+	public URL findResource(String name) {
+		return delegate.getResource(name);
 	}
 
 	public AbstractClassLoader getDelegate() {

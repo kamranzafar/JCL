@@ -58,6 +58,15 @@ public class LoadTest extends TestCase {
     }
 
     @Test
+    public void testPackagedResourceURL() {
+        JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
+
+        URL url = jc.getResource( "test/test.properties" );
+
+        assertNotNull( url );
+    }
+
+    @Test
     public void testWithClassFolder() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );
 

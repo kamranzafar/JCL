@@ -27,6 +27,7 @@
 package org.xeustechnologies.jcl;
 
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * @author Kamran Zafar
@@ -67,6 +68,14 @@ public abstract class ProxyClassLoader implements Comparable<ProxyClassLoader> {
      * @return InputStream
      */
     public abstract InputStream loadResource(String name);
+
+    /**
+     * Finds the resource
+     *
+     * @param name
+     * @return InputStream
+     */
+    public abstract URL findResource(String name);
 
     public boolean isEnabled() {
         return enabled;

@@ -20,6 +20,7 @@
 package org.xeustechnologies.jcl;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -57,6 +58,16 @@ public class CompositeProxyClassLoader extends ProxyClassLoader {
 		Iterator<ProxyClassLoader> iterator = proxyClassLoaders.iterator();
 		while (result == null && iterator.hasNext()) {
 			result = iterator.next().loadResource(name);
+		}
+		return result;
+	}
+
+	@Override
+	public URL findResource(String name) {
+		URL result = null;
+		Iterator<ProxyClassLoader> iterator = proxyClassLoaders.iterator();
+		while (result == null && iterator.hasNext()) {
+			result = iterator.next().findResource(name);
 		}
 		return result;
 	}
