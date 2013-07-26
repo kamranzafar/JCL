@@ -74,11 +74,15 @@ public class JarResources {
         if (baseUrl == null) {
             throw new JclException( "non-URL accessible resource" );
         }
-        try {
-            return new URL( baseUrl.toString() + name );
-        } catch (MalformedURLException e) {
-            throw new JclException( e );
+        if (jarEntryContents.get( name ) != null) {
+            try {
+                return new URL( baseUrl.toString() + name );
+            } catch (MalformedURLException e) {
+                throw new JclException( e );
+            }
         }
+
+        return null;
     }
 
     /**
