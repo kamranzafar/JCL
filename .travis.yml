@@ -2,4 +2,4 @@ language: java
 jdk: oraclejdk7
 
 before_script: cd JCL2
-script: mvn clean install
+script: mvn clean install -Dmvn.test.skip=true
