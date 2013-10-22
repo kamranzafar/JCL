@@ -4,6 +4,8 @@ JCL is a configurable, dynamic and extensible custom classloader that loads java
 
 The entire library, including it's code-base and documentation is available under a dual-license, whereby it can be used under the terms and conditions of "LGPL":http://www.gnu.org/licenses/lgpl.html and "Apache License 2.0":http://www.apache.org/licenses/LICENSE-2.0.
 
+!https://travis-ci.org/kamranzafar/JCL.png?branch=master!:https://travis-ci.org/kamranzafar/JCL
+
 h1. Installation
 
 To use JCL, download and build the JCL project and put jcl(-core-2.x).jar and dependencies in the application's classpath. See the build section below and also check out the downloads section for more details on the available builds and source.
