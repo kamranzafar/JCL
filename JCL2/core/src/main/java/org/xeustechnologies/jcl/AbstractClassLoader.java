@@ -27,6 +27,7 @@
 package org.xeustechnologies.jcl;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -132,6 +133,41 @@ public abstract class AbstractClassLoader extends ClassLoader {
 	}
 
 	/**
+	 * Overrides the getResource method to load non-class resources from other
+	 * sources, JarClassLoader is the only subclass in this project that loads
+	 * non-class resources from jar files
+	 *
+	 * @see java.lang.ClassLoader#getResource(java.lang.String)
+	 */
+	@Override
+	public URL getResource(String name) {
+		if (name == null || name.trim().equals(""))
+			return null;
+
+		Collections.sort(loaders);
+
+		URL url = null;
+
+		// Check osgi boot delegation
+		if (osgiBootLoader.isEnabled()) {
+			url = osgiBootLoader.findResource(name);
+		}
+
+		if (url == null) {
+			for (ProxyClassLoader l : loaders) {
+				if (l.isEnabled()) {
+					url = l.findResource(name);
+					if (url != null)
+						break;
+				}
+			}
+		}
+
+		return url;
+
+	}
+
+	/**
 	 * Overrides the getResourceAsStream method to load non-class resources from
 	 * other sources, JarClassLoader is the only subclass in this project that
 	 * loads non-class resources from jar files
@@ -208,6 +244,20 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
 			return null;
 		}
+
+		@Override
+		public URL findResource(String name) {
+			URL url = getSystemResource(name);
+
+			if (url != null) {
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Returning system resource " + name);
+
+				return url;
+			}
+
+			return null;
+		}
 	}
 
 	/**
@@ -251,6 +301,19 @@ public abstract class AbstractClassLoader extends ClassLoader {
 			return null;
 		}
 
+
+		@Override
+		public URL findResource(String name) {
+			URL url = getParent().getResource(name);
+
+			if (url != null) {
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Returning resource " + name + " loaded with parent classloader");
+
+				return url;
+			}
+			return null;
+		}
 	}
 
 	/**
@@ -295,6 +358,20 @@ public abstract class AbstractClassLoader extends ClassLoader {
 			return null;
 		}
 
+
+		@Override
+		public URL findResource(String name) {
+			URL url = getClass().getClassLoader().getResource(name);
+
+			if (url != null) {
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Returning resource " + name + " loaded with current classloader");
+
+				return url;
+			}
+
+			return null;
+		}
 	}
 
 	/**
@@ -333,6 +410,20 @@ public abstract class AbstractClassLoader extends ClassLoader {
 					logger.finest("Returning resource " + name + " loaded with thread context classloader");
 
 				return is;
+			}
+
+			return null;
+		}
+
+		@Override
+		public URL findResource(String name) {
+			URL url = Thread.currentThread().getContextClassLoader().getResource(name);
+
+			if (url != null) {
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Returning resource " + name + " loaded with thread context classloader");
+
+				return url;
 			}
 
 			return null;
@@ -392,6 +483,24 @@ public abstract class AbstractClassLoader extends ClassLoader {
 			}
 
 			return is;
+		}
+
+		@Override
+		public URL findResource(String name) {
+			URL url = null;
+
+			if (enabled && isPartOfOsgiBootDelegation(name)) {
+				url = getParentLoader().findResource(name);
+
+				if (url == null && strictLoading) {
+					throw new ResourceNotFoundException("JCL OSGi Boot Delegation: Resource " + name + " not found.");
+				}
+
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Resource " + name + " loaded via OSGi boot delegation.");
+			}
+
+			return url;
 		}
 
 		/**

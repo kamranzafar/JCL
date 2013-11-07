@@ -287,6 +287,19 @@ public class JarClassLoader extends AbstractClassLoader {
 
             return null;
         }
+
+        @Override
+        public URL findResource(String name) {
+            URL url = classpathResources.getResourceURL( name );
+            if (url != null) {
+                if (logger.isLoggable( Level.FINEST ))
+                    logger.finest( "Returning newly loaded resource " + name );
+
+                return url;
+            }
+
+            return null;
+        }
     }
 
     public char getClassNameReplacementChar() {

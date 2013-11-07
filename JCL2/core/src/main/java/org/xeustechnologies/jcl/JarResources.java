@@ -28,9 +28,11 @@ package org.xeustechnologies.jcl;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
@@ -50,6 +52,7 @@ import org.xeustechnologies.jcl.exception.JclException;
  */
 public class JarResources {
 
+    protected String baseUrl;
     protected Map<String, byte[]> jarEntryContents;
     protected boolean collisionAllowed;
 
@@ -61,6 +64,25 @@ public class JarResources {
     public JarResources() {
         jarEntryContents = new HashMap<String, byte[]>();
         collisionAllowed = Configuration.suppressCollisionException();
+    }
+
+    /**
+     * @param name
+     * @return URL
+     */
+    public URL getResourceURL(String name) {
+        if (baseUrl == null) {
+            throw new JclException( "non-URL accessible resource" );
+        }
+        if (jarEntryContents.get( name ) != null) {
+            try {
+                return new URL( baseUrl.toString() + name );
+            } catch (MalformedURLException e) {
+                throw new JclException( e );
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -91,9 +113,12 @@ public class JarResources {
 
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream( jarFile );
+            File file = new File( jarFile );
+            baseUrl = "jar:" + file.toURI().toString() + "!/";
+            fis = new FileInputStream( file );
             loadJar( fis );
         } catch (IOException e) {
+            baseUrl = null;
             throw new JclException( e );
         } finally {
             if (fis != null)
@@ -116,9 +141,11 @@ public class JarResources {
 
         InputStream in = null;
         try {
+            baseUrl = "jar:" + url.toString() + "!/";
             in = url.openStream();
             loadJar( in );
         } catch (IOException e) {
+            baseUrl = null;
             throw new JclException( e );
         } finally {
             if (in != null)
