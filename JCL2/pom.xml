@@ -51,12 +51,12 @@
 	</licenses>
 	<scm>
 		<connection>
-			scm:git://github.com/kamranzafar/JCL.git
+			scm:git:git@github.com:kamranzafar/JCL.git
 		</connection>
 		<developerConnection>
-			scm:git://github.com/kamranzafar/JCL.git
+			scm:git:git@github.com:kamranzafar/JCL.git
 		</developerConnection>
-		<url>git://github.com/kamranzafar/JCL.git
+		<url>git@github.com:kamranzafar/JCL.git
 		</url>
 	</scm>
 	<organization>
