@@ -166,7 +166,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param className
      * @return byte[]
      */
-    protected byte[] loadClassBytes(String className) {
+    protected JarResource loadClassBytes(String className) {
         className = formatClassName( className );
 
         return classpathResources.getResource( className );
@@ -237,7 +237,6 @@ public class JarClassLoader extends AbstractClassLoader {
         @Override
         public Class loadClass(String className, boolean resolveIt) {
             Class result = null;
-            byte[] classBytes;
 
             result = classes.get( className );
             if (result != null) {
@@ -246,12 +245,12 @@ public class JarClassLoader extends AbstractClassLoader {
                 return result;
             }
 
-            classBytes = loadClassBytes( className );
+            JarResource classBytes = loadClassBytes( className );
             if (classBytes == null) {
                 return null;
             }
 
-            result = defineClass( className, classBytes, 0, classBytes.length );
+            result = defineClass( className, classBytes.getContent(), 0, classBytes.getContent().length,classBytes.getProtectionDomain() );
 
             if (result == null) {
                 return null;
@@ -277,12 +276,12 @@ public class JarClassLoader extends AbstractClassLoader {
 
         @Override
         public InputStream loadResource(String name) {
-            byte[] arr = classpathResources.getResource( name );
-            if (arr != null) {
+            JarResource resource = classpathResources.getResource( name );
+            if (resource != null) {
                 if (logger.isLoggable( Level.FINEST ))
                     logger.finest( "Returning newly loaded resource " + name );
 
-                return new ByteArrayInputStream( arr );
+                return new ByteArrayInputStream( resource.getContent() );
             }
 
             return null;
@@ -310,14 +309,14 @@ public class JarClassLoader extends AbstractClassLoader {
         this.classNameReplacementChar = classNameReplacementChar;
     }
 
-    /**
-     * Returns all loaded classes and resources
-     * 
-     * @return Map
-     */
-    public Map<String, byte[]> getLoadedResources() {
-        return classpathResources.getResources();
-    }
+//    /**
+//     * Returns all loaded classes and resources
+//     *
+//     * @return Map
+//     */
+//    public Map<String, byte[]> getLoadedResources() {
+//        return classpathResources.getResources();
+//    }
 
     /**
      * @return Local JCL ProxyClassLoader

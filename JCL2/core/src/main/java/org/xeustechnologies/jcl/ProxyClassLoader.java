@@ -28,6 +28,8 @@ package org.xeustechnologies.jcl;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * @author Kamran Zafar
@@ -76,6 +78,15 @@ public abstract class ProxyClassLoader implements Comparable<ProxyClassLoader> {
      * @return InputStream
      */
     public abstract URL findResource(String name);
+
+    public  Enumeration<URL> findResources(String name){
+        Vector<URL> v = new Vector<URL>();
+        URL r = findResource(name);
+        if(r!=null){
+             v.add(r);
+        }
+        return v.elements();
+    }
 
     public boolean isEnabled() {
         return enabled;

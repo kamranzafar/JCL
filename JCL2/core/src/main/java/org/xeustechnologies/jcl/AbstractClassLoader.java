@@ -26,10 +26,12 @@
 
 package org.xeustechnologies.jcl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -166,6 +168,34 @@ public abstract class AbstractClassLoader extends ClassLoader {
 		return url;
 
 	}
+
+    @Override
+    protected Enumeration<URL> findResources(String name) throws IOException {
+        if (name == null || name.trim().equals(""))
+            return null;
+
+        Collections.sort(loaders);
+
+        Enumeration<URL> url = null;
+
+        // Check osgi boot delegation
+        if (osgiBootLoader.isEnabled()) {
+            url = osgiBootLoader.findResources(name);
+        }
+
+        if (url == null || !url.hasMoreElements()) {
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
+                    url = l.findResources(name);
+                    if (url != null)
+                        break;
+                }
+            }
+        }
+
+        return url;
+
+    }
 
 	/**
 	 * Overrides the getResourceAsStream method to load non-class resources from
