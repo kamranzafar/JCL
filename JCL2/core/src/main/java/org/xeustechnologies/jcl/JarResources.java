@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.security.cert.Certificate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,213 +55,231 @@ import org.xeustechnologies.jcl.exception.JclException;
  */
 public class JarResources {
 
-    protected String baseUrl;
-    protected Map<String, byte[]> jarEntryContents;
-    protected boolean collisionAllowed;
+	protected String baseUrl;
+	protected Map<String, JarResource> jarEntryContents;
+	protected boolean collisionAllowed;
 
-    private static Logger logger = Logger.getLogger( JarResources.class.getName() );
+	private static Logger logger = Logger.getLogger(JarResources.class.getName());
 
-    /**
-     * Default constructor
-     */
-    public JarResources() {
-        jarEntryContents = new HashMap<String, byte[]>();
-        collisionAllowed = Configuration.suppressCollisionException();
-    }
+	/**
+	 * Default constructor
+	 */
+	public JarResources() {
+		jarEntryContents = new HashMap<String, JarResource>();
+		collisionAllowed = Configuration.suppressCollisionException();
+	}
 
-    /**
-     * @param name
-     * @return URL
-     */
-    public URL getResourceURL(String name) {
-        if (baseUrl == null) {
-            throw new JclException( "non-URL accessible resource" );
-        }
-        if (jarEntryContents.get( name ) != null) {
-            try {
-                return new URL( baseUrl.toString() + name );
-            } catch (MalformedURLException e) {
-                throw new JclException( e );
-            }
-        }
+	/**
+	 * @param name
+	 * @return URL
+	 */
+	public URL getResourceURL(String name) {
+		if (baseUrl == null) {
+			throw new JclException("non-URL accessible resource");
+		}
+		if (jarEntryContents.get(name) != null) {
+			try {
+				return new URL(baseUrl.toString() + name);
+			} catch (MalformedURLException e) {
+				throw new JclException(e);
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    /**
-     * @param name
-     * @return byte[]
-     */
-    public byte[] getResource(String name) {
-        return jarEntryContents.get( name );
-    }
+	/**
+	 * @param name
+	 * @return byte[]
+	 */
+	public JarResource getResource(String name) {
+		return jarEntryContents.get(name);
+	}
 
-    /**
-     * Returns an immutable Map of all jar resources
-     * 
-     * @return Map
-     */
-    public Map<String, byte[]> getResources() {
-        return Collections.unmodifiableMap( jarEntryContents );
-    }
+	/**
+	 * Returns an immutable Map of all jar resources
+	 * 
+	 * @return Map
+	 */
+	public Map<String, JarResource> getResources() {
+		return Collections.unmodifiableMap(jarEntryContents);
+	}
 
-    /**
-     * Reads the specified jar file
-     * 
-     * @param jarFile
-     */
-    public void loadJar(String jarFile) {
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loading jar: " + jarFile );
+	/**
+	 * Reads the specified jar file
+	 * 
+	 * @param jarFile
+	 */
+	public void loadJar(String jarFile) {
+		if (logger.isLoggable(Level.FINEST))
+			logger.finest("Loading jar: " + jarFile);
 
-        FileInputStream fis = null;
-        try {
-            File file = new File( jarFile );
-            baseUrl = "jar:" + file.toURI().toString() + "!/";
-            fis = new FileInputStream( file );
-            loadJar( fis );
-        } catch (IOException e) {
-            baseUrl = null;
-            throw new JclException( e );
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
-        }
-    }
+		FileInputStream fis = null;
+		try {
+			File file = new File(jarFile);
+			baseUrl = "jar:" + file.toURI().toString() + "!/";
+			fis = new FileInputStream(file);
+			loadJar(fis, getProtectionDomain(file.toURI().toURL()));
+		} catch (IOException e) {
+			baseUrl = null;
+			throw new JclException(e);
+		} finally {
+			if (fis != null)
+				try {
+					fis.close();
+				} catch (IOException e) {
+					throw new JclException(e);
+				}
+		}
+	}
 
-    /**
-     * Reads the jar file from a specified URL
-     * 
-     * @param url
-     */
-    public void loadJar(URL url) {
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loading jar: " + url.toString() );
+	/**
+	 * Reads the jar file from a specified URL
+	 * 
+	 * @param url
+	 */
+	public void loadJar(URL url) {
+		if (logger.isLoggable(Level.FINEST))
+			logger.finest("Loading jar: " + url.toString());
 
-        InputStream in = null;
-        try {
-            baseUrl = "jar:" + url.toString() + "!/";
-            in = url.openStream();
-            loadJar( in );
-        } catch (IOException e) {
-            baseUrl = null;
-            throw new JclException( e );
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
-        }
-    }
+		InputStream in = null;
+		try {
+			baseUrl = "jar:" + url.toString() + "!/";
+			in = url.openStream();
+			loadJar(in, getProtectionDomain(url));
+		} catch (IOException e) {
+			baseUrl = null;
+			throw new JclException(e);
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new JclException(e);
+				}
+		}
+	}
 
-    /**
-     * Load the jar contents from InputStream
-     * 
-     */
-    public void loadJar(InputStream jarStream) {
+	/**
+	 * Loads protection domain for specified jar. The domain is not loaded from the jar itself but it is derived from parent protection domain.
+	 * 
+	 * @param aURL jar url
+	 * @return
+	 */
+	protected ProtectionDomain getProtectionDomain(URL aURL) {
+		ProtectionDomain parentDomain = getClass().getProtectionDomain();
+		CodeSource csParent = parentDomain.getCodeSource();
+		Certificate[] certParent = csParent.getCertificates();
+		CodeSource csChild = (certParent == null ? new CodeSource(aURL, csParent.getCodeSigners()) : new CodeSource(aURL, certParent));
+		ProtectionDomain pdChild = new ProtectionDomain(csChild, parentDomain.getPermissions(), parentDomain.getClassLoader(), parentDomain.getPrincipals());
+		return pdChild;
+	}
 
-        BufferedInputStream bis = null;
-        JarInputStream jis = null;
+	public void loadJar(InputStream jarStream) {
+		loadJar(jarStream, null);
+	}
 
-        try {
-            bis = new BufferedInputStream( jarStream );
-            jis = new JarInputStream( bis );
+	/**
+	 * Load the jar contents from InputStream
+	 * 
+	 */
+	private void loadJar(InputStream jarStream, ProtectionDomain protectionDomain) {
 
-            JarEntry jarEntry = null;
-            while (( jarEntry = jis.getNextJarEntry() ) != null) {
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( dump( jarEntry ) );
+		BufferedInputStream bis = null;
+		JarInputStream jis = null;
 
-                if (jarEntry.isDirectory()) {
-                    continue;
-                }
+		try {
+			bis = new BufferedInputStream(jarStream);
+			jis = new JarInputStream(bis);
 
-                if (jarEntryContents.containsKey( jarEntry.getName() )) {
-                    if (!collisionAllowed)
-                        throw new JclException( "Class/Resource " + jarEntry.getName() + " already loaded" );
-                    else {
-                        if (logger.isLoggable( Level.FINEST ))
-                            logger.finest( "Class/Resource " + jarEntry.getName()
-                                    + " already loaded; ignoring entry..." );
-                        continue;
-                    }
-                }
+			JarEntry jarEntry = null;
+			while ((jarEntry = jis.getNextJarEntry()) != null) {
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest(dump(jarEntry));
 
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( "Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize() );
+				if (jarEntry.isDirectory()) {
+					continue;
+				}
 
-                byte[] b = new byte[2048];
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
+				if (jarEntryContents.containsKey(jarEntry.getName())) {
+					if (!collisionAllowed)
+						throw new JclException("Class/Resource " + jarEntry.getName() + " already loaded");
+					else {
+						if (logger.isLoggable(Level.FINEST))
+							logger.finest("Class/Resource " + jarEntry.getName() + " already loaded; ignoring entry...");
+						continue;
+					}
+				}
 
-                int len = 0;
-                while (( len = jis.read( b ) ) > 0) {
-                    out.write( b, 0, len );
-                }
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest("Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize());
 
-                // add to internal resource HashMap
-                jarEntryContents.put( jarEntry.getName(), out.toByteArray() );
+				byte[] b = new byte[2048];
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( jarEntry.getName() + ": size=" + out.size() + " ,csize="
-                            + jarEntry.getCompressedSize() );
+				int len = 0;
+				while ((len = jis.read(b)) > 0) {
+					out.write(b, 0, len);
+				}
 
-                out.close();
-            }
-        } catch (IOException e) {
-            throw new JclException( e );
-        } catch (NullPointerException e) {
-            if (logger.isLoggable( Level.FINEST ))
-                logger.finest( "Done loading." );
-        } finally {
-            if (jis != null)
-                try {
-                    jis.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
+				// add to internal resource HashMap
+				jarEntryContents.put(jarEntry.getName(), new JarResource(out.toByteArray(), protectionDomain));
 
-            if (bis != null)
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
-        }
-    }
+				if (logger.isLoggable(Level.FINEST))
+					logger.finest(jarEntry.getName() + ": size=" + out.size() + " ,csize=" + jarEntry.getCompressedSize());
 
-    /**
-     * For debugging
-     * 
-     * @param je
-     * @return String
-     */
-    private String dump(JarEntry je) {
-        StringBuffer sb = new StringBuffer();
-        if (je.isDirectory()) {
-            sb.append( "d " );
-        } else {
-            sb.append( "f " );
-        }
+				out.close();
+			}
+		} catch (IOException e) {
+			throw new JclException(e);
+		} catch (NullPointerException e) {
+			if (logger.isLoggable(Level.FINEST))
+				logger.finest("Done loading.");
+		} finally {
+			if (jis != null)
+				try {
+					jis.close();
+				} catch (IOException e) {
+					throw new JclException(e);
+				}
 
-        if (je.getMethod() == JarEntry.STORED) {
-            sb.append( "stored   " );
-        } else {
-            sb.append( "defalted " );
-        }
+			if (bis != null)
+				try {
+					bis.close();
+				} catch (IOException e) {
+					throw new JclException(e);
+				}
+		}
+	}
 
-        sb.append( je.getName() );
-        sb.append( "\t" );
-        sb.append( "" + je.getSize() );
-        if (je.getMethod() == JarEntry.DEFLATED) {
-            sb.append( "/" + je.getCompressedSize() );
-        }
+	/**
+	 * For debugging
+	 * 
+	 * @param je
+	 * @return String
+	 */
+	private String dump(JarEntry je) {
+		StringBuffer sb = new StringBuffer();
+		if (je.isDirectory()) {
+			sb.append("d ");
+		} else {
+			sb.append("f ");
+		}
 
-        return ( sb.toString() );
-    }
+		if (je.getMethod() == JarEntry.STORED) {
+			sb.append("stored   ");
+		} else {
+			sb.append("defalted ");
+		}
+
+		sb.append(je.getName());
+		sb.append("\t");
+		sb.append("" + je.getSize());
+		if (je.getMethod() == JarEntry.DEFLATED) {
+			sb.append("/" + je.getCompressedSize());
+		}
+
+		return (sb.toString());
+	}
+
 }
