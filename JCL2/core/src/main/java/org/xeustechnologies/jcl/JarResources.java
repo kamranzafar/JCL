@@ -38,6 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,8 +53,7 @@ import org.xeustechnologies.jcl.exception.JclException;
  */
 public class JarResources {
 
-    protected String baseUrl;
-    protected Map<String, byte[]> jarEntryContents;
+    protected Map<String, JclJarEntry> jarEntryContents;
     protected boolean collisionAllowed;
 
     private static Logger logger = Logger.getLogger( JarResources.class.getName() );
@@ -62,7 +62,7 @@ public class JarResources {
      * Default constructor
      */
     public JarResources() {
-        jarEntryContents = new HashMap<String, byte[]>();
+        jarEntryContents = new HashMap<String, JclJarEntry>();
         collisionAllowed = Configuration.suppressCollisionException();
     }
 
@@ -71,12 +71,14 @@ public class JarResources {
      * @return URL
      */
     public URL getResourceURL(String name) {
-        if (baseUrl == null) {
+
+      JclJarEntry entry = jarEntryContents.get(name);
+        if (entry != null) {
+          if (entry.getBaseUrl() == null) {
             throw new JclException( "non-URL accessible resource" );
-        }
-        if (jarEntryContents.get( name ) != null) {
+        }          
             try {
-                return new URL( baseUrl.toString() + name );
+                return new URL( entry.getBaseUrl().toString() + name );
             } catch (MalformedURLException e) {
                 throw new JclException( e );
             }
@@ -90,7 +92,13 @@ public class JarResources {
      * @return byte[]
      */
     public byte[] getResource(String name) {
-        return jarEntryContents.get( name );
+      JclJarEntry entry = jarEntryContents.get(name);
+      if (entry != null) {
+        return entry.getResourceBytes();
+      }
+      else {
+        return null;
+      }
     }
 
     /**
@@ -99,7 +107,14 @@ public class JarResources {
      * @return Map
      */
     public Map<String, byte[]> getResources() {
-        return Collections.unmodifiableMap( jarEntryContents );
+      
+      Map<String, byte[]> resourcesAsBytes = new HashMap<String, byte[]>(jarEntryContents.size());
+      
+      for (Map.Entry<String, JclJarEntry> entry : jarEntryContents.entrySet()) {
+        resourcesAsBytes.put(entry.getKey(), entry.getValue().getResourceBytes());
+      }
+
+      return resourcesAsBytes;
     }
 
     /**
@@ -114,11 +129,10 @@ public class JarResources {
         FileInputStream fis = null;
         try {
             File file = new File( jarFile );
-            baseUrl = "jar:" + file.toURI().toString() + "!/";
+            String baseUrl = "jar:" + file.toURI().toString() + "!/";
             fis = new FileInputStream( file );
-            loadJar( fis );
+            loadJar(baseUrl, fis);
         } catch (IOException e) {
-            baseUrl = null;
             throw new JclException( e );
         } finally {
             if (fis != null)
@@ -141,11 +155,10 @@ public class JarResources {
 
         InputStream in = null;
         try {
-            baseUrl = "jar:" + url.toString() + "!/";
+            String baseUrl = "jar:" + url.toString() + "!/";
             in = url.openStream();
-            loadJar( in );
+            loadJar( baseUrl, in );
         } catch (IOException e) {
-            baseUrl = null;
             throw new JclException( e );
         } finally {
             if (in != null)
@@ -159,9 +172,10 @@ public class JarResources {
 
     /**
      * Load the jar contents from InputStream
+     * @param argBaseUrl 
      * 
      */
-    public void loadJar(InputStream jarStream) {
+    public void loadJar(String argBaseUrl, InputStream jarStream) {
 
         BufferedInputStream bis = null;
         JarInputStream jis = null;
@@ -202,7 +216,10 @@ public class JarResources {
                 }
 
                 // add to internal resource HashMap
-                jarEntryContents.put( jarEntry.getName(), out.toByteArray() );
+                JclJarEntry entry = new JclJarEntry();
+                entry.setBaseUrl(argBaseUrl);
+                entry.setResourceBytes(out.toByteArray());
+                jarEntryContents.put( jarEntry.getName(), entry );
 
                 if (logger.isLoggable( Level.FINEST ))
                     logger.finest( jarEntry.getName() + ": size=" + out.size() + " ,csize="
