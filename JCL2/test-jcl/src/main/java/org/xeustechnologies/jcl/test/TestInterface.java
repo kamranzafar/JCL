@@ -1,5 +1,7 @@
 package org.xeustechnologies.jcl.test;
 
-public interface TestInterface {
+import java.io.Serializable;
+
+public interface TestInterface extends Serializable {
     public String sayHello();
 }
