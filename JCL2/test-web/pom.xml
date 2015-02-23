@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.xeustechnologies</groupId>
 		<artifactId>jcl</artifactId>
-		<version>2.6-SNAPSHOT</version>
+		<version>2.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>jcltest</artifactId>
 	<packaging>war</packaging>
@@ -33,7 +33,6 @@
 							<stripVersion>true</stripVersion>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>true</overWriteSnapshots>
-							<includeScope>test</includeScope>
 						</configuration>
 					</execution>
 				</executions>
@@ -78,17 +77,22 @@
 		<dependency>
 			<groupId>org.xeustechnologies</groupId>
 			<artifactId>jcl-core</artifactId>
-			<version>2.6-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.xeustechnologies</groupId>
 			<artifactId>jcl-spring</artifactId>
-			<version>2.6-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.xeustechnologies</groupId>
+            <artifactId>jcl-web</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.xeustechnologies</groupId>
 			<artifactId>test-jcl</artifactId>
-			<version>2.6-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
