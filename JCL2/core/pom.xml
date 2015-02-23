@@ -49,23 +49,13 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>org/xeustechnologies/jcl/LoadTest.java
-                        </include>
-					</includes>
-					<skip>${skipTest}</skip>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.xeustechnologies</groupId>
 			<artifactId>test-jcl</artifactId>
-			<version>2.6-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

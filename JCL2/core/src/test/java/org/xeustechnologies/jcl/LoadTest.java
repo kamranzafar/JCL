@@ -1,5 +1,20 @@
 package org.xeustechnologies.jcl;
 
+import junit.framework.Assert;
+import junit.framework.AssertionFailedError;
+import junit.framework.TestCase;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+import org.xeustechnologies.jcl.context.DefaultContextLoader;
+import org.xeustechnologies.jcl.context.JclContext;
+import org.xeustechnologies.jcl.context.JclContextLoader;
+import org.xeustechnologies.jcl.context.XmlContextLoader;
+import org.xeustechnologies.jcl.exception.JclContextException;
+import org.xeustechnologies.jcl.proxy.CglibProxyProvider;
+import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
+import org.xeustechnologies.jcl.test.TestInterface;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,24 +25,8 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import junit.framework.Assert;
-import junit.framework.AssertionFailedError;
-import junit.framework.TestCase;
-
-import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
-import org.junit.runner.RunWith;
-import org.xeustechnologies.jcl.context.DefaultContextLoader;
-import org.xeustechnologies.jcl.context.JclContext;
-import org.xeustechnologies.jcl.context.JclContextLoader;
-import org.xeustechnologies.jcl.context.XmlContextLoader;
-import org.xeustechnologies.jcl.exception.JclContextException;
-import org.xeustechnologies.jcl.proxy.CglibProxyProvider;
-import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
-import org.xeustechnologies.jcl.test.TestInterface;
-
 @SuppressWarnings("all")
-@RunWith(JUnit4ClassRunner.class)
+@RunWith(JUnit4.class)
 public class LoadTest extends TestCase {
 
     private static Logger logger = Logger.getLogger( LoadTest.class.getName() );
@@ -151,7 +150,7 @@ public class LoadTest extends TestCase {
 
         assertNotNull( ti );
 
-        ti = (TestInterface) JclUtils.clone( testObj );
+        ti = (TestInterface) JclUtils.shallowClone( testObj );
 
         assertNotNull( ti );
 
@@ -253,7 +252,7 @@ public class LoadTest extends TestCase {
                         .getName() );
     }
 
-    @Test
+    //@Test
     public void testDefaultContextLoader() throws InstantiationException, IllegalAccessException,
             ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader( new String[] { "./target/test-jcl.jar" } );

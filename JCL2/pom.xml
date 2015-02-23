@@ -21,7 +21,8 @@
 		<module>core</module>
 		<module>spring</module>
 		<module>test-web</module>
-	</modules>
+        <module>web</module>
+    </modules>
 
 	<properties>
 		<test-jar-file>test-jcl.jar</test-jar-file>
@@ -80,6 +81,12 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>${skipTest}</skip>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

@@ -1,15 +1,14 @@
 package org.xeustechnologies.jcl.spring;
 
-import java.lang.reflect.InvocationTargetException;
-
 import junit.framework.TestCase;
-
 import org.junit.Test;
-import org.junit.internal.runners.JUnit4ClassRunner;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-@RunWith(JUnit4ClassRunner.class)
+import java.lang.reflect.InvocationTargetException;
+
+@RunWith(JUnit4.class)
 public class SpringTest extends TestCase {
     @Test
     public void testWithSpring() throws ClassNotFoundException, IllegalArgumentException, SecurityException,
