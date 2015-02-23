@@ -1,9 +1,12 @@
 package org.xeustechnologies.jcl.test;
 
+import java.io.Serializable;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.xeustechnologies.jcl.test.TestInterface;
 
-public class Test implements TestInterface {
+public class Test implements Serializable, TestInterface {
 
     /**
 	 * serialVersionUID:long
