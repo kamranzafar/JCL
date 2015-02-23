@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -147,7 +148,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param jarStream
      */
     public void add(InputStream jarStream) {
-        classpathResources.loadJar( jarStream );
+        classpathResources.loadJar( null, jarStream );
     }
 
     /**
