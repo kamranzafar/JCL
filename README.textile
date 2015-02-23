@@ -4,7 +4,7 @@ h1. Overview
 
 JCL is a configurable, dynamic and extensible custom classloader that loads java classes directly from Jar files and other sources. The motivation was to create isolated classloaders, which can be easily integrated with IoC frameworks like Spring and with web applications.
 
-The entire library, including it's code-base and documentation is available under a dual-license, whereby it can be used under the terms and conditions of "LGPL":http://www.gnu.org/licenses/lgpl.html and "Apache License 2.0":http://www.apache.org/licenses/LICENSE-2.0.
+The entire library, including it's code-base and documentation is available under the terms and conditions of "Apache License 2.0":http://www.apache.org/licenses/LICENSE-2.0.
 
 
 h1. Installation
