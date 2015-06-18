@@ -2,8 +2,8 @@ package org.xeustechnologies.jcl.test;
 
 import java.io.Serializable;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.test.TestInterface;
 
 public class Test implements Serializable, TestInterface {
@@ -15,7 +15,7 @@ public class Test implements Serializable, TestInterface {
 	private String firstName;
     private String lastName;
 
-    private static Logger logger = Logger.getLogger( Test.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger(Test.class);
 
     public Test() {
         firstName = "World";
@@ -29,8 +29,7 @@ public class Test implements Serializable, TestInterface {
     public String sayHello() {
         String hello = "Hello " + firstName + " " + lastName;
 
-        if( logger.isLoggable( Level.FINER ) )
-            logger.finer( "Hello " + firstName + " " + lastName );
+        logger.debug( "Hello {} {}", firstName, lastName );
 
         return hello;
     }

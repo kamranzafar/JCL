@@ -31,9 +31,9 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.exception.JclException;
 
 /**
@@ -47,7 +47,7 @@ public class JarResources {
     protected Map<String, JclJarEntry> jarEntryContents;
     protected boolean collisionAllowed;
 
-    private static Logger logger = Logger.getLogger( JarResources.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger( JarResources.class );
 
     /**
      * Default constructor
@@ -114,8 +114,7 @@ public class JarResources {
      * @param jarFile
      */
     public void loadJar(String jarFile) {
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loading jar: " + jarFile );
+        logger.debug( "Loading jar: {}", jarFile );
 
         FileInputStream fis = null;
         try {
@@ -141,8 +140,7 @@ public class JarResources {
      * @param url
      */
     public void loadJar(URL url) {
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loading jar: " + url.toString() );
+        logger.debug( "Loading jar: {}", url.toString() );
 
         InputStream in = null;
         try {
@@ -177,8 +175,7 @@ public class JarResources {
 
             JarEntry jarEntry = null;
             while (( jarEntry = jis.getNextJarEntry() ) != null) {
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( dump( jarEntry ) );
+                logger.debug( dump( jarEntry ) );
 
                 if (jarEntry.isDirectory()) {
                     continue;
@@ -188,15 +185,12 @@ public class JarResources {
                     if (!collisionAllowed)
                         throw new JclException( "Class/Resource " + jarEntry.getName() + " already loaded" );
                     else {
-                        if (logger.isLoggable( Level.FINEST ))
-                            logger.finest( "Class/Resource " + jarEntry.getName()
-                                    + " already loaded; ignoring entry..." );
+                        logger.debug( "Class/Resource {} already loaded; ignoring entry...", jarEntry.getName() );
                         continue;
                     }
                 }
 
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( "Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize() );
+                logger.debug( "Entry Name: {}, Entry Size: {}", jarEntry.getName(), jarEntry.getSize() );
 
                 byte[] b = new byte[2048];
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -212,17 +206,14 @@ public class JarResources {
                 entry.setResourceBytes(out.toByteArray());
                 jarEntryContents.put( jarEntry.getName(), entry );
 
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( jarEntry.getName() + ": size=" + out.size() + " ,csize="
-                            + jarEntry.getCompressedSize() );
+                logger.debug("{}: size={}, csize={}", jarEntry.getName(), out.size(), jarEntry.getCompressedSize());
 
                 out.close();
             }
         } catch (IOException e) {
             throw new JclException( e );
         } catch (NullPointerException e) {
-            if (logger.isLoggable( Level.FINEST ))
-                logger.finest( "Done loading." );
+            logger.debug( "Done loading." );
         } finally {
             if (jis != null)
                 try {
