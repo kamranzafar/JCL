@@ -19,8 +19,6 @@ package org.xeustechnologies.jcl.context;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,6 +28,8 @@ import javax.xml.validation.SchemaFactory;
 
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -77,7 +77,7 @@ public class XmlContextLoader implements JclContextLoader {
 
     private final List<PathResolver> pathResolvers = new ArrayList<PathResolver>();
 
-    private static Logger logger = Logger.getLogger( XmlContextLoader.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger(XmlContextLoader.class);
 
     public XmlContextLoader(String file) {
         this.file = file;
@@ -135,8 +135,7 @@ public class XmlContextLoader implements JclContextLoader {
 
                 jclContext.addJcl( name, jcl );
 
-                if (logger.isLoggable( Level.FINER ))
-                    logger.finer( "JarClassLoader[" + name + "] loaded into context." );
+                logger.debug( "JarClassLoader[{}] loaded into context.", name );
             }
 
         } catch (SAXParseException e) {
@@ -242,9 +241,7 @@ public class XmlContextLoader implements JclContextLoader {
             }
         }
 
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
-                    + loader.isEnabled() + "]" );
+        logger.debug( "Loader[{}] configured: [{}, {}]", loader.getClass().getName(), loader.getOrder(), loader.isEnabled() );
     }
 
     public void addPathResolver(PathResolver pr) {

@@ -22,11 +22,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.utils.PathResolver;
 
 /**
@@ -38,7 +38,7 @@ import org.xeustechnologies.jcl.utils.PathResolver;
  */
 public class WebAppPathResolver implements PathResolver {
 
-    private static Logger logger = Logger.getLogger( WebAppPathResolver.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger(WebAppPathResolver.class);
 
     private static final String JAR = ".jar";
     private static final String WEB_APP = "webapp:";
@@ -59,9 +59,7 @@ public class WebAppPathResolver implements PathResolver {
             String webpath = "/" + path.split( ":" )[1];
 
             if (isJar( webpath )) {
-                if (logger.isLoggable( Level.FINEST )) {
-                    logger.finest( "Found jar: " + webpath );
-                }
+                logger.debug( "Found jar: {}", webpath );
 
                 return new InputStream[] { servletContext.getResourceAsStream( webpath ) };
             }
@@ -79,9 +77,7 @@ public class WebAppPathResolver implements PathResolver {
                         InputStream stream = servletContext.getResourceAsStream( source );
 
                         if (stream != null) {
-                            if (logger.isLoggable( Level.FINEST )) {
-                                logger.finest( "Found jar: " + source );
-                            }
+                            logger.debug( "Found jar: {}", source );
 
                             streams.add( stream );
                         }
