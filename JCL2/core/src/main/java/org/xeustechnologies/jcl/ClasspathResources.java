@@ -82,8 +82,15 @@ public class ClasspathResources extends JarResources {
                     logger.finest( "Loading resource: " + entryName );
                 
                 JclJarEntry entry = new JclJarEntry();
-                entry.setBaseUrl(resource);
+                File parentFile = resourceFile.getAbsoluteFile().getParentFile();
+                if (parentFile == null) {
+                    // I don't believe this is actually possible with an absolute path. With no parent, we must be at the root of the filesystem.
+                    entry.setBaseUrl("file:/");
+                } else {
+                    entry.setBaseUrl(parentFile.toURI().toString());
+                }
                 entry.setResourceBytes(content);
+
                 jarEntryContents.put( entryName, entry );
             }
         } catch (IOException e) {
