@@ -17,11 +17,10 @@
 
 package org.xeustechnologies.jcl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -156,6 +155,39 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
 		return url;
 
+	}
+
+	@Override
+	public Enumeration<URL> getResources(String name) throws IOException {
+		if (name == null || name.trim().equals(""))
+			return Collections.emptyEnumeration();
+
+		Collections.sort(loaders);
+
+		Vector<URL> urlVector = new Vector<URL>();
+		URL url = null;
+
+		// Check osgi boot delegation
+		if (osgiBootLoader.isEnabled()) {
+			url = osgiBootLoader.findResource(name);
+
+			if(url!=null) {
+				urlVector.add(url);
+			}
+		}
+
+		if (url == null) {
+			for (ProxyClassLoader l : loaders) {
+				if (l.isEnabled()) {
+					url = l.findResource(name);
+					if (url != null) {
+						urlVector.add(url);
+					}
+				}
+			}
+		}
+
+		return urlVector.elements();
 	}
 
 	/**
