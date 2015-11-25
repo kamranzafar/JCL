@@ -6,7 +6,7 @@
 	<name>Jar Class Loader</name>
 	<url>http://jcloader.sourceforge.net
 	</url>
-	<version>2.7-SNAPSHOT</version>
+	<version>2.7</version>
 	<packaging>pom</packaging>
 	<description>Jar Class Loader</description>
 
