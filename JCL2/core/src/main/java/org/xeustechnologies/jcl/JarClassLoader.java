@@ -62,7 +62,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * 
      */
     public void initialize() {
-        loaders.add( localLoader );
+        addLoader( localLoader );
     }
 
     /**
