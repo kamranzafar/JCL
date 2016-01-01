@@ -44,9 +44,9 @@
 	</developers>
 	<licenses>
 		<license>
-			<name>GNU Lesser General Public License</name>
-			<url>${basedir}/src/main/resources/LICENSE.txt
-			</url>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
 		</license>
 	</licenses>
 	<scm>
