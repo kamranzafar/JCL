@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.JarEntry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,6 +56,13 @@ public class JarClassLoader extends AbstractClassLoader {
         initialize();
     }
 
+    public JarClassLoader(final ClassLoader parent) {
+        super(parent);
+        classpathResources = new ClasspathResources();
+        classes = Collections.synchronizedMap( new HashMap<String, Class>() );
+        initialize();
+    }
+    
     /**
      * Some initialisations
      * 
