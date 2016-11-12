@@ -146,7 +146,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param jarStream
      */
     public void add(InputStream jarStream) {
-        classpathResources.loadJar( null, jarStream );
+        classpathResources.loadJar( null, jarStream, false );
     }
 
     /**

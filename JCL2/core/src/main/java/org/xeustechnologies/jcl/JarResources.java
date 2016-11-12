@@ -159,12 +159,16 @@ public class JarResources {
         }
     }
 
+    public void loadJar(String argBaseUrl, InputStream jarStream) {
+        loadJar(argBaseUrl, jarStream, true);
+    }
+
     /**
      * Load the jar contents from InputStream
      * @param argBaseUrl 
      * 
      */
-    public void loadJar(String argBaseUrl, InputStream jarStream) {
+    public void loadJar(String argBaseUrl, InputStream jarStream, boolean closeStream) {
 
         BufferedInputStream bis = null;
         JarInputStream jis = null;
@@ -215,19 +219,21 @@ public class JarResources {
         } catch (NullPointerException e) {
             logger.debug( "Done loading." );
         } finally {
-            if (jis != null)
-                try {
-                    jis.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
+            if(closeStream) {
+                if (jis != null)
+                    try {
+                        jis.close();
+                    } catch (IOException e) {
+                        throw new JclException(e);
+                    }
 
-            if (bis != null)
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    throw new JclException( e );
-                }
+                if (bis != null)
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        throw new JclException(e);
+                    }
+            }
         }
     }
 
