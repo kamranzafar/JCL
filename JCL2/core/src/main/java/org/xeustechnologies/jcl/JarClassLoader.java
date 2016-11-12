@@ -26,7 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.jar.JarEntry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
 
@@ -48,7 +51,7 @@ public class JarClassLoader extends AbstractClassLoader {
     private char classNameReplacementChar;
     private final ProxyClassLoader localLoader = new LocalLoader();
 
-    private static Logger logger = Logger.getLogger( JarClassLoader.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger( JarClassLoader.class );
 
     public JarClassLoader() {
         classpathResources = new ClasspathResources();
@@ -62,7 +65,7 @@ public class JarClassLoader extends AbstractClassLoader {
         classes = Collections.synchronizedMap( new HashMap<String, Class>() );
         initialize();
     }
-    
+
     /**
      * Some initialisations
      * 
@@ -177,12 +180,10 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param className
      */
     public void unloadClass(String className) {
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Unloading class " + className );
+        logger.debug( "Unloading class {}", className );
 
         if (classes.containsKey( className )) {
-            if (logger.isLoggable( Level.FINEST ))
-                logger.finest( "Removing loaded class " + className );
+            logger.debug( "Removing loaded class {}", className );
             classes.remove( className );
             try {
                 classpathResources.unload( formatClassName( className ) );
@@ -225,7 +226,7 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     class LocalLoader extends ProxyClassLoader {
 
-        private final Logger logger = Logger.getLogger( LocalLoader.class.getName() );
+        private final transient Logger logger = LoggerFactory.getLogger( LocalLoader.class );
 
         public LocalLoader() {
             order = 10;
@@ -239,8 +240,7 @@ public class JarClassLoader extends AbstractClassLoader {
 
             result = classes.get( className );
             if (result != null) {
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( "Returning local loaded class [" + className + "] from cache" );
+                logger.debug( "Returning local loaded class [{}] from cache", className );
                 return result;
             }
 
@@ -268,8 +268,7 @@ public class JarClassLoader extends AbstractClassLoader {
                 resolveClass( result );
 
             classes.put( className, result );
-            if (logger.isLoggable( Level.FINEST ))
-                logger.finest( "Return new local loaded class " + className );
+            logger.debug( "Return new local loaded class {}", className );
             return result;
         }
 
@@ -277,8 +276,7 @@ public class JarClassLoader extends AbstractClassLoader {
         public InputStream loadResource(String name) {
             byte[] arr = classpathResources.getResource( name );
             if (arr != null) {
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( "Returning newly loaded resource " + name );
+                logger.debug( "Returning newly loaded resource {}", name );
 
                 return new ByteArrayInputStream( arr );
             }
@@ -290,8 +288,7 @@ public class JarClassLoader extends AbstractClassLoader {
         public URL findResource(String name) {
             URL url = classpathResources.getResourceURL( name );
             if (url != null) {
-                if (logger.isLoggable( Level.FINEST ))
-                    logger.finest( "Returning newly loaded resource " + name );
+                logger.debug( "Returning newly loaded resource {}", name );
 
                 return url;
             }

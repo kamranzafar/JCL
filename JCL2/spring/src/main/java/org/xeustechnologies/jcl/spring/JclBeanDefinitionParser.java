@@ -17,8 +17,8 @@
 
 package org.xeustechnologies.jcl.spring;
 
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
@@ -32,7 +32,7 @@ import org.xeustechnologies.jcl.JarClassLoader;
  */
 public class JclBeanDefinitionParser implements BeanDefinitionParser {
 
-    private static Logger logger = Logger.getLogger( JclBeanDefinitionParser.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger( JclBeanDefinitionParser.class );
 
     public BeanDefinition parse(Element element, ParserContext parserContext) {
         BeanDefinitionHolder holder = parserContext.getDelegate().parseBeanDefinitionElement( element );
@@ -42,7 +42,7 @@ public class JclBeanDefinitionParser implements BeanDefinitionParser {
         BeanDefinition bd = holder.getBeanDefinition();
         bd.setBeanClassName( JarClassLoader.class.getName() );
 
-        logger.info( "Registering JarClassLoader bean: " + beanName );
+        logger.info( "Registering JarClassLoader bean: {}", beanName );
 
         parserContext.getRegistry().registerBeanDefinition( beanName, bd );
 

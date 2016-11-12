@@ -16,9 +16,8 @@
  */
 package org.xeustechnologies.jcl.context;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.JarClassLoader;
 
 /**
@@ -32,7 +31,7 @@ public class DefaultContextLoader implements JclContextLoader {
     private final JclContext jclContext;
     private final JarClassLoader jcl;
 
-    private static Logger logger = Logger.getLogger( DefaultContextLoader.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger(DefaultContextLoader.class);
 
     public DefaultContextLoader(JarClassLoader jcl) {
         jclContext = new JclContext();
@@ -47,8 +46,7 @@ public class DefaultContextLoader implements JclContextLoader {
     public void loadContext() {
         jclContext.addJcl( JclContext.DEFAULT_NAME, jcl );
 
-        if (logger.isLoggable( Level.FINER ))
-            logger.finer( "Default JarClassLoader loaded into context." );
+        logger.debug( "Default JarClassLoader loaded into context." );
     }
 
     public void unloadContext() {

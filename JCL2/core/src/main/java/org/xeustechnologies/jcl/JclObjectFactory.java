@@ -19,9 +19,9 @@ package org.xeustechnologies.jcl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.exception.JclException;
 
 /**
@@ -35,7 +35,7 @@ import org.xeustechnologies.jcl.exception.JclException;
 public class JclObjectFactory {
     private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
     private static boolean autoProxy;
-    private final Logger logger = Logger.getLogger( JclObjectFactory.class.getName() );
+    private final transient Logger logger = LoggerFactory.getLogger(JclObjectFactory.class);
 
     /**
      * private constructor
@@ -220,10 +220,8 @@ public class JclObjectFactory {
                 }
             }
 
-            if (logger.isLoggable( Level.FINER )) {
-                logger.finer( "Class: " + superClass );
-                logger.finer( "Class Interfaces: " + il );
-            }
+            logger.debug( "Class: {}", superClass );
+            logger.debug( "Class Interfaces: {}", il );
 
             if (superClass == null && il.size() == 0) {
                 throw new JclException( "Neither the class [" + object.getClass().getSuperclass().getName()
