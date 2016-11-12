@@ -24,7 +24,7 @@ import java.io.ObjectOutputStream;
 
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.proxy.ProxyProviderFactory;
-import org.xeustechnologies.jcl.utils.ObjectCloner;
+import org.kamranzafar.commons.cloner.ObjectCloner;
 
 /**
  * This class has some important utility methods commonly required when using
