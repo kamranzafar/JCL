@@ -24,6 +24,8 @@ import java.util.Map;
 import org.xeustechnologies.jcl.JarClassLoader;
 import org.xeustechnologies.jcl.exception.JclContextException;
 
+import edu.emory.mathcs.backport.java.util.concurrent.ConcurrentHashMap;
+
 /**
  * JclContext holds all the JarClassLoader instances so that they can be
  * accessed from anywhere in the application.
@@ -32,8 +34,12 @@ import org.xeustechnologies.jcl.exception.JclContextException;
  * 
  */
 public class JclContext {
+    /*
     private static final Map<String, JarClassLoader> loaders = Collections
             .synchronizedMap( new HashMap<String, JarClassLoader>() );
+    private static final Map<String, JarClassLoader> loaders = new ConcurrentHashMap<String, JarClassLoader>();
+    */
+    private static final Map<String, JarClassLoader> loaders = new ConcurrentHashMap();
     public static final String DEFAULT_NAME = "jcl";
 
     public JclContext() {

@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.xeustechnologies.jcl.exception.JclException;
 import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
 
+import edu.emory.mathcs.backport.java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Reads the class bytes from jar files and other resources using
  * ClasspathResources
@@ -53,14 +55,16 @@ public class JarClassLoader extends AbstractClassLoader {
 
     public JarClassLoader() {
         classpathResources = new ClasspathResources();
-        classes = Collections.synchronizedMap( new HashMap<String, Class>() );
+        // classes = Collections.synchronizedMap( new HashMap<String, Class>() );
+        classes = new ConcurrentHashMap();
         initialize();
     }
 
     public JarClassLoader(final ClassLoader parent) {
         super(parent);
         classpathResources = new ClasspathResources();
-        classes = Collections.synchronizedMap( new HashMap<String, Class>() );
+        // classes = Collections.synchronizedMap( new HashMap<String, Class>() );
+        classes = new ConcurrentHashMap();
         initialize();
     }
 
