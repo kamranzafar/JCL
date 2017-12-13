@@ -29,6 +29,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.emory.mathcs.backport.java.util.concurrent.ConcurrentSkipListSet;
+
 /**
  * Abstract class loader that can load classes from different resources
  *
@@ -37,13 +39,21 @@ import java.util.regex.Pattern;
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
 
-    // we could use concurrent sorted set like ConcurrentSkipListSet here instead, which would be automatically sorted
+    // We could use concurrent sorted set like ConcurrentSkipListSet here instead, which would be automatically sorted
     // and wouldn't require the lock.
     // But that was added in 1.6, and according to Maven we're targeting 1.5+.
     /**
      * Note that all iterations over this list *must* synchronize on it first!
      */
-    protected final List<ProxyClassLoader> loaders = Collections.synchronizedList(new ArrayList<ProxyClassLoader>());
+    // protected final List<ProxyClassLoader> loaders = Collections.synchronizedList(new ArrayList<ProxyClassLoader>());
+
+    // Now we use concurrent sorted set to just resolve the deadlock issue
+    // https://github.com/kamranzafar/JCL/issues/50
+    // protected final List<ProxyClassLoader> loaders = new SetList<ProxyClassLoader>(new ConcurrentSkipListSet<ProxyClassLoader>());
+    /**
+     * Omit type argument since it's not needed in backport implementation
+     */
+    protected final List<ProxyClassLoader> loaders = new SetList<ProxyClassLoader>(new ConcurrentSkipListSet());
 
     private final ProxyClassLoader systemLoader = new SystemLoader();
     private final ProxyClassLoader parentLoader = new ParentLoader();
@@ -70,20 +80,14 @@ public abstract class AbstractClassLoader extends ClassLoader {
     }
 
     protected void addDefaultLoader() {
-        synchronized (loaders) {
-            loaders.add(systemLoader);
-            loaders.add(parentLoader);
-            loaders.add(currentLoader);
-            loaders.add(threadLoader);
-            Collections.sort(loaders);
-        }
+        loaders.add(systemLoader);
+        loaders.add(parentLoader);
+        loaders.add(currentLoader);
+        loaders.add(threadLoader);
     }
 
     public void addLoader(ProxyClassLoader loader) {
-        synchronized (loaders) {
-            loaders.add(loader);
-            Collections.sort(loaders);
-        }
+        loaders.add(loader);
     }
 
     /*
@@ -116,13 +120,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
         }
 
         if (clazz == null) {
-            synchronized (loaders) {
-                for (ProxyClassLoader l : loaders) {
-                    if (l.isEnabled()) {
-                        clazz = l.loadClass(className, resolveIt);
-                        if (clazz != null)
-                            break;
-                    }
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
+                    clazz = l.loadClass(className, resolveIt);
+                    if (clazz != null)
+                        break;
                 }
             }
         }
@@ -153,13 +155,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
         }
 
         if (url == null) {
-            synchronized (loaders) {
-                for (ProxyClassLoader l : loaders) {
-                    if (l.isEnabled()) {
-                        url = l.findResource(name);
-                        if (url != null)
-                            break;
-                    }
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
+                    url = l.findResource(name);
+                    if (url != null)
+                        break;
                 }
             }
         }
@@ -187,13 +187,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
         }
 
         if (url == null) {
-            synchronized (loaders) {
-                for (ProxyClassLoader l : loaders) {
-                    if (l.isEnabled()) {
-                        url = l.findResource(name);
-                        if (url != null) {
-                            urlVector.add(url);
-                        }
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
+                    url = l.findResource(name);
+                    if (url != null) {
+                        urlVector.add(url);
                     }
                 }
             }
@@ -222,13 +220,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
         }
 
         if (is == null) {
-            synchronized (loaders) {
-                for (ProxyClassLoader l : loaders) {
-                    if (l.isEnabled()) {
-                        is = l.loadResource(name);
-                        if (is != null)
-                            break;
-                    }
+            for (ProxyClassLoader l : loaders) {
+                if (l.isEnabled()) {
+                    is = l.loadResource(name);
+                    if (is != null)
+                        break;
                 }
             }
         }
