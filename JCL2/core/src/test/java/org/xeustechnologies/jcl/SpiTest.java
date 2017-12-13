@@ -18,7 +18,7 @@ public class SpiTest {
         JarClassLoader jcl = new JarClassLoader();
         jcl.add("./target/test-classes/lucene-core-5.3.1.jar");
 
-        Class codecClass = jcl.loadClass("org.apache.lucene.codecs.Codec");
+        Class<?> codecClass = jcl.loadClass("org.apache.lucene.codecs.Codec");
 
         ServiceLoader serviceLoader = ServiceLoader.load(codecClass, jcl);
 

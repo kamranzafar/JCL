@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>jcl</artifactId>
-        <groupId>org.xeustechnologies</groupId>
-        <version>2.9-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>jcl</artifactId>
+    <groupId>org.xeustechnologies</groupId>
+    <version>2.9-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>jcl-web</artifactId>
-    <name>JCL - Web</name>
+  <artifactId>jcl-web</artifactId>
+  <name>JCL - Web</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.xeustechnologies</groupId>
-            <artifactId>jcl-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>org.xeustechnologies</groupId>
+      <artifactId>jcl-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>
