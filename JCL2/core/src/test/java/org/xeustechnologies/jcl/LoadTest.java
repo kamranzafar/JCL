@@ -1,6 +1,6 @@
 package org.xeustechnologies.jcl;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.junit.Test;
