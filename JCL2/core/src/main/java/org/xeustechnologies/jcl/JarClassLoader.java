@@ -20,6 +20,7 @@ package org.xeustechnologies.jcl;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.ProtectionDomain;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -219,6 +220,13 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * @return ProtectionDomain
+     */
+    protected ProtectionDomain getProtectionDomain(String className) {
+        return null;
+    }
+
+    /**
      * Local class loader
      * 
      */
@@ -247,7 +255,8 @@ public class JarClassLoader extends AbstractClassLoader {
                 return null;
             }
 
-            result = defineClass( className, classBytes, 0, classBytes.length );
+            ProtectionDomain protectionDomain = getProtectionDomain(className);
+            result = defineClass( className, classBytes, 0, classBytes.length, protectionDomain );
 
             if (result == null) {
                 return null;
