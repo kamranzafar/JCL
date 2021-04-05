@@ -92,6 +92,10 @@ public class JarResources {
       }
     }
 
+    public JclJarEntry getEntry(String name) {
+        return jarEntryContents.get(name);
+    }
+
     /**
      * Returns an immutable Map of all jar resources
      * 

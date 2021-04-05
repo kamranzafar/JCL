@@ -173,6 +173,27 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * Reads the class jar entry from different local and remote resources using
+     * ClasspathResources
+     *
+     * Inherit Example:
+     * <pre>
+     *     {@code
+     *         protected JclJarEntry loadClassEntry(String className) {
+     *             className = formatClassName( className );
+     *             return classpathResources.getEntry( className );
+     *         }
+     *     }
+     * </pre>
+     *
+     * @param className
+     * @return JclJarEntry, if null use loadClassBytes instead.
+     */
+    protected JclJarEntry loadClassEntry(String className) {
+        return null;
+    }
+
+    /**
      * Attempts to unload class, it only unloads the locally loaded classes by
      * JCL
      * 
@@ -220,9 +241,11 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
+     * @param className
+     * @param jarEntry
      * @return ProtectionDomain
      */
-    protected ProtectionDomain getProtectionDomain(String className) {
+    protected ProtectionDomain getProtectionDomain(String className, JclJarEntry jarEntry) {
         return null;
     }
 
@@ -242,7 +265,8 @@ public class JarClassLoader extends AbstractClassLoader {
         @Override
         public Class loadClass(String className, boolean resolveIt) {
             Class result = null;
-            byte[] classBytes;
+            byte[] classBytes = null;
+            JclJarEntry jarEntry;
 
             result = classes.get( className );
             if (result != null) {
@@ -250,12 +274,15 @@ public class JarClassLoader extends AbstractClassLoader {
                 return result;
             }
 
-            classBytes = loadClassBytes( className );
+            jarEntry = loadClassEntry( className );
+            if (jarEntry == null) {
+                classBytes = loadClassBytes( className );
+            }
             if (classBytes == null) {
                 return null;
             }
 
-            ProtectionDomain protectionDomain = getProtectionDomain(className);
+            ProtectionDomain protectionDomain = getProtectionDomain(className, jarEntry);
             result = defineClass( className, classBytes, 0, classBytes.length, protectionDomain );
 
             if (result == null) {
