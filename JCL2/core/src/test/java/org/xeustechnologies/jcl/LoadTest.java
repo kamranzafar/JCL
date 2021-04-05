@@ -3,6 +3,8 @@ package org.xeustechnologies.jcl;
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,6 +26,10 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("all")
 @RunWith(JUnit4.class)
@@ -228,8 +234,14 @@ public class LoadTest extends TestCase {
         // Load with parent among all java core classes
         obl.setBootDelagation( new String[] { "org.xeustechnologies.jcl.test.*" } );
 
-        assertEquals( "sun.misc.Launcher$AppClassLoader", jc.loadClass( "org.xeustechnologies.jcl.test.Test" )
-                .getClassLoader().getClass().getName() );
+        assertThat(
+                jc.loadClass( "org.xeustechnologies.jcl.test.Test" )
+                        .getClassLoader().getClass().getName(),
+                anyOf(
+                        equalTo("sun.misc.Launcher$AppClassLoader"),
+                        equalTo("jdk.internal.loader.ClassLoaders$AppClassLoader")
+                )
+        );
     }
 
     @Test
@@ -246,9 +258,15 @@ public class LoadTest extends TestCase {
             // expected
         }
 
-        assertEquals( "sun.misc.Launcher$AppClassLoader",
+
+        assertThat(
                 JclContext.get( "jcl3" ).loadClass( "org.xeustechnologies.jcl.test.Test" ).getClassLoader().getClass()
-                        .getName() );
+                        .getName(),
+                anyOf(
+                        equalTo("sun.misc.Launcher$AppClassLoader"),
+                        equalTo("jdk.internal.loader.ClassLoaders$AppClassLoader")
+                )
+        );
     }
 
     //@Test
