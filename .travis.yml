@@ -3,3 +3,7 @@ jdk: oraclejdk7
 
 before_script: cd JCL2
 script: mvn clean install -DskipTest=true
+
+cache:
+  directories:
+  - $HOME/.m2
