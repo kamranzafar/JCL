@@ -254,7 +254,7 @@ public class JarResources {
         if (je.getMethod() == JarEntry.STORED) {
             sb.append( "stored   " );
         } else {
-            sb.append( "defalted " );
+            sb.append( "deflated " );
         }
 
         sb.append( je.getName() );
